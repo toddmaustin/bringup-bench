@@ -11,6 +11,20 @@
 
 */
 
+/* copy src to dst, truncating or null-padding to always copy n bytes */
+char *libmin_strncpy(char *dst, const char *src, size_t n);
+char * libmin_strncat(char *d, const char *s, size_t n);
+
+/* standard atoi() implementation */
+int libmin_atoi(const char *s);
+
+/* getopt() hooks */
+extern char *optarg;
+extern int optind, opterr, optopt, optpos, optreset;
+
+/* standard getopt() implementation */
+int libmin_getopt(int argc, char * const argv[], const char *optstring);
+
 /* return string length */
 size_t libmin_strlen(const char *str);
 
@@ -21,6 +35,9 @@ void libmin_printf(char *fmt, ...);
 /* run silent */
 #define libmin_printf(FMT, ARGS...)	do { ; } while (0)
 #endif /* COSIM_SILENT */
+
+/* print one character */
+void libmin_putc(char c);
 
 /* successfully exit co-simulation */
 void libmin_success(void);

@@ -11,6 +11,6 @@ void libtarg_success(void);
 void libtarg_fail(int code);
 
 /* output a single character, to whereever the target wants to send it... */
-void libtarg_cputc(char c);
+void libtarg_putc(char c);
 
 #endif /* LIBTARG_H */

@@ -33,10 +33,6 @@
  */
 
 #include "libmin.h"
-// #include <stdio.h>
-// #include <stdlib.h>
-// #include <string.h>
-// #include <unistd.h>
 
 #define MAXMSG 1024
 #define DWIDTH 132
@@ -1018,20 +1014,20 @@ main(void)
 { 
 	int ch;
 
-	while ((ch = getopt(argc, argv, "w:tdh")) != -1)
+	while ((ch = libmin_getopt(argc, argv, "w:tdh")) != -1)
 		switch (ch) {
 		case 'd':
 			debug = 1;
 			break;
 		case 'w':
-			width = atoi(optarg);
+			width = libmin_atoi(optarg);
 			if (width <= 0)
-				perror("illegal argument for -w option");
+				libmin_printf("error: illegal argument for -w option\n");
 			break;
 		case '?': case 'h':
 		default:
 			libmin_printf("usage: banner [-w width]\n");
-			exit(1);
+			libmin_fail(1);
 		}
 	argc -= optind;
 	argv += optind;
@@ -1043,10 +1039,10 @@ main(void)
 
 	/* Have now read in the data. Next get the message to be printed. */
 	if (*argv) {
-		strncpy(message, *argv, sizeof message);
+		libmin_strncpy(message, *argv, sizeof message);
 		while (*++argv) {
-			strncat(message, " ", sizeof message);
-			strncat(message, *argv, sizeof message);
+			libmin_strncat(message, " ", sizeof message);
+			libmin_strncat(message, *argv, sizeof message);
 		}
 		nchars = libmin_strlen(message);
 	} else {
@@ -1072,7 +1068,7 @@ main(void)
 				x = data_table[j] & 0377;
 				libmin_printf(" %3d, ",x);
 			}
-			putchar('\n');
+			libmin_putc('\n');
 		}
 		libmin_printf("};\n");
 	}
@@ -1109,8 +1105,8 @@ main(void)
 					if (print[linen++]) {
 						for (j=0; j <= max; j++)
 							if (print[j])
-								putchar(line[j]);
-						putchar('\n');
+								libmin_putc(line[j]);
+						libmin_putc('\n');
 					}
 				}
 				for (j = 0; j < DWIDTH; j++) line[j] = ' ';

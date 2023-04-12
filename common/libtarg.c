@@ -27,7 +27,7 @@ libtarg_fail(int code)
 
 /* output a single character, to whereever the target wants to send it... */
 void
-libtarg_cputc(char c)
+libtarg_putc(char c)
 {
 #ifdef LIBTARG_HOST
   fputc(c, stdout);

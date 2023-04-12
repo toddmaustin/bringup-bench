@@ -2,8 +2,58 @@
 #include "libmin.h"
 #include "libtarg.h"
 
+/*
+ * Copy src to dst, truncating or null-padding to always copy n bytes.
+ * Return dst.
+ */
+char *
+libmin_strncpy(char *dst, const char *src, size_t n)
+{
+	if (n != 0) {
+		char *d = dst;
+		const char *s = src;
+
+		do {
+			if ((*d++ = *s++) == 0) {
+				/* NUL pad the remaining n-1 bytes */
+				while (--n != 0)
+					*d++ = 0;
+				break;
+			}
+		} while (--n != 0);
+	}
+	return (dst);
+}
+
+char *
+libmin_strncat(char *d, const char *s, size_t n)
+{
+	char *a = d;
+	d += libmin_strlen(d);
+	while (n && *s)
+    n--, *d++ = *s++;
+	*d++ = 0;
+	return a;
+}
+
+/* standard atoi() implementation */
+int
+libmin_atoi(const char *s)
+{
+	int n=0, neg=0;
+	while (isspace(*s)) s++;
+	switch (*s) {
+	case '-': neg=1;
+	case '+': s++;
+	}
+	/* Compute n as a negative number to avoid overflow on INT_MIN */
+	while (isdigit(*s))
+		n = 10*n - (*s++ - '0');
+	return neg ? n : -n;
+}
+
 char *optarg;
-int optind=1, opterr=1, optopt, __optpos, optreset=0;
+int optind=1, opterr=1, optopt, optpos, optreset=0;
 
 /* standard getopt() implementation */
 int
@@ -15,7 +65,7 @@ libmin_getopt(int argc, char * const argv[], const char *optstring)
 
 	if (!optind || optreset) {
 		optreset = 0;
-		__optpos = 0;
+		optpos = 0;
 		optind = 1;
 	}
 
@@ -59,16 +109,15 @@ libmin_getopt(int argc, char * const argv[], const char *optstring)
 
 	if (d != c) {
 		if (optstring[0] != ':' && opterr)
-			__getopt_msg(argv[0], ": unrecognized option: ", optchar, k);
+      libmin_printf("%s: unrecognized option: %c\n", argv[0], optchar);
 		return '?';
 	}
 	if (optstring[i] == ':') {
 		if (optstring[i+1] == ':') optarg = 0;
 		else if (optind >= argc) {
 			if (optstring[0] == ':') return ':';
-			if (opterr) __getopt_msg(argv[0],
-				": option requires an argument: ",
-				optchar, k);
+			if (opterr)
+        libmin_printf("%s: unrecognized option: %c\n", argv[0], optchar);
 			return '?';
 		}
 		if (optstring[i+1] != ':' || optpos) {
@@ -866,7 +915,13 @@ libmin_printf(char *fmt, ...)
   va_end(ap);
 
   for (s=buf; *s; s++)
-    libtarg_cputc(*s);
+    libtarg_putc(*s);
+}
+
+void
+libmin_putc(char c)
+{
+  libtarg_putc(c);
 }
 
 unsigned short _ctype[257] =
