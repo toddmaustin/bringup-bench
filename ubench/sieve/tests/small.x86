@@ -1,0 +1,7 @@
+
+   Sieve of Eratosthenes (Scaled to 10 Iterations)
+   Version 1.2b, 26 Sep 1992
+
+   Array Size   Number   Last Prime
+    (Bytes)   of Primes
+       1024        308         2039

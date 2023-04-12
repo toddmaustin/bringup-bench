@@ -1,0 +1,28 @@
+#
+#  Copyright 1002-2003, BitRaker Inc.  All Rights Reserved.
+#
+#  THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF BITRAKER INC.
+#  The copyright notice above does not evidence any actual or intended
+#  publication of such source code.
+#
+#  The copyright of this software is the property of BitRaker Inc.  and
+#  is to be treated as BitRaker Inc. Confidential.  It shall not be
+#  copied, used, duplicated, demonstrated, licensed, or disclosed to
+#  others in whole or part for any purpose without the prior, written
+#  permission of BitRaker Inc.
+#
+
+PROG	= sieve
+LD	= $(CC)
+CFLAGS	= -I../../common -DCOSIM_HOST -Dnewmain=main
+LIBS	=
+
+OBJS	= src/sieve.o ../../common/libcosim.o
+TMPS	=
+
+include ../../Makefile.config
+
+run-tests:
+	$(SIM) $(SIMARGS) ./$(PROG)$(EXT) > small.out
+	$(DIFF) small.out tests/small.$(TARG)
+

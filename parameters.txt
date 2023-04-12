@@ -1,0 +1,4 @@
+
+./sim-zesto -config config/baseline.cfg -max:inst 500000000 ...
+
+runexps.sh all run-tests MOPT=hesson:HESSON:4096:1:0:100000000

@@ -1,0 +1,15 @@
+Nov 17, 2010
+
+added ubench/anagram/tests/small.x86
+added ubench/dhrystone/tests/small.x86
+added ubench/kepler/tests/small.x86
+added ubench/parrondo/tests/small.x86
+
+Known problems:
+ubench/dhrystone:
+	different gcc verison generates different results (gcc4.5 vs gcc4.1.2)
+ubench/itemfile:
+	not compatible with Makefile.x86. Can use g++ to hand-compile
+	missing input/output files
+ubench/longdiv:
+	won't compile (undefined reference to `_pctype')

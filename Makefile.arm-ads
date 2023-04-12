@@ -1,0 +1,52 @@
+#
+#  Copyright 2002-2003, BitRaker Inc.  All Rights Reserved.
+#
+#  THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF BITRAKER INC.
+#  The copyright notice above does not evidence any actual or intended
+#  publication of such source code.
+#
+#  The copyright of this software is the property of BitRaker Inc.  and
+#  is to be treated as BitRaker Inc. Confidential.  It shall not be
+#  copied, used, duplicated, demonstrated, licensed, or disclosed to
+#  others in whole or part for any purpose without the prior, written
+#  permission of BitRaker Inc.
+#
+
+TARG	= arm-ads
+CC	= armcc
+EXT	= .axf
+GFLAGS	= -g -DTARG_ARM_ADS -DLITTLE_ENDIAN -I../../common $(CFLAGS)
+SIM	= armsd -e
+MV	= mv -f
+DIFF	= diff -s
+#DIFF	= diff -s --strip-trailing-cr
+
+all: $(PROG).axf
+
+$(PROG).axf: $(OBJS)
+	$(CC) -o $(PROG).axf $(OBJS)
+
+.SUFFIXES: .o .c
+
+.c.o:
+	$(CC) $(GFLAGS) -o $@ -c $<
+
+build: $(PROG).axf
+
+size: $(PROG).axf
+	fromelf -z $(PROG).axf
+
+clean:
+	-rm -f $(PROG).axf $(PROG).axf.bre $(PROG).axf.cfg $(PROG).axf.txt $(OBJS) $(TMPS) core core.* FOO *.out *~
+
+clean-build:
+	-rm -f $(PROG).axf.bre $(PROG).axf.cfg $(PROG).axf.txt $(OBJS) $(TMPS) core core.* FOO *.out *~
+
+clean-anvil:
+	-rm -f $(PROG).axf.bre $(PROG).axf.cfg $(PROG).axf.txt core core.*
+
+anvil-test:
+	$(ANVILTOOL) $(ANVILARGS) -i $(PROG).axf -o $(PROG).axf.bre
+
+global:
+	$(GLOBALCMD) $(PROG) $(GLOBALARGS)
