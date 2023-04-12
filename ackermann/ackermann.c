@@ -107,50 +107,44 @@ would have a(x,x) + 1 < a(x,m). But this is contradiction when x = m.
 
 #include "libmin.h"
 
-#define VERSION "1.0"
-#define USAGE "\nackermann [-hvr] [ x y ]\n"
-#define MAX 0x10  /* largest arguments to contemplate. This is waaaaaaaaaay
-		        more than sufficient! */
+#define MAX 5  /* largest arguments to contemplate. This is waaaaaaaaaay more than sufficient! */
 
 /* Play around with these definitions. Can you get a(1,4)? */
 #define MAX_X 0xFFFF  /* rows in storage array */
 #define MAX_Y 0x10    /* columns in storage array */
-#define MAX_DEPTH 0xFFFF /* stack guard */
-
-#define HELP USAGE"\n\
--h: print this helpful message\n\
--r: remind me of the definition of the Ackermann function and exit.\n\
--v: print version number and exit\n\n\
-Attempt to compute a(x,y), where a is Ackermann's function. With no\n\
-arguments it creates a small table of values.\n\n"
+#define MAX_DEPTH 0xffFFFF /* stack guard */
 
 static unsigned a[MAX_X][MAX_Y]; /* Remembered values */
 static unsigned depth;
+static unsigned max_depth;
 
-/* Implement Ackermann function as recursive function that remembers its
- * values */
-
+/* Implement Ackermann function as recursive function that remembers its values */
 unsigned
-ack(unsigned x, unsigned y){
-
+ack(unsigned x, unsigned y)
+{
 	depth++;
-	if(depth > MAX_DEPTH){
+	if (depth > MAX_DEPTH)
+  {
 		libmin_printf("Maximum stack depth %d exceeded. Abort.\n", MAX_DEPTH);
 		libmin_fail(1);
 	}
-	if( x >= MAX_X) {
+	if (x >= MAX_X)
+  {
 		libmin_printf("Maximum x value %d exceeded. Abort. \n", MAX_X);
 		libmin_fail(1);
 	}
-	if( y >= MAX_Y) {
+	if (y >= MAX_Y)
+  {
 		libmin_printf("Maximum y value %d exceeded. Abort. \n", MAX_Y);
 		libmin_fail(1);
 	}
-	if(a[x][y]) return a[x][y];
-	if(y==0) return a[x][0] = x+1;
-	if(x==0) return a[0][y] = ack(1,y-1);
-        return a[x][y] = ack(ack(x-1,y),y-1);
-
+	if (a[x][y])
+    return a[x][y];
+	if (y==0)
+    return a[x][0] = x+1;
+	if (x==0)
+    return a[0][y] = ack(1,y-1);
+  return a[x][y] = ack(ack(x-1,y),y-1);
 }	
 
 int
@@ -160,45 +154,19 @@ main(void)
 	unsigned x,y,k; 
 	int i = 1;
 
-	/* Process command line options */
-
-	while( (i<argc) && (argv[i][0] == '-')){
-		  if(strcmp(argv[i],"-h")==0){
-			libmin_printf("%s\n", HELP);
-			libmin_success();
-		  }
-		  if(strcmp(argv[i],"-v")==0){
-			libmin_printf("%s\n", VERSION);
-			libmin_success();
-		  }
-		  if(strcmp(argv[i],"-r")==0){
-			  libmin_printf("\nAckermann's function a(x,y) is defined by:\n\n");
-			  libmin_printf("\ta(x,0)     = x + 1\n");
-			  libmin_printf("\ta(0,y+1)   = a(1,y)\n");
-			  libmin_printf("\ta(x+1,y+1) = a(a(x,y+1),y)\n\n"); 
-			  libmin_printf("where x and y are nonnegative integers.\n");
-			  libmin_printf("It is known that a is recursive, but not primitive recursive.\n\n");
-			  libmin_success();
-	          }
-		  libmin_printf("ackermann: Unknown option %s\n", argv[i]);
-		  libmin_printf("%s\n",USAGE);
-		  return 1;
-	}
-
-	if(argc == 3){
-		x = atoi(argv[1]);
-		y = atoi(argv[2]);
-		libmin_printf("a(%d,%d) = %d\n",x,y,ack(x,y));
-		return 0;
-	}
-
-	for(k=0;k<=MAX;k++){
+  max_depth = 0;
+	for(k=0;k<=MAX;k++)
+  {
 		libmin_printf("\nx+y=%d:\n\n",k);
-		for(y=0;y<=k;y++){
-				depth = 0;  /* stack guard */
-				libmin_printf("A(%d,%d) = %d\n",k-y,y,ack(k-y,y));
+		for(y=0;y<=k;y++)
+    {
+		  depth = 0;  /* stack guard */
+			libmin_printf("A(%d,%d) = %d\n",k-y,y,ack(k-y,y));
+      if (depth > max_depth)
+        max_depth = depth;   
 		}
 	}
+  libmin_printf("Max recursive depth = %u\n", max_depth);
 	return 0; /* Don't hold your breath ! */
 }
 

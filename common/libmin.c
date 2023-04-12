@@ -1,12 +1,24 @@
 #ifdef LIBMIN_HOST
-#include <stdio.h>
-#include <stdarg.h>
-#include <stddef.h>
+// #include <stdio.h>
+// #include <stdarg.h>
+// #include <stddef.h>
 // #include <string.h>
 #endif
 
-#define isdigit(x)	((x) >= '0' && (x) <= '9')
-//#include <ctype.h>
+#include "libmin.h"
+
+size_t
+libmin_strlen(const char *str)
+{
+  if (!str)
+    return 0;
+  
+  const char *ptr = str;
+  while (*str)
+    ++str;
+
+  return str - ptr;
+}
 
 /*
  * Copyright Patrick Powell 1995
@@ -330,7 +342,7 @@ dopr(char *buffer, size_t maxlen, const char *format, va_list args)
       case 's':
 	strvalue = va_arg (args, char *);
 	if (max == -1) {
-	  max = strlen(strvalue);
+	  max = libmin_strlen(strvalue);
 	}
 	if (min > 0 && max >= 0 && min > max) max = min;
 	fmtstr (buffer, &currlen, maxlen, strvalue, flags, min, max);
@@ -814,7 +826,7 @@ libmin_fail(int code)
 void
 libmin_printf(char *fmt, ...)
 {
-  char buf[256];
+  char buf[1024];
   va_list ap;
 
   va_start(ap, fmt);
@@ -981,6 +993,7 @@ int _isctype(int c, int mask)
     return 0;
 }
 
+#ifdef notdef
 int isalpha(int c)
 {
   return _pctype[c] & (_UPPER | _LOWER);
@@ -1056,6 +1069,7 @@ int tolower(int c)
   else
     return c;
 }
+#endif
 
 
 /*

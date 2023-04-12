@@ -9,11 +9,10 @@
 
 */
 
-/* successfully exit co-simulation */
-void libmin_success(void);
+typedef unsigned long size_t;
 
-/* exit co-simulation with failure exit code CODE */
-void libmin_fail(int code);
+/* return string length */
+size_t libmin_strlen(const char *str);
 
 #ifndef COSIM_SILENT
 /* print a message with format FMT to the co-simulation console */
@@ -22,6 +21,12 @@ void libmin_printf(char *fmt, ...);
 /* run silent */
 #define libmin_printf(FMT, ARGS...)	do { ; } while (0)
 #endif /* COSIM_SILENT */
+
+/* successfully exit co-simulation */
+void libmin_success(void);
+
+/* exit co-simulation with failure exit code CODE */
+void libmin_fail(int code);
 
 /* see the random integer generator */
 void libmin_srand(unsigned int seed);
@@ -54,6 +59,7 @@ extern unsigned short *_pctype; // pointer to table for char's
 
 int _isctype(int c, int mask);
 
+#ifdef notdef
 int isspace(int c);
 int isupper(int c);
 int islower(int c);
@@ -69,6 +75,7 @@ int isleadbyte(int c);
 
 int toupper(int c);
 int tolower(int c);
+#endif
 
 #define isalpha(c)     (_pctype[(c)] & (_UPPER | _LOWER))
 #define isupper(c)     (_pctype[(c)] & _UPPER)
