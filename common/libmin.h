@@ -1,6 +1,8 @@
 #ifndef LIBMIN_H
 #define LIBMIN_H
 
+#include "libtarg.h"
+
 /* Build parameters:
 
    #define LIBMIN_SILENT		- disable all console messages
@@ -8,8 +10,6 @@
    #define LIBMIN_TARGET		- build to run on ARM target model
 
 */
-
-typedef unsigned long size_t;
 
 /* return string length */
 size_t libmin_strlen(const char *str);

@@ -1,11 +1,83 @@
-#ifdef LIBMIN_HOST
-// #include <stdio.h>
-// #include <stdarg.h>
-// #include <stddef.h>
-// #include <string.h>
-#endif
-
+#include <stdarg.h>
 #include "libmin.h"
+#include "libtarg.h"
+
+char *optarg;
+int optind=1, opterr=1, optopt, __optpos, optreset=0;
+
+/* standard getopt() implementation */
+int
+libmin_getopt(int argc, char * const argv[], const char *optstring)
+{
+	int i, c, d;
+	int k, l;
+	char *optchar;
+
+	if (!optind || optreset) {
+		optreset = 0;
+		__optpos = 0;
+		optind = 1;
+	}
+
+	if (optind >= argc || !argv[optind])
+		return -1;
+
+	if (argv[optind][0] != '-') {
+		if (optstring[0] == '-') {
+			optarg = argv[optind++];
+			return 1;
+		}
+		return -1;
+	}
+
+	if (!argv[optind][1])
+		return -1;
+
+	if (argv[optind][1] == '-' && !argv[optind][2])
+		return optind++, -1;
+
+	if (!optpos) optpos++;
+	c = argv[optind][optpos], k = 1;
+	optchar = argv[optind]+optpos;
+	optopt = c;
+	optpos += k;
+
+	if (!argv[optind][optpos]) {
+		optind++;
+		optpos = 0;
+	}
+
+	if (optstring[0] == '-' || optstring[0] == '+')
+		optstring++;
+
+	i = 0;
+	d = 0;
+	do {
+		d = optstring[i], l = 1;
+		if (l>0) i+=l; else i++;
+	} while (l && d != c);
+
+	if (d != c) {
+		if (optstring[0] != ':' && opterr)
+			__getopt_msg(argv[0], ": unrecognized option: ", optchar, k);
+		return '?';
+	}
+	if (optstring[i] == ':') {
+		if (optstring[i+1] == ':') optarg = 0;
+		else if (optind >= argc) {
+			if (optstring[0] == ':') return ':';
+			if (opterr) __getopt_msg(argv[0],
+				": option requires an argument: ",
+				optchar, k);
+			return '?';
+		}
+		if (optstring[i+1] != ':' || optpos) {
+			optarg = argv[optind++] + optpos;
+			optpos = 0;
+		}
+	}
+	return c;
+}
 
 size_t
 libmin_strlen(const char *str)
@@ -767,66 +839,24 @@ dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c)
   (*currlen)++;
 }
 
-#if 0
-static int
-vsnprintf(char *str, size_t count, const char *fmt, va_list args)
-{
-  return dopr(str, count, fmt, args);
-}
-
-int
-snprintf(char *str, size_t count, const char *fmt, ...)
-{
-  size_t ret;
-  va_list ap;
-
-  va_start(ap, fmt);
-  ret = vsnprintf(str, count, fmt, ap);
-  va_end(ap);
-  /* printf("str = %s\n", str); */
-  return ret;
-}
-#endif
-
-#ifdef LIBMIN_TARGET
-static void
-cputc(int c)
-{
-  /* signal the target to print the character in $r0 */
-  __asm__("swp r2,r2,[r2]");
-}
-#endif
-
 void
 libmin_success(void)
 {
-#ifdef LIBMIN_HOST
-  fprintf(stdout, "** successful termination sentinel encountered **\n");
-  exit(0);
-#elif LIBMIN_TARGET
-  __asm__("swp r0,r0,[r0]");
-#else
-#error Co-simulation platform not defined, define LIBMIN_HOST or LIBMIN_TARGET
-#endif
+  libmin_printf("** successful termination sentinel encountered **\n");
+  libtarg_success();
 }
 
 void
 libmin_fail(int code)
 {
-#ifdef LIBMIN_HOST
-  fprintf(stdout, "** failure termination sentinel encountered **\n");
-  exit(code);
-#elif LIBMIN_TARGET
-  __asm__("swp r1,r1,[r1]");
-#else
-#error Co-simulation platform not defined, define LIBMIN_HOST or LIBMIN_TARGET
-#endif
+  libmin_printf("** failure termination sentinel encountered **\n");
+  libtarg_fail(code);
 }
 
 void
 libmin_printf(char *fmt, ...)
 {
-  char buf[1024];
+  char buf[1024], *s;
   va_list ap;
 
   va_start(ap, fmt);
@@ -835,18 +865,8 @@ libmin_printf(char *fmt, ...)
   buf[255] = '\0';
   va_end(ap);
 
-#ifdef LIBMIN_HOST
-  fputs(buf, stdout);
-#elif LIBMIN_TARGET
-  {
-    char *s;
-
-    for (s=buf; *s; s++)
-      cputc(*s);
-  }
-#else
-#error Co-simulation platform not defined, define LIBMIN_HOST or LIBMIN_TARGET
-#endif
+  for (s=buf; *s; s++)
+    libtarg_cputc(*s);
 }
 
 unsigned short _ctype[257] =
@@ -993,85 +1013,6 @@ int _isctype(int c, int mask)
     return 0;
 }
 
-#ifdef notdef
-int isalpha(int c)
-{
-  return _pctype[c] & (_UPPER | _LOWER);
-}
-
-int isupper(int c)
-{
-  return _pctype[c] & _UPPER;
-}
-
-int islower(int c)
-{
-  return _pctype[c] & _LOWER;
-}
-
-int isdigit(int c)
-{
-  return _pctype[c] & _DIGIT;
-}
-
-int isxdigit(int c)
-{
-  return _pctype[c] & _HEX;
-}
-
-int isspace(int c)
-{
-  return _pctype[c] & _SPACE;
-}
-
-int ispunct(int c)
-{
-  return _pctype[c] & _PUNCT;
-}
-
-int isalnum(int c)
-{
-  return _pctype[c] & (_UPPER | _LOWER | _DIGIT);
-}
-
-int isprint(int c)
-{
-  return _pctype[c] & (_BLANK | _PUNCT | _UPPER | _LOWER | _DIGIT);
-}
-
-int isgraph(int c)
-{
-  return _pctype[c] & (_PUNCT | _UPPER | _LOWER | _DIGIT);
-}
-
-int iscntrl(int c)
-{
-  return _pctype[c] & _CONTROL;
-}
-
-int isleadbyte(int c)
-{
-  return _pctype[c] & _LEADBYTE;
-}
-
-int toupper(int c)
-{
-  if (_pctype[c] & _LOWER)
-    return c - ('a' - 'A');
-  else
-    return c;
-}
-
-int tolower(int c)
-{
-  if (_pctype[c] & _UPPER)
-    return c + ('a' - 'A');
-  else
-    return c;
-}
-#endif
-
-
 /*
  *  * This generator is a combination of three linear congruential generators
  *  * with periods or 2^15-405, 2^15-1041 and 2^15-1111. It has a period that
@@ -1107,141 +1048,3 @@ libmin_srand(unsigned int seed)
    seed3= seed%31656 + 1;
 }
 
-
-
-
-#ifdef TEST_SNPRINTF
-
-int sprintf(char *str,const char *fmt,...);
-
-int main (void)
-{
-  char buf1[1024];
-  char buf2[1024];
-  char *fp_fmt[] = {
-    "%1.1f",
-    "%-1.5f",
-    "%1.5f",
-    "%123.9f",
-    "%10.5f",
-    "% 10.5f",
-    "%+22.9f",
-    "%+4.9f",
-    "%01.3f",
-    "%4f",
-    "%3.1f",
-    "%3.2f",
-    "%.0f",
-    "%f",
-    "-16.16f",
-    NULL
-  };
-  double fp_nums[] = { 6442452944.1234, -1.5, 134.21, 91340.2,
-		       341.1234, 0203.9, 0.96, 0.996, 
-		       0.9996, 1.996, 4.136,  0};
-  char *int_fmt[] = {
-    "%-1.5d",
-    "%1.5d",
-    "%123.9d",
-    "%5.5d",
-    "%10.5d",
-    "% 10.5d",
-    "%+22.33d",
-    "%01.3d",
-    "%4d",
-    "%d",
-    NULL
-  };
-  long int_nums[] = { -1, 134, 91340, 341, 0203, 0};
-  char *str_fmt[] = {
-    "10.5s",
-    "5.10s",
-    "10.1s",
-    "0.10s",
-    "10.0s",
-    "1.10s",
-    "%s",
-    "%.1s",
-    "%.10s",
-    "%10s",
-    NULL
-  };
-  char *str_vals[] = {"hello", "a", "", "a longer string", NULL};
-  int x, y;
-  int fail = 0;
-  int num = 0;
-
-  printf ("Testing snprintf format codes against system sprintf...\n");
-
-  for (x = 0; fp_fmt[x] ; x++) {
-    for (y = 0; fp_nums[y] != 0 ; y++) {
-      int l1 = snprintf(NULL, 0, fp_fmt[x], fp_nums[y]);
-      int l2 = snprintf(buf1, sizeof(buf1), fp_fmt[x], fp_nums[y]);
-      sprintf (buf2, fp_fmt[x], fp_nums[y]);
-      if (strcmp (buf1, buf2)) {
-	printf("snprintf doesn't match Format: %s\n\tsnprintf = [%s]\n\t sprintf = [%s]\n", 
-	       fp_fmt[x], buf1, buf2);
-	fail++;
-      }
-      if (l1 != l2) {
-	printf("snprintf l1 != l2 (%d %d) %s\n", l1, l2, fp_fmt[x]);
-	fail++;
-      }
-      num++;
-    }
-  }
-
-  for (x = 0; int_fmt[x] ; x++) {
-    for (y = 0; int_nums[y] != 0 ; y++) {
-      int l1 = snprintf(NULL, 0, int_fmt[x], int_nums[y]);
-      int l2 = snprintf(buf1, sizeof(buf1), int_fmt[x], int_nums[y]);
-      sprintf (buf2, int_fmt[x], int_nums[y]);
-      if (strcmp (buf1, buf2)) {
-	printf("snprintf doesn't match Format: %s\n\tsnprintf = [%s]\n\t sprintf = [%s]\n", 
-	       int_fmt[x], buf1, buf2);
-	fail++;
-      }
-      if (l1 != l2) {
-	printf("snprintf l1 != l2 (%d %d) %s\n", l1, l2, int_fmt[x]);
-	fail++;
-      }
-      num++;
-    }
-  }
-
-  for (x = 0; str_fmt[x] ; x++) {
-    for (y = 0; str_vals[y] != 0 ; y++) {
-      int l1 = snprintf(NULL, 0, str_fmt[x], str_vals[y]);
-      int l2 = snprintf(buf1, sizeof(buf1), str_fmt[x], str_vals[y]);
-      sprintf (buf2, str_fmt[x], str_vals[y]);
-      if (strcmp (buf1, buf2)) {
-	printf("snprintf doesn't match Format: %s\n\tsnprintf = [%s]\n\t sprintf = [%s]\n", 
-	       str_fmt[x], buf1, buf2);
-	fail++;
-      }
-      if (l1 != l2) {
-	printf("snprintf l1 != l2 (%d %d) %s\n", l1, l2, str_fmt[x]);
-	fail++;
-      }
-      num++;
-    }
-  }
-
-  printf ("%d tests failed out of %d.\n", fail, num);
-
-  printf("seeing how many digits we support\n");
-  {
-    double v0 = 0.12345678901234567890123456789012345678901;
-    for (x=0; x<100; x++) {
-      snprintf(buf1, sizeof(buf1), "%1.1f", v0*pow(10, x));
-      sprintf(buf2,                "%1.1f", v0*pow(10, x));
-      if (strcmp(buf1, buf2)) {
-	printf("we seem to support %d digits\n", x-1);
-	break;
-      }
-    }
-  }
-
-  return 0;
-}
-#endif /* SNPRINTF_TEST */

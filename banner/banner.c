@@ -27,29 +27,16 @@
  * SUCH DAMAGE.
  */
 
-#ifndef lint
-static char copyright[] =
-"@(#) Copyright (c) 1980, 1993, 1994\n\
-	The Regents of the University of California.  All rights reserved.\n";
-#endif /* not lint */
-
-#ifndef lint
-#if 0
-static char sccsid[] = "@(#)banner.c	8.3 (Berkeley) 4/2/94";
-#else
-static char rcsid[] = "$OpenBSD: banner.c,v 1.11 2003/10/01 05:59:37 cloder Exp $";
-#endif
-#endif /* not lint */
-
 /*
  * banner - prints large signs
  * banner [-w width] [-d] [-t] message ...
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
+#include "libmin.h"
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <string.h>
+// #include <unistd.h>
 
 #define MAXMSG 1024
 #define DWIDTH 132
@@ -1019,11 +1006,11 @@ const char data_table[NBYTES] = {
 char	line[DWIDTH];
 char	message[MAXMSG];
 char	print[DWIDTH];
-int	debug, i, j, linen, max, nchars, pc, term, trace, x, y;
+int	debug, i, j, linen, max, nchars, pc, term, x, y;
 int	width = DWIDTH;	/* -w option: scrunch letters to 80 columns */
 
 int argc = 2;
-char *_argv[] = { "banner", "SimpleScalar Rocks!", NULL };
+char *_argv[] = { "banner", "Come wit' it now!", NULL };
 char **argv = _argv;
 
 int
@@ -1036,9 +1023,6 @@ main(void)
 		case 'd':
 			debug = 1;
 			break;
-		case 't':
-			trace = 1;
-			break;
 		case 'w':
 			width = atoi(optarg);
 			if (width <= 0)
@@ -1046,7 +1030,7 @@ main(void)
 			break;
 		case '?': case 'h':
 		default:
-			(void)fprintf(stderr, "usage: banner [-w width]\n");
+			libmin_printf("usage: banner [-w width]\n");
 			exit(1);
 		}
 	argc -= optind;
@@ -1064,69 +1048,60 @@ main(void)
 			strncat(message, " ", sizeof message);
 			strncat(message, *argv, sizeof message);
 		}
-		nchars = strlen(message);
+		nchars = libmin_strlen(message);
 	} else {
-		if (isatty(fileno(stdin)))
-			fprintf(stderr,"Message: ");
-		(void)fgets(message, sizeof(message), stdin);
-		nchars = strlen(message);
-		message[nchars--] = '\0';	/* get rid of newline */
+    libmin_printf("No message to print.\n");
+    libmin_fail(1);
 	}
 
 	/* some debugging print statements */
 	if (debug) {
-		printf("int asc_ptr[128] = {\n");
+		libmin_printf("int asc_ptr[128] = {\n");
 		for (i = 0; i < 128; i++) {
-			printf("%4d,   ",asc_ptr[i]);
+			libmin_printf("%4d,   ",asc_ptr[i]);
 			if ((i+1) % 8 == 0)
-				printf("\n");
+				libmin_printf("\n");
 		}
-		printf("};\nchar data_table[NBYTES] = {\n");
-		printf("  /*   ");
-		for (i = 0; i < 10; i++) printf(" %3d  ",i);
-		printf("   */\n");
+		libmin_printf("};\nchar data_table[NBYTES] = {\n");
+		libmin_printf("  /*   ");
+		for (i = 0; i < 10; i++) libmin_printf(" %3d  ",i);
+		libmin_printf("   */\n");
 		for (i = 0; i < NBYTES; i += 10) {
-			printf("/* %4d */  ",i);
+			libmin_printf("/* %4d */  ",i);
 			for (j = i; j < i+10; j++) { 
 				x = data_table[j] & 0377;
-				printf(" %3d, ",x);
+				libmin_printf(" %3d, ",x);
 			}
 			putchar('\n');
 		}
-		printf("};\n");
+		libmin_printf("};\n");
 	}
 
 	/* check message to make sure it's legal */
 	j = 0;
 	for (i = 0; i < nchars; i++)
-		if ((u_char) message[i] >= NCHARS ||
-		    asc_ptr[(u_char) message[i]] == 0) {
-			perror("The character '%c' is not in my character set");
+		if ((uint8_t) message[i] >= NCHARS ||
+		    asc_ptr[(uint8_t) message[i]] == 0) {
+			libmin_printf("The character is not in my character set\n");
 			j++;
 		}
 	if (j)
-		exit(1);
+		libmin_fail(1);
 
-	if (trace)
-		printf("Message '%s' is OK\n",message);
 	/* Now have message. Print it one character at a time.  */
 
 	for (i = 0; i < nchars; i++) {
-		if (trace)
-			printf("Char #%d: %c\n", i, message[i]);
 		for (j = 0; j < DWIDTH; j++) line[j] = ' ';
-		pc = asc_ptr[(u_char) message[i]];
+		pc = asc_ptr[(uint8_t) message[i]];
 		term = 0;
 		max = 0;
 		linen = 0;
 		while (!term) {
 			if (pc < 0 || pc >= NBYTES) {
-				printf("bad pc: %d\n",pc);
-				exit(1);
+				libmin_printf("bad pc: %d\n",pc);
+				libmin_fail(1);
 			}
 			x = data_table[pc] & 0377;
-			if (trace)
-				printf("pc=%d, term=%d, max=%d, linen=%d, x=%d\n",pc,term,max,linen,x);
 			if (x >= 128) {
 				if (x>192) term++;
 				x = x & 63;
@@ -1151,12 +1126,10 @@ main(void)
 				max = x+y;
 				while (x < max) line[x++] = '#';
 				pc += 2;
-				if (trace)
-					printf("x=%d, y=%d, max=%d\n",x,y,max);
 			}
 		}
 	}
 
-	exit(0);
+	libmin_success();
 }
 
