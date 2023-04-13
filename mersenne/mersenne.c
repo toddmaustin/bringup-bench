@@ -33,7 +33,7 @@
 /* ACM Transactions on Modeling and Computer Simulation,           */
 /* Vol. 8, No. 1, January 1998, pp 3--30.                          */
 
-#include "libcosim.h"
+#include "libmin.h"
 
 /* Period parameters */  
 #define N 624
@@ -129,7 +129,7 @@ genrand(void)
 
 /* This main() outputs first 1000 generated numbers.  */
 int
-newmain(void)
+main(void)
 { 
   int steps = 10000;
   int i, j;
@@ -139,12 +139,12 @@ newmain(void)
     {
       if ((i % 100) == 0)
 	{
-	  cosim_printf("%10u ", genrand());
+	  libmin_printf("%10u ", genrand());
 	  if (++j%5==0)
-	    cosim_printf("\n");
+	    libmin_printf("\n");
 	}
     }
-  cosim_printf("\n");
+  libmin_printf("\n");
 
   return 0;
 }
