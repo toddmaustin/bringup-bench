@@ -41,18 +41,7 @@
 
 */
 
-/* FIX_MPY() - fixed-point multiplication macro.
-   This macro is a statement, not an expression (uses asm).
-   BEWARE: make sure _DX is not clobbered by evaluating (A) or DEST.
-   args are all of type fixed.
-   Scaling ensures that 32767*32767 = 32767. */
-#define dosFIX_MPY(DEST,A,B)       {       \
-        _DX = (B);                      \
-        _AX = (A);                      \
-        asm imul dx;                    \
-        asm add ax,ax;                  \
-        asm adc dx,dx;                  \
-        DEST = _DX;             }
+#include "libmin.h"
 
 #define FIX_MPY(DEST,A,B)       DEST = ((int)(A) * (int)(B))>>15
 
@@ -61,7 +50,7 @@
 #define N_LOUD          100     /* dimension of Loudampl[] */
 
 #ifndef fixed
-#define fixed short
+#define fixed int
 #endif
 
 extern fixed Sinewave[N_WAVE]; /* placed at end of this file for clarity */
@@ -411,32 +400,31 @@ fixed Loudampl[100] = {
       0,      0,      0,      0,
 };
 
-#include "libcosim.h"
-#include <math.h>
 
 #define M       8
 #define N       (1<<M)
 
 int
-newmain(void)
+main(void)
 {
   fixed real[N], imag[N];
   int     i;
 
   for (i=0; i<N; i++){
-    real[i] = 1000*cos(i*2*3.1415926535/N);
+    real[i] = 1000*libmin_cos(i*2*3.1415926535/N);
     imag[i] = 0;
   }
 
   fix_fft(real, imag, M, 0);
 
   for (i=0; i<N; i++)
-    cosim_printf("%d: %d, %d\n", i, real[i], imag[i]);
+    libmin_printf("%d: %d, %d\n", i, real[i], imag[i]);
 
   fix_fft(real, imag, M, 1);
 
   for (i=0; i<N; i++)
-    cosim_printf("%d: %d, %d\n", i, real[i], imag[i]);
+    libmin_printf("%d: %d, %d\n", i, real[i], imag[i]);
 
   return 0;
 }
+

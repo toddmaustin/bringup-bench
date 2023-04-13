@@ -13,7 +13,10 @@
 
 /* copy src to dst, truncating or null-padding to always copy n bytes */
 char *libmin_strncpy(char *dst, const char *src, size_t n);
-char * libmin_strncat(char *d, const char *s, size_t n);
+char *libmin_strncat(char *d, const char *s, size_t n);
+
+/* standard atol() implementation */
+long libmin_atol(const char *s);
 
 /* standard atoi() implementation */
 int libmin_atoi(const char *s);
@@ -44,6 +47,9 @@ void libmin_success(void);
 
 /* exit co-simulation with failure exit code CODE */
 void libmin_fail(int code);
+
+/* largest random number */
+#define RAND_MAX (0x7fffffff)
 
 /* see the random integer generator */
 void libmin_srand(unsigned int seed);
@@ -109,5 +115,10 @@ int tolower(int c);
 
 #define tolower(c)     (isupper(c) ? ((c) - 'A' + 'a') : (c))
 #define toupper(c)     (islower(c) ? ((c) - 'a' + 'A') : (c))
+
+/* math functions */
+double libmin_floor(double x);
+double libmin_scalbn(double x, int n);
+double libmin_cos(double x);
 
 #endif /* LIBMIN_H */

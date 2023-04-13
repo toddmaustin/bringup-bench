@@ -50,10 +50,7 @@
 */
 
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<math.h>
-#include<time.h>
+#include "libmin.h"
 
 #define VERSION "1.1"
 #define USAGE "parrondo [ -s number -t number -m number -1 -2 -h -v]"
@@ -69,15 +66,6 @@ Print information on simulations of Parrondo's paradoxical game.\n\n\
 -2: Simulate complex game alone.\n\n"
 #else
 #define HELP USAGE
-#endif
-
-
-#ifdef _NO_RANDOM
-#define RANDOM rand
-#define SRANDOM srand
-#else
-#define RANDOM random
-#define SRANDOM srandom
 #endif
 
 /* Default values */
@@ -105,7 +93,7 @@ cointoss(double p)
 
 	double U;   /* U(0,1) random variable */
 
-	U = ((double)RANDOM())/((double)_MAX_RAND);
+	U = ((double)libmin_rand())/((double)_MAX_RAND);
 	return U >= p ? -1 : 1;
 } 
 
@@ -159,39 +147,39 @@ main(void)
 				case 's':
 				case 'S':
 					if(j+1 >= argc){
-						fprintf(stderr,"%s\n",USAGE);
-						exit(1);
+						libmin_printf("%s\n",USAGE);
+						libmin_fail(1);
 					}
-					seed = atol(argv[j+1]);
+					seed = libmin_atol(argv[j+1]);
 					j++;
 					continue;
 				case 't':
 				case 'T':
 					if(j+1 >= argc){
-						fprintf(stderr,"%s\n",USAGE);
-						exit(1);
+						libmin_printf("%s\n",USAGE);
+						libmin_fail(1);
 					}
-					trials = atoi(argv[j+1]);
+					trials = libmin_atoi(argv[j+1]);
 					j++;
 					continue;	
 				case 'm':
 				case 'M':
 					if(j+1 >= argc){
-						fprintf(stderr,"%s\n",USAGE);
-						exit(1);
+						libmin_printf("%s\n",USAGE);
+						libmin_fail(1);
 					}
-					max_fortune = atoi(argv[j+1]);
+					max_fortune = libmin_atoi(argv[j+1]);
 					j++;
 					continue;
 				case 'v':
 				case 'V':
-					printf("%s\n",VERSION);
-					exit(0);
+					libmin_printf("%s\n", VERSION);
+					libmin_success();
 				case '?':
 				case 'h':
 				case 'H':
-					printf("%s\n",HELP);
-					exit(0);
+					libmin_printf("%s\n",HELP);
+					libmin_success();
 				case '1':
 					game_select = 0.0;
 					break;
@@ -199,33 +187,33 @@ main(void)
 					game_select = 1.0;
 					break;
 				default:
-					fprintf(stderr,"parrondo: unkown option %s\n",
+					libmin_printf("parrondo: unkown option %s\n",
 						argv[j]);
-					exit(1);
+					libmin_fail(1);
 			}
 		else {
-			fprintf(stderr,"%s\n",USAGE);
-			exit(1);
+			libmin_printf("%s\n", USAGE);
+			libmin_fail(1);
 		}
 	}
  
 	/* If no seed is supplied, then use current system time */
 	
 	if(!seed)
-		if((seed = (long)time(NULL)) == -1){
+  {
 			seed = INITIAL_SEED; /* if all else fails */
-			fprintf(stderr, "Using seed = %d\n",INITIAL_SEED);
-		}
+			libmin_printf("Using seed = %d\n",INITIAL_SEED);
+  }
 		
-	SRANDOM((int)seed);
+	libmin_srand((int)seed);
 	for(i=0;i<3;i++)site_visits[i] = 0L;  /* initialize counters */
 	i=0;
-	printf("Simulating %d trials ...\n",trials);
+	libmin_printf("Simulating %d trials ...\n",trials);
 	while(i<trials){   /* Loop over trials */
 
 		/* reseed */
-		seed = RANDOM();
-		SRANDOM((int)seed);
+		seed = libmin_rand();
+		libmin_srand((int)seed);
 
 		/* Each trial: loop until fortune goes out of range */
 		fortune = 0;
@@ -256,12 +244,12 @@ main(void)
 
 	/* Print stuff out */
 
-	printf("%d wins, %d losses, %d draws\n",win_count,
+	libmin_printf("%d wins, %d losses, %d draws\n",win_count,
 			loss_count, i-(win_count+loss_count));
-	printf("(Win/loss = %d/-%d, draw = no win/loss in %ld plays.)\n",
+	libmin_printf("(Win/loss = %d/-%d, draw = no win/loss in %ld plays.)\n",
 			max_fortune,max_fortune,MAX_ITERATIONS);
-	printf("Average trial length = %g\n",n_bar);
-	printf("Site occupancy: 0 mod 3: %g%%, 1 mod 3: %g%%, 2 mod 3: %g%%\n",
+	libmin_printf("Average trial length = %g\n",n_bar);
+	libmin_printf("Site occupancy: 0 mod 3: %g%%, 1 mod 3: %g%%, 2 mod 3: %g%%\n",
 		100.0*((double)site_visits[0])/n_tot,
 		100.0*((double)site_visits[1])/n_tot,
 		100.0*((double)site_visits[2])/n_tot

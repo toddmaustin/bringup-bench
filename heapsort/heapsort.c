@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include "libcosim.h"
+#include "libmin.h"
 
 static long bplong;
 static long base[2048];
@@ -8,11 +7,11 @@ static long base[2048];
 /*  Heap Sort Program    */
 /*************************/
 
-static int HSORT(m,p)
-long m,p;
+int
+HSORT(long m, long p)
 {
-  register long i,j,k,l;
-  register long size;
+  long i,j,k,l;
+  long size;
 
   long  msize, iran, ia, ic, im, ih, ir;
   long  count, ca, cb, cc, cd, ce, cf;
@@ -22,8 +21,8 @@ long m,p;
 
   if (m >= 2048)
     {
-      cosim_printf("base buffer overflow!\n");
-      cosim_fail(1);
+      libmin_printf("base buffer overflow!\n");
+      libmin_fail(1);
     }
 
   ia = 106;
@@ -94,29 +93,38 @@ long m,p;
   ir = (ir + ca) / 2;
 
   if ( p != 0L )
-    cosim_printf("   %10ld\n", msize);
+    libmin_printf("   %10ld\n", msize);
+
+  /* check the array */
+  for(i = 0; i < size-1; i++)
+    {
+      if (base[i] > base[i+1])
+      {
+        libmin_printf("ERROR: base array is not properly sorted!\n");
+        libmin_fail(1);
+      }
+    }
+  libmin_printf("INFO: base array is properly sorted!\n");
 
   return 0;
 }
 
 int
-newmain(void)
+main(void)
 {
   long  j, p;
 
   bplong = sizeof(long);
 
-  cosim_printf("\n   Heap Sort C Program\n");
-  cosim_printf("   Version 1.0, 04 Oct 1992\n\n");
-  cosim_printf("   Size of long (bytes): %ld\n\n", bplong);
-  cosim_printf("   Array Size\n");
-  cosim_printf("    (bytes)\n");
+  libmin_printf("\n   Heap Sort C Program\n");
+  libmin_printf("   Size of long (bytes): %ld\n\n", bplong);
+  libmin_printf("   Array Size (bytes)\n");
 
 				   /* Predetermine runtime (sec) for  */
 				   /* memory size 2000 * sizeof(long),*/
 				   /* and 256 iterations. p = 0 means */
 				   /* don't print the result.         */
-  j = 50;
+  j = 1024;
   p = 1;
   HSORT(j,p);
 

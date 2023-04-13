@@ -15,7 +15,7 @@
 	     Compile: cc -o pascal pascal.c
 */
 
-#include "libcosim.h"
+#include "libmin.h"
 
 #ifndef FALSE
 #define FALSE 0
@@ -66,10 +66,10 @@ int print_centered(int n, int width)
 	pad_space = (width - nw)/2;
 
 	for(i=0;i<pad_space;i++)
-	  cosim_printf(" ");
-	cosim_printf("%d",n);
+	  libmin_printf(" ");
+	libmin_printf("%d",n);
 	for(i=0;i<width - nw - pad_space;i++)
-	  cosim_printf(" ");
+	  libmin_printf(" ");
 	return 0;
 }
 
@@ -86,17 +86,17 @@ int main(void)
 	
 	while(((i+1)<=argc)&&(argv[i][0] == '-')){
 		if(argv[i][1] == 'h'){
-			cosim_printf(HELP);
+			libmin_printf(HELP);
 			return 0;
 		}
 		if(argv[i][1] == 'v'){
-			cosim_printf("%s\n",VERSION);
+			libmin_printf("%s\n",VERSION);
 			return 0;
 		}
 		if(argv[i][1]=='c'){
 			/* make sure there is an arg */
 			if((i+1) >= argc){
-				cosim_printf(USAGE);
+				libmin_printf(USAGE);
 				return 1;
 			}
 			cols_option = TRUE;
@@ -104,31 +104,31 @@ int main(void)
 			continue;
 		}
 		/* Unknown option if we got to here */
-		cosim_printf(USAGE);
+		libmin_printf(USAGE);
 		return 1;
 	}
 
 	/* Make sure there is one arg left */
 
 	if((i+1) != argc){ 
-	  nrows = 15;
+	  nrows = 20;
 	}
 	else
-	  nrows = atoi(argv[i]);
+	  nrows = libmin_atoi(argv[i]);
 
 	/* Sanity checks */
 	if(nrows == 0){ 
 		if(cols_option)
-		  cosim_printf("0\n");
-		cosim_success(); /* nothing to do */
+		  libmin_printf("0\n");
+		libmin_success(); /* nothing to do */
 	}
 	if(nrows < 0){
-		cosim_printf("%s: %d is an invalid number of rows\n", PROGRAM_NAME,nrows);
-		cosim_fail(1);
+		libmin_printf("%s: %d is an invalid number of rows\n", PROGRAM_NAME,nrows);
+		libmin_fail(1);
 	}
 	if(nrows > MAX_ROWS){
-		cosim_printf("%s: %d > %d rows maximum\n",PROGRAM_NAME,nrows, MAX_ROWS);
-		cosim_fail(1);
+		libmin_printf("%s: %d > %d rows maximum\n",PROGRAM_NAME,nrows, MAX_ROWS);
+		libmin_fail(1);
 	}
 
 	/* build the triangle */
@@ -156,8 +156,8 @@ int main(void)
            (max_width+2)*nrows */
 
 	if(cols_option){
-			cosim_printf("%d\n",(max_width + 2)*nrows);
-			cosim_success();
+			libmin_printf("%d\n",(max_width + 2)*nrows);
+			libmin_success();
 	}
 	   
 	/* Now print everything out */ 
@@ -175,16 +175,16 @@ int main(void)
                    number of leading blanks */
 
 		for(j=0;j<row_offset;j++)
-		  cosim_printf(" ");
+		  libmin_printf(" ");
 
 		/* Print ith row of numbers */
 
 		for(j=0;j<i+1;j++)
 			if( print_centered(triangle[i][j],max_width+2)){
-				cosim_printf("%s: error printing element %d,%d\n",PROGRAM_NAME,i,j);
-				cosim_fail(1);
+				libmin_printf("%s: error printing element %d,%d\n",PROGRAM_NAME,i,j);
+				libmin_fail(1);
 		}
-		cosim_printf("\n");
+		libmin_printf("\n");
 	}
 	return 0;
 }

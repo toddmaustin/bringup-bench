@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <string.h>
-#include "libcosim.h"
+#include "libmin.h"
 
 #ifndef TIME
 #ifndef CLOCK
@@ -129,7 +127,7 @@ Boolean PFunc_3 (Enumeration);
 int PProc_6 (Enumeration, Enumeration*);
 
 int
-newmain(void)
+main(void)
 /*****/
 
   /* main program, corresponds to procedures        */
@@ -166,13 +164,13 @@ newmain(void)
         /* Warning: With 16-Bit processors and Pnumber_of_runs > 32000,  */
         /* overflow may occur for this array element.                   */
 
-  cosim_printf("\n");
-  cosim_printf("Dhrystone Benchmark, Version 2.1 (Language: C)\n");
-  cosim_printf("\n");
+  libmin_printf("\n");
+  libmin_printf("Dhrystone Benchmark, Version 2.1 (Language: C)\n");
+  libmin_printf("\n");
 
   Pnumber_of_runs = nofr; // HCH
 
-  cosim_printf("Execution starts, %d runs through Dhrystone\n",Pnumber_of_runs);
+  libmin_printf("Execution starts, %d runs through Dhrystone\n",Pnumber_of_runs);
 
   /***************/
   /* Start timer */
@@ -228,60 +226,60 @@ newmain(void)
   /* Stop timer */
   /**************/
 
-  cosim_printf("Execution ends\n");
-  cosim_printf("\n");
-  cosim_printf("Final values of the variables used in the benchmark:\n");
-  cosim_printf("\n");
-  cosim_printf("Int_Glob:            %d\n", Int_Glob);
-  cosim_printf("        should be:   %d\n", 5);
-  cosim_printf("Bool_Glob:           %d\n", Bool_Glob);
-  cosim_printf("        should be:   %d\n", 1);
-  cosim_printf("Ch_1_Glob:           %c\n", Ch_1_Glob);
-  cosim_printf("        should be:   %c\n", 'A');
-  cosim_printf("Ch_2_Glob:           %c\n", Ch_2_Glob);
-  cosim_printf("        should be:   %c\n", 'B');
-  cosim_printf("Arr_1_Glob[8]:       %d\n", Arr_1_Glob[8]);
-  cosim_printf("        should be:   %d\n", 7);
-  cosim_printf("Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
-  cosim_printf("        should be:   Pnumber_of_runs + 10\n");
-  cosim_printf("Ptr_Glob->\n");
-  cosim_printf("  Ptr_Comp:          %d\n", (int)(long) Ptr_Glob->Ptr_Comp);
-  cosim_printf("        should be:   (implementation-dependent)\n");
-  cosim_printf("  Discr:             %d\n", Ptr_Glob->Discr);
-  cosim_printf("        should be:   %d\n", 0);
-  cosim_printf("  Enum_Comp:         %d\n", Ptr_Glob->variant.var_1.Enum_Comp);
-  cosim_printf("        should be:   %d\n", 2);
-  cosim_printf("  Int_Comp:          %d\n", Ptr_Glob->variant.var_1.Int_Comp);
-  cosim_printf("        should be:   %d\n", 17);
-  cosim_printf("  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
-  cosim_printf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
-  cosim_printf("Next_Ptr_Glob->\n");
-  cosim_printf("  Ptr_Comp:          %d\n", (int)(long) Next_Ptr_Glob->Ptr_Comp);
-  cosim_printf("        should be:   (implementation-dependent), same as above\n");
-  cosim_printf("  Discr:             %d\n", Next_Ptr_Glob->Discr);
-  cosim_printf("        should be:   %d\n", 0);
-  cosim_printf("  Enum_Comp:         %d\n",
+  libmin_printf("Execution ends\n");
+  libmin_printf("\n");
+  libmin_printf("Final values of the variables used in the benchmark:\n");
+  libmin_printf("\n");
+  libmin_printf("Int_Glob:            %d\n", Int_Glob);
+  libmin_printf("        should be:   %d\n", 5);
+  libmin_printf("Bool_Glob:           %d\n", Bool_Glob);
+  libmin_printf("        should be:   %d\n", 1);
+  libmin_printf("Ch_1_Glob:           %c\n", Ch_1_Glob);
+  libmin_printf("        should be:   %c\n", 'A');
+  libmin_printf("Ch_2_Glob:           %c\n", Ch_2_Glob);
+  libmin_printf("        should be:   %c\n", 'B');
+  libmin_printf("Arr_1_Glob[8]:       %d\n", Arr_1_Glob[8]);
+  libmin_printf("        should be:   %d\n", 7);
+  libmin_printf("Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
+  libmin_printf("        should be:   Pnumber_of_runs + 10\n");
+  libmin_printf("Ptr_Glob->\n");
+  libmin_printf("  Ptr_Comp:          0x%08lx\n", (int)(long) Ptr_Glob->Ptr_Comp);
+  libmin_printf("        should be:   (implementation-dependent)\n");
+  libmin_printf("  Discr:             %d\n", Ptr_Glob->Discr);
+  libmin_printf("        should be:   %d\n", 0);
+  libmin_printf("  Enum_Comp:         %d\n", Ptr_Glob->variant.var_1.Enum_Comp);
+  libmin_printf("        should be:   %d\n", 2);
+  libmin_printf("  Int_Comp:          %d\n", Ptr_Glob->variant.var_1.Int_Comp);
+  libmin_printf("        should be:   %d\n", 17);
+  libmin_printf("  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
+  libmin_printf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
+  libmin_printf("Next_Ptr_Glob->\n");
+  libmin_printf("  Ptr_Comp:          0x%08lx\n", (int)(long) Next_Ptr_Glob->Ptr_Comp);
+  libmin_printf("        should be:   (implementation-dependent), same as above\n");
+  libmin_printf("  Discr:             %d\n", Next_Ptr_Glob->Discr);
+  libmin_printf("        should be:   %d\n", 0);
+  libmin_printf("  Enum_Comp:         %d\n",
          Next_Ptr_Glob->variant.var_1.Enum_Comp);
-  cosim_printf("        should be:   %d\n", 1);
-  cosim_printf("  Int_Comp:          %d\n",
+  libmin_printf("        should be:   %d\n", 1);
+  libmin_printf("  Int_Comp:          %d\n",
          Next_Ptr_Glob->variant.var_1.Int_Comp);
-  cosim_printf("        should be:   %d\n", 18);
-  cosim_printf("  Str_Comp:          %s\n",
+  libmin_printf("        should be:   %d\n", 18);
+  libmin_printf("  Str_Comp:          %s\n",
                                 Next_Ptr_Glob->variant.var_1.Str_Comp);
-  cosim_printf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
-  cosim_printf("Int_1_Loc:           %d\n", Int_1_Loc);
-  cosim_printf("        should be:   %d\n", 5);
-  cosim_printf("Int_2_Loc:           %d\n", Int_2_Loc);
-  cosim_printf("        should be:   %d\n", 13);
-  cosim_printf("Int_3_Loc:           %d\n", Int_3_Loc);
-  cosim_printf("        should be:   %d\n", 7);
-  cosim_printf("Enum_Loc:            %d\n", Enum_Loc);
-  cosim_printf("        should be:   %d\n", 1);
-  cosim_printf("Str_1_Loc:           %s\n", Str_1_Loc);
-  cosim_printf("        should be:   DHRYSTONE PROGRAM, 1'ST STRING\n");
-  cosim_printf("Str_2_Loc:           %s\n", Str_2_Loc);
-  cosim_printf("        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
-  cosim_printf("\n");
+  libmin_printf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
+  libmin_printf("Int_1_Loc:           %d\n", Int_1_Loc);
+  libmin_printf("        should be:   %d\n", 5);
+  libmin_printf("Int_2_Loc:           %d\n", Int_2_Loc);
+  libmin_printf("        should be:   %d\n", 13);
+  libmin_printf("Int_3_Loc:           %d\n", Int_3_Loc);
+  libmin_printf("        should be:   %d\n", 7);
+  libmin_printf("Enum_Loc:            %d\n", Enum_Loc);
+  libmin_printf("        should be:   %d\n", 1);
+  libmin_printf("Str_1_Loc:           %s\n", Str_1_Loc);
+  libmin_printf("        should be:   DHRYSTONE PROGRAM, 1'ST STRING\n");
+  libmin_printf("Str_2_Loc:           %s\n", Str_2_Loc);
+  libmin_printf("        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
+  libmin_printf("\n");
 
   return 0;
 }
