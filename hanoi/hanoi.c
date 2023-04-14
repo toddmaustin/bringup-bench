@@ -1,4 +1,4 @@
-#include "libcosim.h"
+#include "libmin.h"
 
 #define other(i,j) (6-(i+j))
 
@@ -25,12 +25,12 @@ mov(int n, int f, int t)
 }
 
 int
-newmain(void)
+main(void)
 {
   int disk, Loops = 0;
 
-  cosim_printf("Towers of Hanoi Puzzle Test Program\n");
-  cosim_printf("Disks     Moves\n");
+  libmin_printf("Towers of Hanoi Puzzle Test Program\n");
+  libmin_printf("Disks     Moves\n");
 
   disk = 0;
 
@@ -46,9 +46,9 @@ newmain(void)
       mov(disk,1,3);
 
       Loops = Loops + 1;
-      cosim_printf("%3d  %10ld\n",disk,count);
+      libmin_printf("%3d  %10ld\n",disk,count);
 
-      if ( disk == 5 ) break;
+      if (disk == 10) break;
     }
   return 0;
 }
