@@ -9,16 +9,16 @@
  ** 
  **/
 
-#include "libcosim.h"
+#include "libmin.h"
 
 void
 color(int red, int green, int blue)
 {
-  cosim_printf("<%d,%d,%d>\n", red, green, blue);
+  libmin_printf("<%d,%d,%d>\n", red, green, blue);
 }
 
 int
-newmain(void)
+main(void)
 {
   double x, xx, y, cx, cy;
   int iteration, hx, hy;
@@ -28,8 +28,8 @@ newmain(void)
   int hyres = 48;		/* vertical resolution		*/
 
   /* header for PPM output */
-  cosim_printf("** Mandelbrot ASCII image\n");
-  cosim_printf("** xres: %d, yres: %d\n", hxres, hyres);
+  libmin_printf("** Mandelbrot ASCII image\n");
+  libmin_printf("** xres: %d, yres: %d\n", hxres, hyres);
 
   for (hy=1; hy <= hyres; hy++)
     {
@@ -48,11 +48,11 @@ newmain(void)
 		iteration = 999999;
 	    }
 	  if (iteration < 99999)
-	    cosim_printf(" ");
+	    libmin_printf(" ");
 	  else
-	    cosim_printf("0");
+	    libmin_printf("0");
 	}
-      cosim_printf("\n");
+      libmin_printf("\n");
     }
 
   return 0;

@@ -11,10 +11,6 @@
 
 */
 
-/* copy src to dst, truncating or null-padding to always copy n bytes */
-char *libmin_strncpy(char *dst, const char *src, size_t n);
-char *libmin_strncat(char *d, const char *s, size_t n);
-
 /* standard atol() implementation */
 long libmin_atol(const char *s);
 
@@ -28,16 +24,32 @@ extern int optind, opterr, optopt, optpos, optreset;
 /* standard getopt() implementation */
 int libmin_getopt(int argc, char * const argv[], const char *optstring);
 
+/* copy src to dst, truncating or null-padding to always copy n bytes */
+char *libmin_strcat(char *dest, const char *src);
+char *libmin_strcpy(char *dest, const char *src);
+char *libmin_strncpy(char *dst, const char *src, size_t n);
+char *libmin_strncat(char *d, const char *s, size_t n);
+
 /* return string length */
 size_t libmin_strlen(const char *str);
 
-#ifndef COSIM_SILENT
+/* return order of strings */
+int libmin_strcmp(const char *l, const char *r);
+
+size_t libmin_strcspn(const char *s, const char *c);
+char * libmin_strpbrk(const char *s, const char *b);
+
+/* set a block of memory to a value */
+void * libmin_memset(void *dest, int c, size_t n);
+void *libmin_memcpy(void *dest, const void *src, size_t n);
+
+#ifndef LIBTARG_SILENT
 /* print a message with format FMT to the co-simulation console */
 void libmin_printf(char *fmt, ...);
-#else /* COSIM_SILENT */
+#else /* LIBTARG_SILENT */
 /* run silent */
 #define libmin_printf(FMT, ARGS...)	do { ; } while (0)
-#endif /* COSIM_SILENT */
+#endif /* LIBTARG_SILENT */
 
 /* print one character */
 void libmin_putc(char c);
@@ -57,9 +69,47 @@ void libmin_srand(unsigned int seed);
 /* generate a random integer */
 int libmin_rand(void);
 
+/* allocate memory */
+void *libmin_malloc(size_t size);
+void *libmin_calloc(size_t m, size_t n);
+void *libmin_realloc(void *block, size_t size);
+
+/* free memory */
+void libmin_free(void * addr);
+
 #ifndef NULL
 #define NULL	((void *)0)
 #endif /* NULL */
+
+/* in-memory file I/O */
+struct _MFILE {
+  char *fname;
+  size_t data_sz;
+  uint8_t *data;
+  int rdptr;
+};
+typedef struct _MFILE MFILE;
+
+/* open an in-memory file */
+void libmin_mopen(MFILE *mfile, const char *mode);
+
+/* return in-memory file size */
+size_t libmin_msize(MFILE *mfile);
+
+/* at end of file */
+int libmin_meof(MFILE *mfile);
+
+/* close the in-memory file */
+void libmin_mclose(MFILE *mfile);
+
+/* read a buffer from the in-memory file */
+size_t libmin_mread(void *ptr, size_t size, MFILE *mfile);
+
+/* get a string from the in-memory file */
+char *libmin_mgets(char *s, size_t size, MFILE *mfile);
+
+/* read a character from the in-memory file */
+int libmin_mgetc(MFILE *mfile);
 
 /* ctype defs */
 //
@@ -117,8 +167,13 @@ int tolower(int c);
 #define toupper(c)     (islower(c) ? ((c) - 'a' + 'A') : (c))
 
 /* math functions */
+
+#define DBL_EPSILON 2.22044604925031308085e-16
+
 double libmin_floor(double x);
 double libmin_scalbn(double x, int n);
 double libmin_cos(double x);
+double libmin_sin(double x);
+double libmin_pow(double x, double y);
 
 #endif /* LIBMIN_H */

@@ -599,12 +599,9 @@ void SortCandidates(void) {
     fputc('\n', stdout);
 }
 
-int fInteractive;
-
 char * GetPhrase(char * pch) {
-    if (fInteractive) printf(">");
     fflush(stdout);
-    if (gets(pch) == NULL) {
+    if (libmin_mgets(pch) == NULL) {
 #ifdef PLUS_STATS
 	PrintDerefStats(stdout);
         PrintHeapSize(stdout);
@@ -623,8 +620,6 @@ int Cdecl main(int cpchArgc, char **ppchArgv) {
 
     if (cpchArgc == 3)
 	cchMinLength = atoi(ppchArgv[2]);
-
-    fInteractive = isatty(1);
 
     ReadDict(ppchArgv[1]);
 

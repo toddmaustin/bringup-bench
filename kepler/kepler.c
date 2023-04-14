@@ -62,12 +62,7 @@
 
 */
 
-
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<float.h>
-#include<math.h>
+#include "libmin.h"
 
 #define VERSION "1.11"
 
@@ -131,7 +126,7 @@ double strict_iteration(double E, double e, double M, int reset)
 
 	/* reset is not used in this routine. It may generate a compiler
            warning */
-	return M + e*sin(E);
+	return M + e*libmin_sin(E);
 }
 
 /* The following routine is used to solve kepler's equation using
@@ -144,7 +139,7 @@ double newton(double E, double e, double M, int reset)
 {
 	/* reset is not used in this routine. It may generate a compiler
            warning */
-	return E + (M + e*sin(E) - E)/(1 - e*cos(E));
+	return E + (M + e*libmin_sin(E) - E)/(1 - e*libmin_cos(E));
 }
 
 /* The following routine implements the binary search algorithm due
@@ -163,7 +158,7 @@ double binary(double E, double e, double M, int reset)
 		return 0.0;
 	}
 
-	R = E - e*sin(E);
+	R = E - e*libmin_sin(E);
 	X = M > R ? E + scale : E - scale;
 	scale = scale/2.0;
 	return X;
@@ -211,10 +206,10 @@ double e_series(double E, double e, double M, int reset)
 	for(k=0;2*k<=n;k++){
 		n_2k = (double)n - 2.0 * ((double)k);
 		s_k = k%2 ? -1.0 : 1.0;   /*   (-1)^k */
-		a_n += s_k*bin_fact(n,k)*sin(n_2k*M);
+		a_n += s_k*bin_fact(n,k)*libmin_sin(n_2k*M);
 	}
 	n++;
-	return E + pow(e,n-1)*a_n;
+	return E + libmin_pow(e,n-1)*a_n;
 }
 	
 /* The eccentric anomaly is an odd periodic function in the Mean Anomoly
@@ -247,7 +242,7 @@ double j_series(double E, double e, double M, int reset)
 		return M;
 	}
 	dn = (double)n;
-	term = (2.0/(double)n)*J(n,dn*e)*sin(dn*M);
+	term = (2.0/(double)n)*J(n,dn*e)*libmin_sin(dn*M);
 	n++;
 	return E + term;
 }
@@ -286,36 +281,36 @@ main(void)
 	/* Process command line options */
 
 	while(argv[i][0] == '-'){
-		  if(strcmp(argv[i],"-h")==0){
-			printf("%s\n", HELP);
-			exit(0);
+		  if(libmin_strcmp(argv[i],"-h")==0){
+			libmin_printf("%s\n", HELP);
+			libmin_success();
 		  }
-		  if(strcmp(argv[i],"-v")==0){
-			printf("%s\n",VERSION);
-			exit(0);
+		  if(libmin_strcmp(argv[i],"-v")==0){
+			libmin_printf("%s\n",VERSION);
+			libmin_success();
 		  }
-		  if(strcmp(argv[i],"-a")==0){
+		  if(libmin_strcmp(argv[i],"-a")==0){
 			derror = atof(argv[i+1]);
 			if(derror <= DBL_EPSILON)
-			        fprintf(stderr,"Warning: requested precision may exceed implementation limit.\n");
+			        libmin_printf("Warning: requested precision may exceed implementation limit.\n");
 			i += 2;
 			continue;
 		  }
-		  if(strcmp(argv[i],"-m")==0){
+		  if(libmin_strcmp(argv[i],"-m")==0){
 			m = atoi(argv[i+1]);
 			if((m<=0) || (m>NMETHODS)){
-				fprintf(stderr,"Bad method number %d\n",m);
+				libmin_printf("Bad method number %d\n",m);
 				return 1;
 			}
 			i += 2;
 			continue;
 		  }
 		  fprintf(stderr, "kepler: Unknown option %s\n", argv[i]);
-		  fprintf(stderr, "%s\n",USAGE);
+		  libmin_printf("%s\n",USAGE);
 		  return 1;
 		}
 	if(i + 2 > argc){
-		fprintf(stderr, "%s\n",USAGE);
+		libmin_printf("%s\n",USAGE);
 		return 1;
 	}
 	M = atof(argv[i++]);
@@ -323,13 +318,13 @@ main(void)
 	method = (double(*)(double,double,double,int))methods[m-1];
 
 	if((m==4)&&(e > LAPLACE_LIMIT)){
-		fprintf(stderr,"e cannot exceed %f for this method.\n",
+		libmin_printf("e cannot exceed %f for this method.\n",
 				LAPLACE_LIMIT);
 		return 1;
 	}
 
 	if((e<0)||(e>=1.0)){
-		fprintf(stderr,"Eccentricity %f out of range.\n",e);
+		libmin_printf("Eccentricity %f out of range.\n",e);
 		return 1;
 	}
 

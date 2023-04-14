@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include "libcosim.h"
+#include "libmin.h"
 
 		     /***********************************************/
 #define LIMIT 8      /* You may need to change this to '3' for PC's */
@@ -64,21 +63,21 @@ SIEVE(long m, long p)
   L_Prime = prime;
 
   if (p != 0L)
-    cosim_printf("  %9ld   %8ld     %8ld\n",m,N_Prime,L_Prime);
+    libmin_printf("  %9ld   %8ld     %8ld\n",m,N_Prime,L_Prime);
 
   return 0;
 }
 
 int
-newmain(void)
+main(void)
 {
 
   long  j,p;
 
-  cosim_printf("\n   Sieve of Eratosthenes (Scaled to 10 Iterations)\n");
-  cosim_printf("   Version 1.2b, 26 Sep 1992\n\n");
-  cosim_printf("   Array Size   Number   Last Prime\n");
-  cosim_printf("    (Bytes)   of Primes\n");
+  libmin_printf("\n   Sieve of Eratosthenes (Scaled to 10 Iterations)\n");
+  libmin_printf("   Version 1.2b, 26 Sep 1992\n\n");
+  libmin_printf("   Array Size   Number   Last Prime\n");
+  libmin_printf("    (Bytes)   of Primes\n");
 	
   j = 1024;
   p = 1;

@@ -3,6 +3,7 @@
 #ifdef LIBTARG_HOST
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 #else /* undefined target */
 #error Co-simulation platform not defined, define LIBTARG_HOST or a target-dependent definition.
 #endif
@@ -33,3 +34,22 @@ libtarg_putc(char c)
   fputc(c, stdout);
 #endif
 }
+
+/* set memory breakpoint */
+int
+libtarg_brk(void *addr)
+{
+#ifdef LIBTARG_HOST
+  return brk(addr);
+#endif
+}
+
+/* get some memory */
+void *
+libtarg_sbrk(size_t inc)
+{
+#ifdef LIBTARG_HOST
+  return sbrk(inc);
+#endif
+}
+

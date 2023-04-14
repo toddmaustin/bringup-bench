@@ -25,11 +25,7 @@
 #define USAGE "Usage: longdiv <dividend> <divisor>"
 #define DIGITS "123456789"
 
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<limits.h>
-#include<ctype.h>
+#include "libmin.h"
 
 #define TRUE 1
 #define FALSE 0
@@ -73,13 +69,13 @@ isgte( char *A, char *B)
 
 /* Normalize by stripping off leading zeros */
 
-	AA = strpbrk(A,DIGITS);
-	BB = strpbrk(B,DIGITS);
+	AA = libmin_strpbrk(A,DIGITS);
+	BB = libmin_strpbrk(B,DIGITS);
 
 	if(BB == NULL) return TRUE;
 	if(AA == NULL) return FALSE;  
 
-	if((b=strlen(BB ))>(a=strlen(AA)))return FALSE;
+	if((b=libmin_strlen(BB ))>(a=libmin_strlen(AA)))return FALSE;
 	if(a > b) return TRUE;
 	
 	for(i=0;i<b;i++){
@@ -105,19 +101,19 @@ char *sbc(char *mend, char *shend)
 
 	if(!isgte(mend,shend))return NULL;
 
-	lm = strlen(mend);
-	ls = strlen(shend);
-	res = (char *)malloc(strlen(mend)+1);
+	lm = libmin_strlen(mend);
+	ls = libmin_strlen(shend);
+	res = (char *)libmin_malloc(libmin_strlen(mend)+1);
 	if(res == NULL){
-		fprintf(stderr,"sbc: Unable to malloc space for result\n");
-		exit(1);
+		libmin_printf("sbc: Unable to malloc space for result\n");
+		libmin_fail(1);
 	}
-	p = mnd = (char *)malloc(strlen(mend)+1);
+	p = mnd = (char *)libmin_malloc(libmin_strlen(mend)+1);
 	if(mnd == NULL){
-		fprintf(stderr,"sbc: Unable to malloc\n");
-		exit(1);
+		libmin_printf("sbc: Unable to malloc\n");
+		libmin_fail(1);
 	}
-	strcpy(mnd,mend);
+	libmin_strcpy(mnd,mend);
 
 	/* Fill result array with digit zero */
 
@@ -139,7 +135,7 @@ char *sbc(char *mend, char *shend)
 		 need_borrow |= sub(mnd[lm-i-1],'0',res+lm-i-1);
 	}
 		
-	free(p);
+	libmin_free(p);
 	return res;
 }
 
@@ -158,11 +154,11 @@ times_digit(char *mcand, char dgt)
 	if(mcand == NULL) return NULL;
 
 	idgt = dgt - '0';
-	len = strlen(mcand);
-	tmp = (char *)malloc(len+2);
+	len = libmin_strlen(mcand);
+	tmp = (char *)libmin_malloc(len+2);
 	if(tmp==NULL){
-		fprintf(stderr,"Unable to malloc partial product array\n");
-		exit(1);
+		libmin_printf("Unable to malloc partial product array\n");
+		libmin_fail(1);
 	}
 	
 	tmp[len+1]='\0';
@@ -175,14 +171,14 @@ times_digit(char *mcand, char dgt)
 	}
 	tmp[0] = '0' + carry;
 	if(tmp[0]=='0'){
-		res = (char *)malloc(len+1);
+		res = (char *)libmin_malloc(len+1);
 		if(res == NULL){
-			fprintf(stderr,"Unable to malloc partial product array\n");
-			exit(1);
+			libmin_printf("Unable to malloc partial product array\n");
+			libmin_fail(1);
 		}
 		res[len]='\0';
-		strcpy(res,tmp+1);
-		free(tmp);
+		libmin_strcpy(res,tmp+1);
+		libmin_free(tmp);
 	}
 	else res = tmp;
 	return res;
@@ -199,15 +195,15 @@ splice(char *front, char *back)
 
 	if(front == NULL)return back;
 	if(back == NULL) return front;  
-	len = strlen(front)+strlen(back);
+	len = libmin_strlen(front)+libmin_strlen(back);
 
-	res = (char *)malloc((len+1)*sizeof(char));
+	res = (char *)libmin_malloc((len+1)*sizeof(char));
 	if(res == NULL) {
-		fprintf(stderr,"splice: unable to malloc\n");
+		libmin_printf("splice: unable to malloc\n");
 		return NULL;
 	}
-	strcpy(res,front);
-	strcat(res,back);
+	libmin_strcpy(res,front);
+	libmin_strcat(res,back);
 	return res;
 }
 
@@ -221,14 +217,14 @@ cut_off(char *source, int n)
 	char *res;
 
 	if((n <= 0)||(source == NULL))return NULL;
-	k = strlen(source);
+	k = libmin_strlen(source);
 	k = ( n > k ? k : n );
-	res = (char *)calloc(sizeof(char),(k+1));
+	res = (char *)libmin_calloc(sizeof(char),(k+1));
 	if(res == NULL){
-		fprintf(stderr,"cut_off: Unable to malloc\n");
+		libmin_printf("cut_off: Unable to malloc\n");
 		return NULL;
 	}
-	strncpy(res,source,k);
+	libmin_strncpy(res,source,k);
 	return res;
 }
 	
@@ -251,58 +247,58 @@ main(void)
 
 	/* Do sanity checks on args */
 
-	for(i=0; i<strlen(argv[1]); i++)
+	for(i=0; i<libmin_strlen(argv[1]); i++)
 		if(!isdigit(argv[1][i])){
-			fprintf(stderr,"%s\n%s\n","longdiv: syntax error",
+			libmin_printf("%s\n%s\n","longdiv: syntax error",
 				argv[1]);
-			for(j=0;j<i;j++)fputc(' ',stderr);
-			fputc('^',stderr);
-			fputc('\n',stderr);
+			for(j=0;j<i;j++)libmin_putc(' ');
+			libmin_putc('^');
+			libmin_putc('\n');
 			return FALSE;
 		}
 
-	for(i=0; i<strlen(argv[2]); i++)
+	for(i=0; i<libmin_strlen(argv[2]); i++)
 		if(!isdigit(argv[2][i])){
-			fprintf(stderr,"%s\n%s\n","longdiv: syntax error",
+			libmin_printf("%s\n%s\n","longdiv: syntax error",
 				argv[2]);
-			for(j=0;j<i;j++)fputc(' ',stderr);
-			fputc('^',stderr);
-			fputc('\n',stderr);
+			for(j=0;j<i;j++)libmin_putc(' ');
+			libmin_putc('^');
+			libmin_putc('\n');
 			return FALSE;
 		}
 
 	/* Make sure we're not dividing by 0 */
 
 	j = TRUE; /* Guilty, till proven innocent */
-	for(i=0;i<strlen(argv[2]);i++)
+	for(i=0;i<libmin_strlen(argv[2]);i++)
 		if(argv[2][i] != '0'){j = FALSE; break; }
 	if(j){
-		fprintf(stderr,"%s\n", "longdiv: Cannot divide by 0.\n");
+		libmin_printf("%s\n", "longdiv: Cannot divide by 0.\n");
 		return FALSE;
 	}
 
 	/* OK, lookin' good */
 	/* Save divisor and dividend */
 
-	if((ptr = strpbrk(argv[1],DIGITS))==NULL)
+	if((ptr = libmin_strpbrk(argv[1],DIGITS))==NULL)
 		 ddnd_len = 1;
 	else 
-	   ddnd_len = strlen(ptr);
-	ddnds[0] = (char *)malloc((ddnd_len+1)*sizeof(char));
+	   ddnd_len = libmin_strlen(ptr);
+	ddnds[0] = (char *)libmin_malloc((ddnd_len+1)*sizeof(char));
 	if(ptr == NULL)
-		strcpy(ddnds[0],"0");
+		libmin_strcpy(ddnds[0],"0");
 	else
-	        strcpy(ddnds[0],ptr);
-	ptr = strpbrk(argv[2],DIGITS);
-	dsr_len = strlen(ptr);
-	dsr = (char *)malloc((dsr_len+1)*sizeof(char));
-	strcpy(dsr,ptr);
+	        libmin_strcpy(ddnds[0],ptr);
+	ptr = libmin_strpbrk(argv[2],DIGITS);
+	dsr_len = libmin_strlen(ptr);
+	dsr = (char *)libmin_malloc((dsr_len+1)*sizeof(char));
+	libmin_strcpy(dsr,ptr);
 
 	dgts_fwd = dsr_len-1; /* Turns out to be the right initialization */
 
 	/* Reserve space for, and properly terminate, quotient */
 
-	quotient = (char *)calloc(sizeof(char),ddnd_len+1);
+	quotient = (char *)libmin_calloc(sizeof(char),ddnd_len+1);
 
 	/* stick an appropriate number of leading zeros on quotient */
 	/* These will be stripped in the printout */
@@ -336,12 +332,12 @@ main(void)
 	  /* Determine the next minuend */
 	  mend = cut_off(ddnds[step],++dgts_fwd);	
 	  while(!isgte(mend,dsr)){
-		strcat(quotient,"0");
-		free(mend);
+		libmin_strcat(quotient,"0");
+		libmin_free(mend);
 		mend = cut_off(ddnds[step],++dgts_fwd);
 	  } 
 
-	  pend = ddnds[step]+strlen(mend); /* Set pointer to rest of dividend that
+	  pend = ddnds[step]+libmin_strlen(mend); /* Set pointer to rest of dividend that
 					 will be spliced on to form the
                                          next dividend. (points to 7 in example
 					 above. */
@@ -352,22 +348,22 @@ main(void)
 	  for(i='9';i>='1';i--){
 		shends[step] = times_digit(dsr,i);
 		if(isgte(mend,shends[step]))break;
-		free(shends[step]);
+		libmin_free(shends[step]);
 	  }
 
 	/* 
 	  Insert the new digit in the quotient.  
 	*/
 
-	  quotient[strlen(quotient)]=i;
+	  quotient[libmin_strlen(quotient)]=i;
 
 	/* Now, subtract the current subtrahend from the current minuend,
 	   and splice the result with pend to form the next dividend */
 
 	  ptr = sbc(mend,shends[step]);
-	  if(strpbrk(ptr,DIGITS)==NULL)dgts_fwd = 0;
+	  if(libmin_strpbrk(ptr,DIGITS)==NULL)dgts_fwd = 0;
 	  else
-	  	dgts_fwd = strlen(strpbrk(ptr,DIGITS));
+	  	dgts_fwd = libmin_strlen(libmin_strpbrk(ptr,DIGITS));
 
 	/* A special situation arises here if dgts_fwd = 0 and pend
            points to a zero: since we strip off leading zeros when defining
@@ -376,50 +372,50 @@ main(void)
 	*/
 	 if(dgts_fwd == 0)
 		while ((*pend == '0') && (*pend != '\0')){
-			strcat(quotient,"0");
+			libmin_strcat(quotient,"0");
 			pend++;
 		} 
-	  ddnds[step+1] = strpbrk(splice(ptr,pend),
+	  ddnds[step+1] = libmin_strpbrk(splice(ptr,pend),
 				DIGITS); 
 	  if(ddnds[step+1]==NULL){
-		ddnds[step+1]= malloc(2*sizeof(char));
-		strcpy(ddnds[step+1],"0");
+		ddnds[step+1]= libmin_malloc(2*sizeof(char));
+		libmin_strcpy(ddnds[step+1],"0");
 	  }
-	  free(mend);
+	  libmin_free(mend);
 	  step++;
 
 	}  /* repeat with new dividend */
 
 	/* Add any necessary trailing zeros to quotient */
-	j = strlen(quotient);
-	for(i=0;i<ddnd_len - j;i++)strcat(quotient,"0");
+	j = libmin_strlen(quotient);
+	for(i=0;i<ddnd_len - j;i++)libmin_strcat(quotient,"0");
 
 	/* Calculation done. Print everything out */
 
 	/* Print out the quotient */
-	for(i=0;i<dsr_len+2;i++)putchar(' ');
-	for(;*quotient == '0';quotient++)putchar(' ');
-	printf("%s\n",quotient);
+	for(i=0;i<dsr_len+2;i++)libmin_putc(' ');
+	for(;*quotient == '0';quotient++)libmin_putc(' ');
+	libmin_printf("%s\n",quotient);
 
 	/* Print out the top bar */
 	
-	for(i=0;i<dsr_len+2;i++)putchar(' ');   /* space over */
-	for(i=0;i<ddnd_len;i++)putchar('_');
+	for(i=0;i<dsr_len+2;i++)libmin_putc(' ');   /* space over */
+	for(i=0;i<ddnd_len;i++)libmin_putc('_');
 
 	/* Print out divisor and dividend */
-	printf("\n %s)%s\n",dsr,ddnds[0]);
+	libmin_printf("\n %s)%s\n",dsr,ddnds[0]);
 
 	for(i=0;i<step;i++){
-		for(j=0;j<dsr_len+2+ddnd_len - strlen(ddnds[i]);j++)
-			putchar(' ');	
-		printf("%s\n",shends[i]);
-		for(j=0;j<dsr_len+2+ddnd_len - strlen(ddnds[i]);j++)
-			putchar(' ');	
-		for(k=0;k<strlen(shends[i]);k++)putchar('-');
-		putchar('\n');
-		for(j=0;j<dsr_len+2+ddnd_len - strlen(ddnds[i+1]);j++)
-			putchar(' ');	
-		printf("%s\n",ddnds[i+1]);
+		for(j=0;j<dsr_len+2+ddnd_len - libmin_strlen(ddnds[i]);j++)
+			libmin_putc(' ');	
+		libmin_printf("%s\n",shends[i]);
+		for(j=0;j<dsr_len+2+ddnd_len - libmin_strlen(ddnds[i]);j++)
+			libmin_putc(' ');	
+		for(k=0;k<libmin_strlen(shends[i]);k++)libmin_putc('-');
+		libmin_putc('\n');
+		for(j=0;j<dsr_len+2+ddnd_len - libmin_strlen(ddnds[i+1]);j++)
+			libmin_putc(' ');	
+		libmin_printf("%s\n",ddnds[i+1]);
 	}	
 		
 

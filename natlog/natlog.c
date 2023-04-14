@@ -1,12 +1,12 @@
-#include "libcosim.h"
+#include "libmin.h"
 
 /* calculate e=2.718..., using an interative approximation */
 
 int
-newmain(void)
+main(void)
 {
   /* STEPS is usually a very large number eg 10000000 */
-  int steps = 10000;
+  int steps = 100000;
   double x, y;
 
   y = 1.0 + 1.0/steps;
@@ -15,7 +15,7 @@ newmain(void)
   for(; steps > 0; steps--)
     x *= y;
 
-  cosim_printf("natlog: e=%f\n", x);
+  libmin_printf("natlog: e=%f\n", x);
   return 0;
 }
 

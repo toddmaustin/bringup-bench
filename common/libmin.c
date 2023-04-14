@@ -2,40 +2,6 @@
 #include "libmin.h"
 #include "libtarg.h"
 
-/*
- * Copy src to dst, truncating or null-padding to always copy n bytes.
- * Return dst.
- */
-char *
-libmin_strncpy(char *dst, const char *src, size_t n)
-{
-	if (n != 0) {
-		char *d = dst;
-		const char *s = src;
-
-		do {
-			if ((*d++ = *s++) == 0) {
-				/* NUL pad the remaining n-1 bytes */
-				while (--n != 0)
-					*d++ = 0;
-				break;
-			}
-		} while (--n != 0);
-	}
-	return (dst);
-}
-
-char *
-libmin_strncat(char *d, const char *s, size_t n)
-{
-	char *a = d;
-	d += libmin_strlen(d);
-	while (n && *s)
-    n--, *d++ = *s++;
-	*d++ = 0;
-	return a;
-}
-
 /* standard atol() implementation */
 long libmin_atol(const char *s)
 {
@@ -144,6 +110,57 @@ libmin_getopt(int argc, char * const argv[], const char *optstring)
 	return c;
 }
 
+char *
+libmin_strcat(char *dest, const char *src)
+{
+	libmin_strcpy(dest + libmin_strlen(dest), src);
+	return dest;
+}
+
+char *
+libmin_strcpy(char *dest, const char *src)
+{
+	const unsigned char *s = src;
+	unsigned char *d = dest;
+	while ((*d++ = *s++));
+	return dest;
+}
+
+/*
+ * Copy src to dst, truncating or null-padding to always copy n bytes.
+ * Return dst.
+ */
+char *
+libmin_strncpy(char *dst, const char *src, size_t n)
+{
+	if (n != 0) {
+		char *d = dst;
+		const char *s = src;
+
+		do {
+			if ((*d++ = *s++) == 0) {
+				/* NUL pad the remaining n-1 bytes */
+				while (--n != 0)
+					*d++ = 0;
+				break;
+			}
+		} while (--n != 0);
+	}
+	return (dst);
+}
+
+char *
+libmin_strncat(char *d, const char *s, size_t n)
+{
+	char *a = d;
+	d += libmin_strlen(d);
+	while (n && *s)
+    n--, *d++ = *s++;
+	*d++ = 0;
+	return a;
+}
+
+
 size_t
 libmin_strlen(const char *str)
 {
@@ -155,6 +172,101 @@ libmin_strlen(const char *str)
     ++str;
 
   return str - ptr;
+}
+
+int
+libmin_strcmp(const char *l, const char *r)
+{
+	for (; *l==*r && *l && *r; l++, r++);
+	return *(unsigned char *)l - *(unsigned char *)r;
+}
+
+#define BITOP(a,b,op) \
+ ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
+#define ALIGN (sizeof(size_t))
+#define ONES ((size_t)-1/UCHAR_MAX)
+#define HIGHS (ONES * (UCHAR_MAX/2+1))
+#define HASZERO(x) ((x)-ONES & ~(x) & HIGHS)
+
+static char *__strchrnul(const char *s, int c)
+{
+	size_t *w, k;
+
+	c = (unsigned char)c;
+	if (!c) return (char *)s + libmin_strlen(s);
+
+	for (; (uintptr_t)s % ALIGN; s++)
+		if (!*s || *(unsigned char *)s == c) return (char *)s;
+	k = ONES * c;
+	for (w = (void *)s; !HASZERO(*w) && !HASZERO(*w^k); w++);
+	for (s = (void *)w; *s && *(unsigned char *)s != c; s++);
+	return (char *)s;
+}
+
+size_t
+libmin_strcspn(const char *s, const char *c)
+{
+	const char *a = s;
+	size_t byteset[32/sizeof(size_t)];
+
+	if (!c[0] || !c[1]) return __strchrnul(s, *c)-a;
+
+	libmin_memset(byteset, 0, sizeof byteset);
+	for (; *c && BITOP(byteset, *(unsigned char *)c, |=); c++);
+	for (; *s && !BITOP(byteset, *(unsigned char *)s, &); s++);
+	return s-a;
+}
+
+char *
+libmin_strpbrk(const char *s, const char *b)
+{
+	s += libmin_strcspn(s, b);
+	return *s ? (char *)s : 0;
+}
+
+void *
+libmin_memset(void *dest, int c, size_t n)
+{
+	unsigned char *s = dest;
+	size_t k;
+
+	/* Fill head and tail with minimal branching. Each
+	 * conditional ensures that all the subsequently used
+	 * offsets are well-defined and in the dest region. */
+
+	if (!n) return dest;
+	s[0] = s[n-1] = c;
+	if (n <= 2) return dest;
+	s[1] = s[n-2] = c;
+	s[2] = s[n-3] = c;
+	if (n <= 6) return dest;
+	s[3] = s[n-4] = c;
+	if (n <= 8) return dest;
+
+	/* Advance pointer to align it at a 4-byte boundary,
+	 * and truncate n to a multiple of 4. The previous code
+	 * already took care of any head/tail that get cut off
+	 * by the alignment. */
+
+	k = -(uintptr_t)s & 3;
+	s += k;
+	n -= k;
+	n &= -4;
+
+	/* Pure C fallback with no aliasing violations. */
+	for (; n; n--, s++) *s = c;
+
+	return dest;
+}
+
+void *
+libmin_memcpy(void *dest, const void *src, size_t n)
+{
+	unsigned char *d = dest;
+	const unsigned char *s = src;
+
+	for (; n; n--) *d++ = *s++;
+	return dest;
 }
 
 /*
@@ -940,6 +1052,84 @@ libmin_putc(char c)
   libtarg_putc(c);
 }
 
+/* in-memory file I/O */
+
+#define EOF (-1)
+
+/* open an in-memory file */
+void
+libmin_mopen(MFILE *mfile, const char *mode)
+{
+  if (libmin_strcmp(mode, "r") != 0)
+  {
+    libmin_printf("ERROR: libmin only support file reads\n");
+    libmin_fail(1);
+  }
+
+  /* reset the read pointer */
+  mfile->rdptr = 0;
+}
+
+/* return in-memory file size */
+size_t
+libmin_msize(MFILE *mfile)
+{
+  return mfile->data_sz;
+}
+
+/* at end of file */
+int
+libmin_meof(MFILE *mfile)
+{
+  return mfile->rdptr >= mfile->data_sz;
+}
+
+
+/* close the in-memory file */
+void
+libmin_mclose(MFILE *mfile)
+{
+  /* reset the read pointer */
+  mfile->rdptr = 0;
+}
+
+/* read a buffer from the in-memory file */
+size_t
+libmin_mread(void *_ptr, size_t size, MFILE *mfile)
+{
+  char *ptr = _ptr;
+  size_t cnt = 0;
+  while (mfile->rdptr < mfile->data_sz)
+    *ptr++ = mfile->data[mfile->rdptr++];
+}
+
+/* get a string from the in-memory file */
+char *
+libmin_mgets(char *s, size_t size, MFILE *mfile)
+{
+  if (libmin_meof(mfile))
+    return NULL;
+
+  char *p = s;
+  size_t cnt;
+  
+  for (cnt=0; cnt < (size-1) && !libmin_meof(; cnt++)
+    *p++ = mfile->data[mfile->rdptr++];
+
+  *p = '\0';
+
+  return s;
+}
+
+/* read a character from the in-memory file */
+int
+libmin_mgetc(MFILE *mfile)
+{
+  if (mfile->rdptr >= mfile->data_sz)
+    return EOF;
+  return mfile->data[mfile->rdptr++];
+}
+
 unsigned short _ctype[257] =
 {
   0,                      // -1 EOF
@@ -1119,9 +1309,141 @@ libmin_srand(unsigned int seed)
    seed3= seed%31656 + 1;
 }
 
-/* math functions */
+/* malloc/free functions */
 
-#define DBL_EPSILON 2.22044604925031308085e-16
+typedef char MEMALIGN[16];
+
+union memhdr {
+	struct {
+		size_t size;
+		unsigned is_free;
+
+		union memhdr *next;
+	};
+	MEMALIGN stub;
+};
+
+typedef union memhdr memhdr_t;
+
+static memhdr_t *head = NULL, *tail = NULL;
+
+static memhdr_t *
+__get_free_block(size_t size) {
+	memhdr_t *current = head;
+	while (current) {
+		if (current->is_free && current->size >= size) {
+			return current;
+		}
+		current = current->next;
+	}
+	return NULL;
+}
+
+void *
+libmin_malloc(size_t size) {
+	void *block;
+	memhdr_t *header;
+
+	if (!size) {
+		return NULL;
+	}
+	header = __get_free_block(size);
+
+	if (header) {
+		header->is_free = 0;
+		return (void *) (header + 1);
+	}
+	size_t total_size = sizeof(memhdr_t) + size;
+	block = libtarg_sbrk(total_size);
+	if (block == (void *) -1) {
+		return NULL;
+	}
+
+	header = block;
+	header->size = size;
+	header->is_free = 0;
+	header->next = NULL;
+	if (!head) {
+		head = header;
+	}
+	if (tail) {
+		tail->next = header;
+	}
+	tail = header;
+
+	return (void *) (header + 1);
+}
+
+void
+libmin_free(void *block) {
+	memhdr_t *header;
+
+	if (!block) {
+		return;
+	}
+
+	header = (memhdr_t * )(block - 1);
+
+	void *pbreak = libtarg_sbrk(0);
+	memhdr_t *tmp;
+	if ((char *) block + header->size == pbreak) {
+		if (head == tail) {
+			head = tail = NULL;
+		} else {
+			tmp = head;
+			while (tmp) {
+				if (tmp->next == tail) {
+					tmp->next = NULL;
+					tail = tmp;
+				}
+				tmp = tmp->next;
+			}
+		}
+		libtarg_sbrk(0 - sizeof(memhdr_t) - header->size);
+		return;
+	}
+
+	header->is_free = 1;
+}
+
+void *
+libmin_calloc(size_t num, size_t nsize) {
+	if (!num || !nsize) {
+		return NULL;
+	}
+
+	size_t size = num * nsize;
+	if (nsize != size / num) {
+		return NULL; // If ml
+	}
+	void *block = libmin_malloc(size);
+	if (!block) {
+		return NULL;
+	}
+	libmin_memset(block, 0, size);
+	return block;
+}
+
+void *
+libmin_realloc(void *block, size_t size) {
+	if (!block || !size) {
+		return libmin_malloc(size);
+	}
+
+	memhdr_t *header = (memhdr_t *) block - 1;
+	if (header->size >= size) {
+		return block;
+	}
+
+	void *ret = libmin_malloc(size);
+	if (ret) {
+		libmin_memcpy(ret, block, header->size);
+		libmin_free(block);
+	}
+	return ret;
+}
+
+/* math functions */
 
 #define FORCE_EVAL(x) do {                        \
 	if (sizeof(x) == sizeof(float)) {         \
@@ -2074,3 +2396,376 @@ libmin_cos(double x)
 	}
 }
 
+/* sin(x)
+ * Return sine function of x.
+ *
+ * kernel function:
+ *      __sin            ... sine function on [-pi/4,pi/4]
+ *      __cos            ... cose function on [-pi/4,pi/4]
+ *      __rem_pio2       ... argument reduction routine
+ *
+ * Method.
+ *      Let S,C and T denote the sin, cos and tan respectively on
+ *      [-PI/4, +PI/4]. Reduce the argument x to y1+y2 = x-k*pi/2
+ *      in [-pi/4 , +pi/4], and let n = k mod 4.
+ *      We have
+ *
+ *          n        sin(x)      cos(x)        tan(x)
+ *     ----------------------------------------------------------
+ *          0          S           C             T
+ *          1          C          -S            -1/T
+ *          2         -S          -C             T
+ *          3         -C           S            -1/T
+ *     ----------------------------------------------------------
+ *
+ * Special cases:
+ *      Let trig be any of sin, cos, or tan.
+ *      trig(+-INF)  is NaN, with signals;
+ *      trig(NaN)    is that NaN;
+ *
+ * Accuracy:
+ *      TRIG(x) returns trig(x) nearly rounded
+ */
+
+double
+libmin_sin(double x)
+{
+	double y[2], z=0.0;
+	int32_t n, ix;
+
+	/* High word of x. */
+	GET_HIGH_WORD(ix, x);
+
+	/* |x| ~< pi/4 */
+	ix &= 0x7fffffff;
+	if (ix <= 0x3fe921fb) {
+		if (ix < 0x3e500000) {  /* |x| < 2**-26 */
+			/* raise inexact if x != 0 */
+			if ((int)x == 0)
+				return x;
+		}
+		return __sin(x, z, 0);
+	}
+
+	/* sin(Inf or NaN) is NaN */
+	if (ix >= 0x7ff00000)
+		return x - x;
+
+	/* argument reduction needed */
+	n = __rem_pio2(x, y);
+	switch (n&3) {
+	case 0: return  __sin(y[0], y[1], 1);
+	case 1: return  __cos(y[0], y[1]);
+	case 2: return -__sin(y[0], y[1], 1);
+	default:
+		return -__cos(y[0], y[1]);
+	}
+}
+
+#ifdef notdef
+/* pow(x,y) return x**y
+ *
+ *                    n
+ * Method:  Let x =  2   * (1+f)
+ *      1. Compute and return log2(x) in two pieces:
+ *              log2(x) = w1 + w2,
+ *         where w1 has 53-24 = 29 bit trailing zeros.
+ *      2. Perform y*log2(x) = n+y' by simulating muti-precision
+ *         arithmetic, where |y'|<=0.5.
+ *      3. Return x**y = 2**n*exp(y'*log2)
+ *
+ * Special cases:
+ *      1.  (anything) ** 0  is 1
+ *      2.  1 ** (anything)  is 1
+ *      3.  (anything except 1) ** NAN is NAN
+ *      4.  NAN ** (anything except 0) is NAN
+ *      5.  +-(|x| > 1) **  +INF is +INF
+ *      6.  +-(|x| > 1) **  -INF is +0
+ *      7.  +-(|x| < 1) **  +INF is +0
+ *      8.  +-(|x| < 1) **  -INF is +INF
+ *      9.  -1          ** +-INF is 1
+ *      10. +0 ** (+anything except 0, NAN)               is +0
+ *      11. -0 ** (+anything except 0, NAN, odd integer)  is +0
+ *      12. +0 ** (-anything except 0, NAN)               is +INF, raise divbyzero
+ *      13. -0 ** (-anything except 0, NAN, odd integer)  is +INF, raise divbyzero
+ *      14. -0 ** (+odd integer) is -0
+ *      15. -0 ** (-odd integer) is -INF, raise divbyzero
+ *      16. +INF ** (+anything except 0,NAN) is +INF
+ *      17. +INF ** (-anything except 0,NAN) is +0
+ *      18. -INF ** (+odd integer) is -INF
+ *      19. -INF ** (anything) = -0 ** (-anything), (anything except odd integer)
+ *      20. (anything) ** 1 is (anything)
+ *      21. (anything) ** -1 is 1/(anything)
+ *      22. (-anything) ** (integer) is (-1)**(integer)*(+anything**integer)
+ *      23. (-anything except 0 and inf) ** (non-integer) is NAN
+ *
+ * Accuracy:
+ *      pow(x,y) returns x**y nearly rounded. In particular
+ *                      pow(integer,integer)
+ *      always returns the correct integer provided it is
+ *      representable.
+ *
+ * Constants :
+ * The hexadecimal values are the intended ones for the following
+ * constants. The decimal values may be used, provided that the
+ * compiler will convert from decimal to binary accurately enough
+ * to produce the hexadecimal values shown.
+ */
+
+static const double
+bp[]   = {1.0, 1.5,},
+dp_h[] = { 0.0, 5.84962487220764160156e-01,}, /* 0x3FE2B803, 0x40000000 */
+dp_l[] = { 0.0, 1.35003920212974897128e-08,}, /* 0x3E4CFDEB, 0x43CFD006 */
+two53  =  9007199254740992.0, /* 0x43400000, 0x00000000 */
+huge   =  1.0e300,
+tiny   =  1.0e-300,
+/* poly coefs for (3/2)*(log(x)-2s-2/3*s**3 */
+L1 =  5.99999999999994648725e-01, /* 0x3FE33333, 0x33333303 */
+L2 =  4.28571428578550184252e-01, /* 0x3FDB6DB6, 0xDB6FABFF */
+L3 =  3.33333329818377432918e-01, /* 0x3FD55555, 0x518F264D */
+L4 =  2.72728123808534006489e-01, /* 0x3FD17460, 0xA91D4101 */
+L5 =  2.30660745775561754067e-01, /* 0x3FCD864A, 0x93C9DB65 */
+L6 =  2.06975017800338417784e-01, /* 0x3FCA7E28, 0x4A454EEF */
+P1 =  1.66666666666666019037e-01, /* 0x3FC55555, 0x5555553E */
+P2 = -2.77777777770155933842e-03, /* 0xBF66C16C, 0x16BEBD93 */
+P3 =  6.61375632143793436117e-05, /* 0x3F11566A, 0xAF25DE2C */
+P4 = -1.65339022054652515390e-06, /* 0xBEBBBD41, 0xC5D26BF1 */
+P5 =  4.13813679705723846039e-08, /* 0x3E663769, 0x72BEA4D0 */
+lg2     =  6.93147180559945286227e-01, /* 0x3FE62E42, 0xFEFA39EF */
+lg2_h   =  6.93147182464599609375e-01, /* 0x3FE62E43, 0x00000000 */
+lg2_l   = -1.90465429995776804525e-09, /* 0xBE205C61, 0x0CA86C39 */
+ovt     =  8.0085662595372944372e-017, /* -(1024-log2(ovfl+.5ulp)) */
+cp      =  9.61796693925975554329e-01, /* 0x3FEEC709, 0xDC3A03FD =2/(3ln2) */
+cp_h    =  9.61796700954437255859e-01, /* 0x3FEEC709, 0xE0000000 =(float)cp */
+cp_l    = -7.02846165095275826516e-09, /* 0xBE3E2FE0, 0x145B01F5 =tail of cp_h*/
+ivln2   =  1.44269504088896338700e+00, /* 0x3FF71547, 0x652B82FE =1/ln2 */
+ivln2_h =  1.44269502162933349609e+00, /* 0x3FF71547, 0x60000000 =24b 1/ln2*/
+ivln2_l =  1.92596299112661746887e-08; /* 0x3E54AE0B, 0xF85DDF44 =1/ln2 tail*/
+
+double
+libmin_pow(double x, double y)
+{
+	double z,ax,z_h,z_l,p_h,p_l;
+	double y1,t1,t2,r,s,t,u,v,w;
+	int32_t i,j,k,yisint,n;
+	int32_t hx,hy,ix,iy;
+	uint32_t lx,ly;
+
+	EXTRACT_WORDS(hx, lx, x);
+	EXTRACT_WORDS(hy, ly, y);
+	ix = hx & 0x7fffffff;
+	iy = hy & 0x7fffffff;
+
+	/* x**0 = 1, even if x is NaN */
+	if ((iy|ly) == 0)
+		return 1.0;
+	/* 1**y = 1, even if y is NaN */
+	if (hx == 0x3ff00000 && lx == 0)
+		return 1.0;
+	/* NaN if either arg is NaN */
+	if (ix > 0x7ff00000 || (ix == 0x7ff00000 && lx != 0) ||
+	    iy > 0x7ff00000 || (iy == 0x7ff00000 && ly != 0))
+		return x + y;
+
+	/* determine if y is an odd int when x < 0
+	 * yisint = 0       ... y is not an integer
+	 * yisint = 1       ... y is an odd int
+	 * yisint = 2       ... y is an even int
+	 */
+	yisint = 0;
+	if (hx < 0) {
+		if (iy >= 0x43400000)
+			yisint = 2; /* even integer y */
+		else if (iy >= 0x3ff00000) {
+			k = (iy>>20) - 0x3ff;  /* exponent */
+			if (k > 20) {
+				j = ly>>(52-k);
+				if ((j<<(52-k)) == ly)
+					yisint = 2 - (j&1);
+			} else if (ly == 0) {
+				j = iy>>(20-k);
+				if ((j<<(20-k)) == iy)
+					yisint = 2 - (j&1);
+			}
+		}
+	}
+
+	/* special value of y */
+	if (ly == 0) {
+		if (iy == 0x7ff00000) {  /* y is +-inf */
+			if (((ix-0x3ff00000)|lx) == 0)  /* (-1)**+-inf is 1 */
+				return 1.0;
+			else if (ix >= 0x3ff00000) /* (|x|>1)**+-inf = inf,0 */
+				return hy >= 0 ? y : 0.0;
+			else                       /* (|x|<1)**+-inf = 0,inf */
+				return hy >= 0 ? 0.0 : -y;
+		}
+		if (iy == 0x3ff00000)    /* y is +-1 */
+			return hy >= 0 ? x : 1.0/x;
+		if (hy == 0x40000000)    /* y is 2 */
+			return x*x;
+		if (hy == 0x3fe00000) {  /* y is 0.5 */
+			if (hx >= 0)     /* x >= +0 */
+				return sqrt(x);
+		}
+	}
+
+	ax = fabs(x);
+	/* special value of x */
+	if (lx == 0) {
+		if (ix == 0x7ff00000 || ix == 0 || ix == 0x3ff00000) { /* x is +-0,+-inf,+-1 */
+			z = ax;
+			if (hy < 0)   /* z = (1/|x|) */
+				z = 1.0/z;
+			if (hx < 0) {
+				if (((ix-0x3ff00000)|yisint) == 0) {
+					z = (z-z)/(z-z); /* (-1)**non-int is NaN */
+				} else if (yisint == 1)
+					z = -z;          /* (x<0)**odd = -(|x|**odd) */
+			}
+			return z;
+		}
+	}
+
+	s = 1.0; /* sign of result */
+	if (hx < 0) {
+		if (yisint == 0) /* (x<0)**(non-int) is NaN */
+			return (x-x)/(x-x);
+		if (yisint == 1) /* (x<0)**(odd int) */
+			s = -1.0;
+	}
+
+	/* |y| is huge */
+	if (iy > 0x41e00000) { /* if |y| > 2**31 */
+		if (iy > 0x43f00000) {  /* if |y| > 2**64, must o/uflow */
+			if (ix <= 0x3fefffff)
+				return hy < 0 ? huge*huge : tiny*tiny;
+			if (ix >= 0x3ff00000)
+				return hy > 0 ? huge*huge : tiny*tiny;
+		}
+		/* over/underflow if x is not close to one */
+		if (ix < 0x3fefffff)
+			return hy < 0 ? s*huge*huge : s*tiny*tiny;
+		if (ix > 0x3ff00000)
+			return hy > 0 ? s*huge*huge : s*tiny*tiny;
+		/* now |1-x| is tiny <= 2**-20, suffice to compute
+		   log(x) by x-x^2/2+x^3/3-x^4/4 */
+		t = ax - 1.0;       /* t has 20 trailing zeros */
+		w = (t*t)*(0.5 - t*(0.3333333333333333333333-t*0.25));
+		u = ivln2_h*t;      /* ivln2_h has 21 sig. bits */
+		v = t*ivln2_l - w*ivln2;
+		t1 = u + v;
+		SET_LOW_WORD(t1, 0);
+		t2 = v - (t1-u);
+	} else {
+		double ss,s2,s_h,s_l,t_h,t_l;
+		n = 0;
+		/* take care subnormal number */
+		if (ix < 0x00100000) {
+			ax *= two53;
+			n -= 53;
+			GET_HIGH_WORD(ix,ax);
+		}
+		n += ((ix)>>20) - 0x3ff;
+		j = ix & 0x000fffff;
+		/* determine interval */
+		ix = j | 0x3ff00000;   /* normalize ix */
+		if (j <= 0x3988E)      /* |x|<sqrt(3/2) */
+			k = 0;
+		else if (j < 0xBB67A)  /* |x|<sqrt(3)   */
+			k = 1;
+		else {
+			k = 0;
+			n += 1;
+			ix -= 0x00100000;
+		}
+		SET_HIGH_WORD(ax, ix);
+
+		/* compute ss = s_h+s_l = (x-1)/(x+1) or (x-1.5)/(x+1.5) */
+		u = ax - bp[k];        /* bp[0]=1.0, bp[1]=1.5 */
+		v = 1.0/(ax+bp[k]);
+		ss = u*v;
+		s_h = ss;
+		SET_LOW_WORD(s_h, 0);
+		/* t_h=ax+bp[k] High */
+		t_h = 0.0;
+		SET_HIGH_WORD(t_h, ((ix>>1)|0x20000000) + 0x00080000 + (k<<18));
+		t_l = ax - (t_h-bp[k]);
+		s_l = v*((u-s_h*t_h)-s_h*t_l);
+		/* compute log(ax) */
+		s2 = ss*ss;
+		r = s2*s2*(L1+s2*(L2+s2*(L3+s2*(L4+s2*(L5+s2*L6)))));
+		r += s_l*(s_h+ss);
+		s2 = s_h*s_h;
+		t_h = 3.0 + s2 + r;
+		SET_LOW_WORD(t_h, 0);
+		t_l = r - ((t_h-3.0)-s2);
+		/* u+v = ss*(1+...) */
+		u = s_h*t_h;
+		v = s_l*t_h + t_l*ss;
+		/* 2/(3log2)*(ss+...) */
+		p_h = u + v;
+		SET_LOW_WORD(p_h, 0);
+		p_l = v - (p_h-u);
+		z_h = cp_h*p_h;        /* cp_h+cp_l = 2/(3*log2) */
+		z_l = cp_l*p_h+p_l*cp + dp_l[k];
+		/* log2(ax) = (ss+..)*2/(3*log2) = n + dp_h + z_h + z_l */
+		t = (double)n;
+		t1 = ((z_h + z_l) + dp_h[k]) + t;
+		SET_LOW_WORD(t1, 0);
+		t2 = z_l - (((t1 - t) - dp_h[k]) - z_h);
+	}
+
+	/* split up y into y1+y2 and compute (y1+y2)*(t1+t2) */
+	y1 = y;
+	SET_LOW_WORD(y1, 0);
+	p_l = (y-y1)*t1 + y*t2;
+	p_h = y1*t1;
+	z = p_l + p_h;
+	EXTRACT_WORDS(j, i, z);
+	if (j >= 0x40900000) {                      /* z >= 1024 */
+		if (((j-0x40900000)|i) != 0)        /* if z > 1024 */
+			return s*huge*huge;         /* overflow */
+		if (p_l + ovt > z - p_h)
+			return s*huge*huge;         /* overflow */
+	} else if ((j&0x7fffffff) >= 0x4090cc00) {  /* z <= -1075 */  // FIXME: instead of abs(j) use unsigned j
+		if (((j-0xc090cc00)|i) != 0)        /* z < -1075 */
+			return s*tiny*tiny;         /* underflow */
+		if (p_l <= z - p_h)
+			return s*tiny*tiny;         /* underflow */
+	}
+	/*
+	 * compute 2**(p_h+p_l)
+	 */
+	i = j & 0x7fffffff;
+	k = (i>>20) - 0x3ff;
+	n = 0;
+	if (i > 0x3fe00000) {  /* if |z| > 0.5, set n = [z+0.5] */
+		n = j + (0x00100000>>(k+1));
+		k = ((n&0x7fffffff)>>20) - 0x3ff;  /* new k for n */
+		t = 0.0;
+		SET_HIGH_WORD(t, n & ~(0x000fffff>>k));
+		n = ((n&0x000fffff)|0x00100000)>>(20-k);
+		if (j < 0)
+			n = -n;
+		p_h -= t;
+	}
+	t = p_l + p_h;
+	SET_LOW_WORD(t, 0);
+	u = t*lg2_h;
+	v = (p_l-(t-p_h))*lg2 + t*lg2_l;
+	z = u + v;
+	w = v - (z-u);
+	t = z*z;
+	t1 = z - t*(P1+t*(P2+t*(P3+t*(P4+t*P5))));
+	r = (z*t1)/(t1-2.0) - (w + z*w);
+	z = 1.0 - (r-z);
+	GET_HIGH_WORD(j, z);
+	j += n<<20;
+	if ((j>>20) <= 0)  /* subnormal output */
+		z = scalbn(z,n);
+	else
+		SET_HIGH_WORD(z, j);
+	return s*z;
+}
+#endif

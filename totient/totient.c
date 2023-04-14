@@ -45,7 +45,7 @@
 */
 
 
-#include "libcosim.h"
+#include "libmin.h"
 
 #define VERSION "1.0"
 #define USAGE "totient [ -h -v -- ] n"
@@ -144,17 +144,17 @@ main(void)
 					break;
 				case 'v':
 				case 'V':
-					cosim_printf("%s\n",VERSION);
-					cosim_success();
+					libmin_printf("%s\n",VERSION);
+					libmin_success();
 				case '?':
 				case 'h':
 				case 'H':
-					cosim_printf("%s\n",HELP);
-					cosim_success();
+					libmin_printf("%s\n",HELP);
+					libmin_success();
 				default:
-					cosim_printf("totient: unkown option %s\n", argv[j]);
-					cosim_printf("%s\n",USAGE);
-					cosim_fail(1);
+					libmin_printf("totient: unkown option %s\n", argv[j]);
+					libmin_printf("%s\n",USAGE);
+					libmin_fail(1);
 			}
 		break;
 	}
@@ -162,17 +162,17 @@ main(void)
 	if(j >= argc){
 		//fprintf(stderr,"totient: usage error.\n");
 		//fprintf(stderr,"%s\n",USAGE);
-		n = 458457;
+		n = 45457;
 	}
 	else
-	  n = atoi(argv[j++]);
+	  n = libmin_atoi(argv[j++]);
 
 	if(n == 0){
-		cosim_printf("totient: not defined for n = 0.\n");
+		libmin_printf("totient: not defined for n = 0.\n");
 		return 1;
 	}
 
-	cosim_printf("phi(%d) = %d\n",n,phi(n));
+	libmin_printf("phi(%d) = %d\n",n,phi(n));
 
 	return 0;
 }
