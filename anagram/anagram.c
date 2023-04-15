@@ -590,7 +590,7 @@ void SortCandidates(void) {
 
     /* Sort the letters by frequency */
     for (i = 0; i < ALPHABET; i++) achByFrequency[i] = i;
-    qsort(achByFrequency, ALPHABET, sizeof(char),
+    libmin_qsort(achByFrequency, ALPHABET, sizeof(char),
           (int (*)(const void *, const void *))CompareFrequency);
 
     libmin_printf("Order of search will be ");

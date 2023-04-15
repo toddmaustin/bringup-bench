@@ -209,7 +209,7 @@ double e_series(double E, double e, double M, int reset)
 		a_n += s_k*bin_fact(n,k)*libmin_sin(n_2k*M);
 	}
 	n++;
-	return E + libmin_pow(e,n-1)*a_n;
+	return E + pow(e,n-1)*a_n;
 }
 	
 /* The eccentric anomaly is an odd periodic function in the Mean Anomoly
@@ -290,14 +290,14 @@ main(void)
 			libmin_success();
 		  }
 		  if(libmin_strcmp(argv[i],"-a")==0){
-			derror = atof(argv[i+1]);
+			derror = libmin_atof(argv[i+1]);
 			if(derror <= DBL_EPSILON)
 			        libmin_printf("Warning: requested precision may exceed implementation limit.\n");
 			i += 2;
 			continue;
 		  }
 		  if(libmin_strcmp(argv[i],"-m")==0){
-			m = atoi(argv[i+1]);
+			m = libmin_atoi(argv[i+1]);
 			if((m<=0) || (m>NMETHODS)){
 				libmin_printf("Bad method number %d\n",m);
 				return 1;
@@ -305,7 +305,7 @@ main(void)
 			i += 2;
 			continue;
 		  }
-		  fprintf(stderr, "kepler: Unknown option %s\n", argv[i]);
+		  libmin_printf("kepler: Unknown option %s\n", argv[i]);
 		  libmin_printf("%s\n",USAGE);
 		  return 1;
 		}
@@ -313,8 +313,8 @@ main(void)
 		libmin_printf("%s\n",USAGE);
 		return 1;
 	}
-	M = atof(argv[i++]);
-	e = atof(argv[i]);
+	M = libmin_atof(argv[i++]);
+	e = libmin_atof(argv[i]);
 	method = (double(*)(double,double,double,int))methods[m-1];
 
 	if((m==4)&&(e > LAPLACE_LIMIT)){
@@ -331,7 +331,7 @@ main(void)
 	/* Normalize M to lie between 0 and PI */
 	sign = M > 0 ? 1.0 : -1.0;
 	M = fabs(M)/(2*PI);
-	M = (M - floor(M))*2*PI*sign;
+	M = (M - libmin_floor(M))*2*PI*sign;
 	sign = 1.0;
 	if(M > PI){
 		M = 2*PI - M;
@@ -341,7 +341,7 @@ main(void)
 	/* Do selected calculation, and quit when accuracy is bettered. */
 	while(fabs(E_old - (E = method(E_old,e,M,0))) >= derror){
 		E_old = E;
-		printf("n = %d\tE = %f\n",n++,sign*E);
+		libmin_printf("n = %d\tE = %f\n",n++,sign*E);
 	}
 	return 0;
 }
@@ -444,7 +444,7 @@ kepler(double *E, double M, double e, double my_derror, int m)
 	/* Normalize M to lie between 0 and PI */
 	sign = M > 0 ? 1.0 : -1.0;
 	M = fabs(M)/(2*PI);
-	M = (M - floor(M))*2*PI*sign;
+	M = (M - libmin_floor(M))*2*PI*sign;
 	sign = M > 0 ? 1.0 : -1.0;
 	M = fabs(M);
 	if(M > PI){

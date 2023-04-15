@@ -14,8 +14,9 @@
 /* standard atol() implementation */
 long libmin_atol(const char *s);
 
-/* standard atoi() implementation */
+/* standard atoi/atof implementation */
 int libmin_atoi(const char *s);
+double libmin_atof(const char *s);
 
 /* getopt() hooks */
 extern char *optarg;
@@ -83,7 +84,7 @@ void libmin_free(void * addr);
 struct _MFILE {
   char *fname;
   size_t data_sz;
-  uint8_t *data;
+  const uint8_t *data;
   int rdptr;
 };
 typedef struct _MFILE MFILE;
@@ -110,6 +111,11 @@ char *libmin_mgets(char *s, size_t size, MFILE *mfile);
 
 /* read a character from the in-memory file */
 int libmin_mgetc(MFILE *mfile);
+
+/* sort an array */
+typedef int (*cmpfun)(const void *, const void *);
+void libmin_qsort(void *base, size_t nel, size_t width, cmpfun cmp);
+
 
 /* ctype defs */
 //
@@ -174,6 +180,7 @@ double libmin_floor(double x);
 double libmin_scalbn(double x, int n);
 double libmin_cos(double x);
 double libmin_sin(double x);
+double fabs(double x);
 double libmin_pow(double x, double y);
 
 #endif /* LIBMIN_H */
