@@ -3,6 +3,9 @@
 
 #include "libtarg.h"
 
+#define TRUE  1
+#define FALSE 0
+
 /* Build parameters:
 
    #define LIBMIN_SILENT		- disable all console messages
@@ -68,7 +71,7 @@ void libmin_fail(int code);
 void libmin_srand(unsigned int seed);
 
 /* generate a random integer */
-int libmin_rand(void);
+unsigned int libmin_rand(void);
 
 /* allocate memory */
 void *libmin_malloc(size_t size);
