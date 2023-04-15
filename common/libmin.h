@@ -77,9 +77,7 @@ void *libmin_realloc(void *block, size_t size);
 /* free memory */
 void libmin_free(void * addr);
 
-#ifndef NULL
 #define NULL	((void *)0)
-#endif /* NULL */
 
 /* in-memory file I/O */
 struct _MFILE {
@@ -89,6 +87,8 @@ struct _MFILE {
   int rdptr;
 };
 typedef struct _MFILE MFILE;
+
+#define EOF (-1)
 
 /* open an in-memory file */
 void libmin_mopen(MFILE *mfile, const char *mode);

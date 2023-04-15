@@ -1054,8 +1054,6 @@ libmin_putc(char c)
 
 /* in-memory file I/O */
 
-#define EOF (-1)
-
 /* open an in-memory file */
 void
 libmin_mopen(MFILE *mfile, const char *mode)
@@ -1113,8 +1111,11 @@ libmin_mgets(char *s, size_t size, MFILE *mfile)
   char *p = s;
   size_t cnt;
   
-  for (cnt=0; cnt < (size-1) && !libmin_meof(; cnt++)
+  for (cnt=0; mfile->data[mfile->rdptr] != '\n' && cnt < (size-1) && !libmin_meof(mfile); cnt++)
     *p++ = mfile->data[mfile->rdptr++];
+
+  if (mfile->data[mfile->rdptr] == '\n')
+    mfile->rdptr++;
 
   *p = '\0';
 

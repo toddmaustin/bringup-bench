@@ -128,17 +128,26 @@
  * prototypes, for those of you who have K&R compilers.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#ifdef USE_UNISTD
-#include <unistd.h>
-#endif
-#include <ctype.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <setjmp.h>
+#include "libmin.h"
+#include "words.h"
+#include "input.h"
 
+MFILE __mwords = {
+  "words",
+  __words_sz,
+  __words,
+  0
+};
+MFILE *mwords = &__mwords;
+  
+MFILE __minput = {
+  "input",
+  __input_sz,
+  __input,
+  0
+};
+MFILE *minput = &__minput;
+  
 /* Before compiling, make sure Quad and MASK_BITS are set properly.  For best
  * results, make Quad the largest integer size supported on your machine.
  * So if your machine has long longs, make Quad an unsigned long long.
@@ -244,12 +253,12 @@ char achByFrequency[ALPHABET];          /* for sorting */
 
 char * pchDictionary;               /* the dictionary is read here */
 
-#define Zero(t) memset(t, 0, sizeof(t)) /* quickly zero out an integer array */
+#define Zero(t) libmin_memset(t, 0, sizeof(t)) /* quickly zero out an integer array */
 
 /* Fatal -- print a message before expiring */
 void Fatal(char *pchMsg, unsigned u) {
-    fprintf(stdout, pchMsg, u);
-    exit(1);
+    libmin_printf(pchMsg, u);
+    libmin_fail(1);
 }
 
 /* ReadDict -- read the dictionary file into memory and preprocess it
@@ -265,30 +274,25 @@ void Fatal(char *pchMsg, unsigned u) {
  */
 
 void ReadDict(char *pchFile) {
-    FILE *fp;
     char * pch;
     char * pchBase;
     unsigned long ulLen;
     unsigned cWords = 0;
     unsigned cLetters;
     int ch;
-    struct stat statBuf;
 
-    if (stat(pchFile, &statBuf)) Fatal("Cannot stat dictionary\n", 0);
-
-    ulLen = statBuf.st_size + 2 * (unsigned long)MAXWORDS;
-    pchBase = pchDictionary = (char *)malloc(ulLen);
+    ulLen = libmin_msize(mwords) + 2 * (unsigned long)MAXWORDS;
+    pchBase = pchDictionary = (char *)libmin_malloc(ulLen);
 
     if(pchDictionary == NULL)
 	Fatal("Unable to allocate memory for dictionary\n", 0);
 
-    if ((fp = fopen(pchFile, "r")) == NULL)
-	Fatal("Cannot open dictionary\n", 0);
+    libmin_mopen(mwords, "r");
 
-    while (!feof(fp)) {
+    while (!libmin_meof(mwords)) {
         pch = pchBase+2;                /* reserve for length */
         cLetters = 0;
-        while ((ch = fgetc(fp)) != '\n' && ch != EOF) {
+        while ((ch = libmin_mgetc(mwords)) != '\n' && ch != EOF) {
             if (isalpha(ch)) cLetters++;
             *pch++ = ch;
         }
@@ -298,14 +302,14 @@ void ReadDict(char *pchFile) {
         pchBase = pch;
         cWords++;
     }
-    fclose(fp);
+    libmin_mclose(mwords);
 
     *pchBase++ = 0;
 
-    fprintf(stdout, "main dictionary has %u entries\n", cWords);
+    libmin_printf("main dictionary has %u entries\n", cWords);
     if (cWords >= MAXWORDS)
-	Fatal("Dictionary too large; increase MAXWORDS\n", 0);
-    fprintf(stdout, "%lu bytes wasted\n", ulLen - (pchBase - pchDictionary));
+	    Fatal("Dictionary too large; increase MAXWORDS\n", 0);
+    libmin_printf("%lu bytes wasted\n", ulLen - (pchBase - pchDictionary));
 }
 
 void BuildMask(char * pchPhrase) {
@@ -316,9 +320,9 @@ void BuildMask(char * pchPhrase) {
     int cbtNeed;                        /* bits needed for current letter */
     Quad qNeed;                         /* used to build the mask */
 
-    bzero(alPhrase, sizeof(Letter)*ALPHABET);
-    bzero(aqMainMask, sizeof(Quad)*MAX_QUADS);
-    bzero(aqMainSign, sizeof(Quad)*MAX_QUADS);
+    libmin_memset(alPhrase, 0, sizeof(Letter)*ALPHABET);
+    libmin_memset(aqMainMask, 0, sizeof(Quad)*MAX_QUADS);
+    libmin_memset(aqMainSign, 0, sizeof(Quad)*MAX_QUADS);
 /*
     Zero(alPhrase);
     Zero(aqMainMask);
@@ -368,7 +372,7 @@ PWord
 NewWord(void) {
     PWord pw;
 
-    pw = (Word *)malloc(sizeof(Word));
+    pw = (Word *)libmin_malloc(sizeof(Word));
     if (pw == NULL)
         Fatal("Out of memory after %d candidates\n", cpwCand);
     return pw;
@@ -380,7 +384,7 @@ NewWord(void) {
  * is a huge pointer (on an IBM PC), so special care must be taken.
  */
 void wprint(char * pch) {
-    printf("%s ", pch);
+    libmin_printf("%s ", pch);
 }
 
 PWord NextWord(void);
@@ -407,7 +411,7 @@ void BuildWord(char * pchWord) {
     PWord pw;
     int cchLength = 0;
 
-    bzero(cchFrequency, sizeof(unsigned char)*ALPHABET);
+    libmin_memset(cchFrequency, 0, sizeof(unsigned char)*ALPHABET);
     /* Zero(cchFrequency); */
 
     /* Build frequency table */
@@ -429,7 +433,7 @@ void BuildWord(char * pchWord) {
      * bitfield of frequencies.
      */
     pw = NextWord();
-    bzero(pw->aqMask, sizeof(Quad)*MAX_QUADS);
+    libmin_memset(pw->aqMask, 0, sizeof(Quad)*MAX_QUADS);
     /* Zero(pw->aqMask); */
     pw->pchWord = pchWord;
     pw->cchLength = cchLength;
@@ -453,15 +457,15 @@ AddWords(void) {
         pch += *pch;
     }
 
-    fprintf(stdout, "%d candidates\n", cpwCand);
+    libmin_printf("%d candidates\n", cpwCand);
 }
 
 void DumpCandidates(void) {
     unsigned u;
 
     for (u = 0; u < cpwCand; u++)
-        printf(StringFormat, apwCand[u]->pchWord, (u % 4 == 3) ? '\n' : ' ');
-    printf("\n");
+        libmin_printf(StringFormat, apwCand[u]->pchWord, (u % 4 == 3) ? '\n' : ' ');
+    libmin_printf("\n");
 }
 
 PWord apwSol[MAXSOL];                   /* the answers */
@@ -476,21 +480,19 @@ void DumpWord(Quad * pq) {
         q = pq[alPhrase[i].iq];
         if (alPhrase[i].uShift) q >>= alPhrase[i].uShift;
         q &= alPhrase[i].uBits;
-        while (q--) putchar('a'+i);
+        while (q--) libmin_putc('a'+i);
     }
-    putchar(' ');
+    libmin_putc(' ');
 }
 )                                       /* End of debug code */
 
 void DumpWords(void) {
     int i;
     for (i = 0; i < cpwLast; i++) wprint(apwSol[i]->pchWord);
-    printf("\n");
+    libmin_printf("\n");
 }
 
 Stat(unsigned long ulHighCount; unsigned long ulLowCount;)
-
-jmp_buf jbAnagram;
 
 #define OneStep(i) \
     if ((aqNext[i] = pqMask[i] - pw->aqMask[i]) & aqMainSign[i]) { \
@@ -511,9 +513,7 @@ FindAnagram(Quad * pqMask, PPWord ppwStart, int iLetter)
 
     ;
 
-    if (HaltProcessing()) longjmp(jbAnagram, 1);
-
-    Debug(printf("Trying :"); DumpWord(pqMask); printf(":\n");)
+    Debug(libmin_printf("Trying :"); DumpWord(pqMask); libmin_printf(":\n");)
 
     for (;;) {
         iq = alPhrase[achByFrequency[iLetter]].iq;
@@ -523,7 +523,7 @@ FindAnagram(Quad * pqMask, PPWord ppwStart, int iLetter)
         iLetter++;
     }
 
-    Debug(printf("Pivoting on %c\n", i2ch(achByFrequency[iLetter]));)
+    Debug(libmin_printf("Pivoting on %c\n", i2ch(achByFrequency[iLetter]));)
 
     while (ppwStart < ppwEnd) {          /* Half of the program execution */
         pw = *ppwStart;                  /* time is spent in these three */
@@ -593,40 +593,37 @@ void SortCandidates(void) {
     qsort(achByFrequency, ALPHABET, sizeof(char),
           (int (*)(const void *, const void *))CompareFrequency);
 
-    fprintf(stdout, "Order of search will be ");
+    libmin_printf("Order of search will be ");
     for (i = 0; i < ALPHABET; i++)
-	fputc(i2ch(achByFrequency[i]), stdout);
-    fputc('\n', stdout);
+	    libmin_putc(i2ch(achByFrequency[i]));
+    libmin_putc('\n');
 }
 
 char * GetPhrase(char * pch) {
-    fflush(stdout);
-    if (libmin_mgets(pch) == NULL) {
-#ifdef PLUS_STATS
-	PrintDerefStats(stdout);
-        PrintHeapSize(stdout);
-#endif /* PLUS_STATS */
-	exit(0);
+    if (libmin_mgets(pch, 255, minput) == NULL) {
+	    libmin_success();
     }
+    // libmin_printf("Processing: %s...\n", pch);
     return(pch);
 }
 
 char achPhrase[255];
 
-int Cdecl main(int cpchArgc, char **ppchArgv) {
-
+int 
+main(int cpchArgc, char **ppchArgv)
+{
     if (cpchArgc != 2 && cpchArgc != 3)
         Fatal("Usage: anagram dictionary [length]\n", 0);
 
     if (cpchArgc == 3)
-	cchMinLength = atoi(ppchArgv[2]);
+	    cchMinLength = libmin_atoi(ppchArgv[2]);
 
     ReadDict(ppchArgv[1]);
 
     while (GetPhrase(&achPhrase[0]) != NULL) {
         if (isdigit(achPhrase[0])) {
-            cchMinLength = atoi(achPhrase);
-            printf("New length: %d\n", cchMinLength);
+            cchMinLength = libmin_atoi(achPhrase);
+            libmin_printf("New length: %d\n", cchMinLength);
         } else if (achPhrase[0] == '?') {
             DumpCandidates();
         } else {
@@ -637,9 +634,8 @@ int Cdecl main(int cpchArgc, char **ppchArgv) {
             Stat(ulHighCount = ulLowCount = 0;)
             cpwLast = 0;
             SortCandidates();
-            if (setjmp(jbAnagram) == 0)
-                FindAnagram(&aqMainMask[0], &apwCand[0], 0);
-            Stat(printf("%lu:%lu probes\n", ulHighCount, ulLowCount);)
+            FindAnagram(&aqMainMask[0], &apwCand[0], 0);
+            Stat(libmin_printf("%lu:%lu probes\n", ulHighCount, ulLowCount);)
         }
     }
     return 0;
