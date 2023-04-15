@@ -77,9 +77,6 @@ typedef struct record
           } variant;
       } Rec_Type, *Rec_Pointer;
 
-#include <string.h>
-#include <stdlib.h>
-
 /* Global Variables: */
 
 static Rec_Pointer     Ptr_Glob,
@@ -154,9 +151,9 @@ main(void)
   Ptr_Glob->Discr                       = Ident_1;
   Ptr_Glob->variant.var_1.Enum_Comp     = Ident_3;
   Ptr_Glob->variant.var_1.Int_Comp      = 40;
-  strcpy (Ptr_Glob->variant.var_1.Str_Comp,
+  libmin_strcpy (Ptr_Glob->variant.var_1.Str_Comp,
           "DHRYSTONE PROGRAM, SOME STRING");
-  strcpy (Str_1_Loc, "DHRYSTONE PROGRAM, 1'ST STRING");
+  libmin_strcpy (Str_1_Loc, "DHRYSTONE PROGRAM, 1'ST STRING");
 
   Arr_2_Glob [8][7] = 10;
         /* Was missing in published program. Without this statement,    */
@@ -184,7 +181,7 @@ main(void)
       /* Ch_1_Glob == 'A', Ch_2_Glob == 'B', Bool_Glob == true */
     Int_1_Loc = 2;
     Int_2_Loc = 3;
-    strcpy (Str_2_Loc, "DHRYSTONE PROGRAM, 2'ND STRING");
+    libmin_strcpy (Str_2_Loc, "DHRYSTONE PROGRAM, 2'ND STRING");
     Enum_Loc = Ident_2;
     Bool_Glob = ! PFunc_2 (Str_1_Loc, Str_2_Loc);
       /* Bool_Glob == 1 */
@@ -207,7 +204,7 @@ main(void)
           /* then, not executed */
         {
         PProc_6 (Ident_1, &Enum_Loc);
-        strcpy (Str_2_Loc, "DHRYSTONE PROGRAM, 3'RD STRING");
+        libmin_strcpy (Str_2_Loc, "DHRYSTONE PROGRAM, 3'RD STRING");
         Int_2_Loc = Run_Index;
         Int_Glob = Run_Index;
         }
@@ -413,9 +410,6 @@ register int    l;
  *************************************************************************
  */
 
-#include <string.h>
-//#include <stdlib.h>
-
 #ifndef REG
 #define REG
         /* REG becomes defined as empty */
@@ -575,7 +569,7 @@ Str_30  Str_2_Par_Ref;
     return (true);
   else /* executed */
      {
-     if (strcmp (Str_1_Par_Ref, Str_2_Par_Ref) > 0)
+     if (libmin_strcmp (Str_1_Par_Ref, Str_2_Par_Ref) > 0)
       /* then, not executed */
         {
         Int_Loc += 7;

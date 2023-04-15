@@ -1,4 +1,3 @@
-#include <stdarg.h>
 #include "libmin.h"
 #include "libtarg.h"
 
@@ -1471,7 +1470,8 @@ libmin_calloc(size_t num, size_t nsize) {
 }
 
 void *
-libmin_realloc(void *block, size_t size) {
+libmin_realloc(void *block, size_t size)
+{
 	if (!block || !size) {
 		return libmin_malloc(size);
 	}

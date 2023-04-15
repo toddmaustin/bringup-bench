@@ -1,6 +1,8 @@
 #ifndef LIBTARG_H
 #define LIBTARG_H
 
+/* basic numerics and data types */
+
 #if '\xff' > 0
 #define CHAR_MIN 0
 #define CHAR_MAX 255
@@ -63,7 +65,11 @@ int libtarg_brk(void *addr);
 /* get some memory */
 void *libtarg_sbrk(size_t inc);
 
-/* page size */
-#define SYS_PAGESIZE         4096
+/* define support for vararg functions */
+#ifdef LIBTARG_HOST
+#include <stdarg.h>
+#else
+#error Error: no definition for vararg functions!
+#endif
 
 #endif /* LIBTARG_H */
