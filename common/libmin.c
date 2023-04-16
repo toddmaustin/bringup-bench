@@ -1139,10 +1139,14 @@ libmin_mclose(MFILE *mfile)
 size_t
 libmin_mread(void *_ptr, size_t size, MFILE *mfile)
 {
+  if (libmin_feof(mfile)
+    return 0;
+
   char *ptr = _ptr;
   size_t cnt = 0;
-  while (mfile->rdptr < mfile->data_sz)
+  while (mfile->rdptr < mfile->data_sz && !libmin_feof(mfile))
     *ptr++ = mfile->data[mfile->rdptr++];
+  return cnt;
 }
 
 /* get a string from the in-memory file */
