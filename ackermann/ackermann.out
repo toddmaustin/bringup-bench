@@ -35,5 +35,6 @@ A(5,0) = 6
 A(4,1) = 6
 A(3,2) = 9
 A(2,3) = 29
-Maximum stack depth 65535 exceeded. Abort.
-** successful termination sentinel encountered **
+A(1,4) = 65533
+A(0,5) = 65533
+Max recursive depth = 196537

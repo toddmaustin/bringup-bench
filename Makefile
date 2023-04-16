@@ -1,46 +1,115 @@
+define HELP_TEXT
+Please choose one of the following target
+  config-vip     - configure VIP-Bench to target the VIP-Bench functional library
+  config-meso    - configure VIP-Bench to target Agita Labs' Mesosphere secure computation SDK
+  config-seal    - configure VIP-Bench to target Microsoft's SEAL Homomorphic Encryption library
+  run-tests      - clean, build, and test all benchmarks in all target modes (NA,DO,ENC)
+  all-clean      - clean all benchmark directories
+
+Within individual directories, the following Makefile targets are also available:
+  clean          - delete all generated files
+  build          - build the binary
+  test           - run the standard test on the binary
+
+Note that benchmark builds must be parameterized with the build MODE, such as:
+  TARGET=host       - build in NATIVE mode, non-data-oblivious build without encryption
+  TARGET=standalone - build in DATA-OBLIVIOUS ENCRYPTED mode, data-oblivious build with encrpytion
+
+Example benchmark builds:
+  make MODE=na clean build test
+  make MODE=enc build
+  make MODE=do clean
+endef
+
+export HELP_TEXT
+
+error:
+	@echo "$$HELP_TEXT"
+
 #
-#  Copyright 2002-2003, BitRaker Inc.  All Rights Reserved.
+# END of user-modifiable variables
 #
-#  THIS IS UNPUBLISHED PROPRIETARY SOURCE CODE OF BITRAKER INC.
-#  The copyright notice above does not evidence any actual or intended
-#  publication of such source code.
-#
-#  The copyright of this software is the property of BitRaker Inc.  and
-#  is to be treated as BitRaker Inc. Confidential.  It shall not be
-#  copied, used, duplicated, demonstrated, licensed, or disclosed to
-#  others in whole or part for any purpose without the prior, written
-#  permission of BitRaker Inc.
-#
+BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp cipher dhrystone distinctness fft-int flood-fill frac-calc hanoi heapsort kepler longdiv mandelbrot mersenne natlog nr-solver parrondo pascal shortest-path sieve skeleton totient
 
-TARG	= x86
-CC	= gcc
-GFLAGS	= -g -Wall -DTARG_X86 -DUSE_UNISTD -DLITTLE_ENDIAN -DSPEC_CPU2000_LINUX_I386 $(CFLAGS)
-SIM	=
-MV	= mv -f
-DIFF	= diff -s
-#DIFF	= diff -s --strip-trailing-cr
+ifeq ($(TARGET), host)
+TARGET_CFLAGS = -DLIBTAR_HOST
+TARGET_LIBS =
+TARGET_SIM =
+TARGET_DIFF = diff
+TARGET_EXE = $(PROG).na
+else ifeq ($(TARGET), standalong)
+TARGET_CFLAGS = -DLIBTARG_SA
+TARGET_LIBS =
+TARGET_SIM =
+TARGET_DIFF = diff
+TARGET_EXE = $(PROG).sa
+else
+# default is an error
+#$(error No build TARGET defined, e.g., make TARGET=host ...)
+endif
 
-all: $(PROG)
+CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAGS)
+OBJS = $(LOCAL_OBJS) ../common/libmin.o ../common/libtarg.o
+LIBS = $(LOCAL_LIBS) $(TARGET_LIBS)
 
-$(PROG): $(OBJS)
-	$(CC) -static -m32 -o $(PROG) $(OBJS) $(LIBS)
+build: $(TARGET_EXE)
 
-.SUFFIXES: .o .c
+%.o: %.c
+ifeq ($(TARGET), host)
+	$(CC) $(CFLAGS) -DTARGET_HOST -I../common/ -o $(notdir $@) -c $<
+else ifeq ($(TARGET), sa)
+	$(CC) $(CFLAGS) -DTARGET_SA -I../common/ -o $(notdir $@) -c $<
+else
+	$(error MODE is not defined (add: TARGET={host|sa}).)
+endif
 
-.c.o:
-	$(CC) -m32 $(GFLAGS) -o $@ -c $<
-
-build: $(PROG)
-
-size: $(PROG)
-	size $(PROG)
+$(TARGET_EXE): $(OBJS)
+	$(CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
 
 clean:
-	-rm -f $(PROG) $(OBJS) $(TMPS) core core.* FOO *.out *~
+	rm -f $(PROG).na $(PROG).do $(PROG).enc *.o core mem.out *.log FOO $(LOCAL_CLEAN)
 
-clean-build:
-	-rm -f $(OBJS) $(TMPS) core core.* FOO *.out *~
 
-clean-anvil:
-	-rm -f $(PROG).axf.bre $(PROG).axf.cfg core core.*
+#
+# top-level Makefile interfaces
+#
+
+config-vip:
+	@echo "Configuring VIP-Bench for VIP functional library..."
+	ln -sf configs/config.mk.vip config.mk
+	ln -sf configs/config.h.vip config.h
+
+config-mesa:
+	@echo "Configuring VIP-Bench for Agita Labs' Mesosphere SDK..."
+	ln -sf configs/config.mk.meso config.mk
+	ln -sf configs/config.h.meso config.h
+
+config-seal:
+	@echo "Configuring VIP-Bench for Microsoft SEAL HE library..."
+	ln -sf configs/config.mk.seal config.mk
+	ln -sf configs/config.h.seal config.h
+
+run-tests:
+	@for _BMARK in $(BMARKS) ; do \
+	  for _MODE in na do enc ; do \
+	    cd $$_BMARK ; \
+	    echo "--------------------------------" ; \
+	    echo "Running "$$_BMARK" in MODE="$$_MODE ; \
+	    echo "--------------------------------" ; \
+	    make MODE=$$_MODE clean build test ; \
+	    cd .. ; \
+	  done \
+	done
+
+all-clean: clean
+	@for _BMARK in $(BMARKS) ; do \
+	  for _MODE in na do enc ; do \
+	    cd $$_BMARK ; \
+	    echo "--------------------------------" ; \
+	    echo "Running "$$_BMARK" in MODE="$$_MODE ; \
+	    echo "--------------------------------" ; \
+	    make MODE=$$_MODE clean ; \
+	    cd .. ; \
+	  done \
+	done
 

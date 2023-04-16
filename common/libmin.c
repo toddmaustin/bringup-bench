@@ -164,8 +164,8 @@ libmin_strcat(char *dest, const char *src)
 char *
 libmin_strcpy(char *dest, const char *src)
 {
-	const unsigned char *s = src;
-	unsigned char *d = dest;
+	const char *s = src;
+	char *d = dest;
 	while ((*d++ = *s++));
 	return dest;
 }
@@ -270,7 +270,7 @@ libmin_strtok(char *s, const char *sep)
 #define ALIGN (sizeof(size_t))
 #define ONES ((size_t)-1/UCHAR_MAX)
 #define HIGHS (ONES * (UCHAR_MAX/2+1))
-#define HASZERO(x) ((x)-ONES & ~(x) & HIGHS)
+#define HASZERO(x) (((x)-ONES) & ~(x) & HIGHS)
 
 static char *__strchrnul(const char *s, int c)
 {
@@ -1331,7 +1331,7 @@ unsigned short _ctype[257] =
   _UPPER,                 // 59 Y
   _UPPER,                 // 5A Z
   _PUNCT,                 // 5B [
-  _PUNCT,                 // 5C \ 
+  _PUNCT,                 // 5C backslash 
   _PUNCT,                 // 5D ]
   _PUNCT,                 // 5E ^
   _PUNCT,                 // 5F _
@@ -1837,13 +1837,13 @@ libmin_qsort(void *base, size_t nel, size_t width, cmpfun cmp)
 #define FORCE_EVAL(x) do {                        \
 	if (sizeof(x) == sizeof(float)) {         \
 		volatile float __x;               \
-		__x = (x);                        \
+		__x = (x); (void)__x;                        \
 	} else if (sizeof(x) == sizeof(double)) { \
 		volatile double __x;              \
-		__x = (x);                        \
+		__x = (x); (void)__x;                        \
 	} else {                                  \
 		volatile long double __x;         \
-		__x = (x);                        \
+		__x = (x); (void)__x;                        \
 	}                                         \
 } while(0)
 

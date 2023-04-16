@@ -66,7 +66,7 @@ int libtarg_brk(void *addr);
 void *libtarg_sbrk(size_t inc);
 
 /* define support for vararg functions */
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
 #include <stdarg.h>
 #else
 #error Error: no definition for vararg functions!

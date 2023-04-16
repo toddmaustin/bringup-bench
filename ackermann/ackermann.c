@@ -150,9 +150,7 @@ ack(unsigned x, unsigned y)
 int
 main(void)
 {
-	int argc=1; char **argv=NULL;
-	unsigned x,y,k; 
-	int i = 1;
+	unsigned y,k; 
 
   max_depth = 0;
 	for(k=0;k<=MAX;k++)

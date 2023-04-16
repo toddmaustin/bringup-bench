@@ -1,18 +1,18 @@
 #include "libtarg.h"
 
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #else /* undefined target */
-#error Co-simulation platform not defined, define LIBTARG_HOST or a target-dependent definition.
+#error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
 
 /* benchmark completed successfully */
 void
 libtarg_success(void)
 {
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
   exit(0);
 #endif
 }
@@ -21,7 +21,7 @@ libtarg_success(void)
 void
 libtarg_fail(int code)
 {
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
   exit(code);
 #endif
 }
@@ -30,7 +30,7 @@ libtarg_fail(int code)
 void
 libtarg_putc(char c)
 {
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
   fputc(c, stdout);
 #endif
 }
@@ -39,7 +39,7 @@ libtarg_putc(char c)
 int
 libtarg_brk(void *addr)
 {
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
   return brk(addr);
 #endif
 }
@@ -48,7 +48,7 @@ libtarg_brk(void *addr)
 void *
 libtarg_sbrk(size_t inc)
 {
-#ifdef LIBTARG_HOST
+#ifdef TARGET_HOST
   return sbrk(inc);
 #endif
 }
