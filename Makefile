@@ -31,6 +31,8 @@ error:
 #
 BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp cipher dhrystone distinctness fft-int flood-fill frac-calc hanoi heapsort kepler longdiv mandelbrot mersenne natlog nr-solver parrondo pascal shortest-path sieve skeleton totient
 
+OPT_CFLAGS = -O0 -g
+
 ifeq ($(TARGET), host)
 TARGET_CFLAGS = -DLIBTAR_HOST
 TARGET_LIBS =

@@ -3159,7 +3159,7 @@ libmin_pow(double x, double y)
 	GET_HIGH_WORD(j, z);
 	j += n<<20;
 	if ((j>>20) <= 0)  /* subnormal output */
-		z = scalbn(z,n);
+		z = libmin_scalbn(z,n);
 	else
 		SET_HIGH_WORD(z, j);
 	return s*z;
@@ -3232,7 +3232,7 @@ libmin_pow(double x, double y)
  *      sqrt(NaN) = NaN         ... with invalid signal for signaling NaN
  */
 
-static const double tiny = 1.0e-300;
+static const double __tiny = 1.0e-300;
 
 double
 libmin_sqrt(double x)
@@ -3316,9 +3316,9 @@ libmin_sqrt(double x)
 
 	/* use floating add to find out rounding direction */
 	if ((ix0|ix1) != 0) {
-		z = 1.0 - tiny; /* raise inexact flag */
+		z = 1.0 - __tiny; /* raise inexact flag */
 		if (z >= 1.0) {
-			z = 1.0 + tiny;
+			z = 1.0 + __tiny;
 			if (q1 == (uint32_t)0xffffffff) {
 				q1 = 0;
 				q++;

@@ -516,9 +516,9 @@ FindAnagram(Quad * pqMask, PPWord ppwStart, int iLetter)
     Debug(libmin_printf("Trying :"); DumpWord(pqMask); libmin_printf(":\n");)
 
     for (;;) {
-        iq = alPhrase[achByFrequency[iLetter]].iq;
-        qMask = alPhrase[achByFrequency[iLetter]].uBits <<
-                alPhrase[achByFrequency[iLetter]].uShift;
+        iq = alPhrase[(int)achByFrequency[iLetter]].iq;
+        qMask = alPhrase[(int)achByFrequency[iLetter]].uBits <<
+                alPhrase[(int)achByFrequency[iLetter]].uShift;
         if (pqMask[iq] & qMask) break;
         iLetter++;
     }
@@ -579,9 +579,9 @@ FindAnagram(Quad * pqMask, PPWord ppwStart, int iLetter)
 }
 
 int Cdecl CompareFrequency(char *pch1, char *pch2) {
-    return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
+    return auGlobalFrequency[(int)(*pch1)] < auGlobalFrequency[(int)(*pch2)]
         ?  -1 :
-           auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
+           auGlobalFrequency[(int)(*pch1)] == auGlobalFrequency[(int)(*pch2)]
         ?   0 : 1;
 }
 

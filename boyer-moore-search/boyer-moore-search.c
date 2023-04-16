@@ -42,7 +42,7 @@ char inp_txt[] =
 
 // The preprocessing function for Boyer Moore's
 // bad character heuristic
-void badCharHeuristic(vector<char> str, int size, int badchar[NO_OF_CHARS])
+void badCharHeuristic(char *str, int size, int badchar[NO_OF_CHARS])
 {
 	// Initialize all occurrences as -1
 	for(int i = 0; i < NO_OF_CHARS; i++)
@@ -59,7 +59,7 @@ void badCharHeuristic(vector<char> str, int size, int badchar[NO_OF_CHARS])
 
 /* A pattern searching function that uses Bad
 Character Heuristic of Boyer Moore Algorithm */
-void search(vector<char> txt, int n, vector<char> pat, int m, int *ret)
+void search(char *txt, int n, char *pat, int m, int *ret)
 {
 	int badchar[NO_OF_CHARS];
 
@@ -92,7 +92,7 @@ void search(vector<char> txt, int n, vector<char> pat, int m, int *ret)
     int cond = (idx < 0);
     if(cond)
     {
-      ret[s] = true; 
+      ret[s] = TRUE; 
 			s += (s+m < n)? m-badchar[(int)txt[s+m]] : 1;
     }
 		else 
@@ -107,21 +107,21 @@ void search(vector<char> txt, int n, vector<char> pat, int m, int *ret)
 int
 main(void) 
 { 
-  int n = strlen(inp_txt); // String lengths are public
-  int m = strlen(inp_pat); // String lengths are public
-  printf("n = %d, m = %d\n", n, m);
+  int n = libmin_strlen(inp_txt); // String lengths are public
+  int m = libmin_strlen(inp_pat); // String lengths are public
+  libmin_printf("n = %d, m = %d\n", n, m);
   
-  vector<char> txt(n);
+  char txt[n];
   for (int k=0; k < n; k++)
     txt[k] = inp_txt[k];
 
-  vector<char> pat(m);
+  char pat[m];
   for (int k=0; k < m; k++)
     pat[k] = inp_pat[k];
 
   // Return vector
   int ret[n];
-  for(int i=0; i<n; i++) ret[i] = false; 
+  for(int i=0; i<n; i++) ret[i] = FALSE; 
 	
 
   // Run search
@@ -132,7 +132,7 @@ main(void)
   {
     if(ret[i]) 
     { 
-      printf("pattern occurs at shift = %d\n", i);
+      libmin_printf("pattern occurs at shift = %d\n", i);
     }
   }
 
