@@ -82,6 +82,8 @@ main(void)
   j = 1024;
   p = 1;
   SIEVE(j,p);
+
+  libmin_success();
   return 0;
 }
 

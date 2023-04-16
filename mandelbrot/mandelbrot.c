@@ -55,5 +55,6 @@ main(void)
       libmin_printf("\n");
     }
 
+  libmin_success();
   return 0;
 }

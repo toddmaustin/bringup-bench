@@ -459,6 +459,8 @@ kepler(double *E, double M, double e, double my_derror, int m)
 	}
 	*E = sign*(*E);
 	method(0.0,0.0,0.0,1);  /* reset */
+
+  libmin_success();
 	return count;
 }
 

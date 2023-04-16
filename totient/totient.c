@@ -174,6 +174,7 @@ main(void)
 
 	libmin_printf("phi(%d) = %d\n",n,phi(n));
 
+  libmin_success();
 	return 0;
 }
 

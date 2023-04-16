@@ -88,5 +88,7 @@ main(void)
     root = rn_solver(&converged, 0.00001, 20, f, df);
     libmin_printf("sqrt(%lf) == %lf (converged:%c)\n", sqrt_value, root, converged ? 't' : 'f');
   }
+
+  libmin_success();
   return 0;
 }

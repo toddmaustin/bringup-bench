@@ -217,6 +217,7 @@ int main(int argc, char *argv[])
         repi = libmin_atoi(rep);
     }while(repi == 1);
 
+    libmin_success();
     return 0;
 }
 

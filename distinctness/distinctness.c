@@ -182,6 +182,7 @@ main(void)
 	else
 		libmin_printf("The elements of `elements2' are not distinct (e.g., %d is duplicated)\n", dup2);
 
-	return 0;
+	libmin_success();
+  return 0;
 }
 

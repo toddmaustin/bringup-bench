@@ -111,6 +111,8 @@ main(void)
  
   // Print the shortest distance matrix
   printSolution(dist);
+
+  libmin_success();
   return 0;
 }
 

@@ -165,6 +165,8 @@ main(void)
 		}
 	}
   libmin_printf("Max recursive depth = %u\n", max_depth);
-	return 0; /* Don't hold your breath ! */
+
+  libmin_success();
+  return 0;
 }
 

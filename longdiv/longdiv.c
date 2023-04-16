@@ -420,7 +420,7 @@ main(void)
 		libmin_printf("%s\n",ddnds[i+1]);
 	}	
 		
-
+  libmin_success();
 	return 0;
 }	
 

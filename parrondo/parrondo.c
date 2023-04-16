@@ -254,6 +254,8 @@ main(void)
 		100.0*((double)site_visits[1])/n_tot,
 		100.0*((double)site_visits[2])/n_tot
 	);
+
+  libmin_success();
 	return 0;
 }
 

@@ -1127,5 +1127,6 @@ main(void)
 	}
 
 	libmin_success();
+  return 0;
 }
 

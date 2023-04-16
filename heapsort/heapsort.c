@@ -128,5 +128,6 @@ main(void)
   p = 1;
   HSORT(j,p);
 
+  libmin_success();
   return 0;
 }

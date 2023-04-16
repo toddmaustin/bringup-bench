@@ -60,6 +60,7 @@ main(void)
   libmin_printf("  newplain:   0x%08lx 0x%08lx\n",
 	       newplain[0], newplain[1]);
 
+  libmin_success();
   return 0;
 }
 

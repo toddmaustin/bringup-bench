@@ -15,5 +15,6 @@ int main()
         printf("fibonacci(%2d) = %d\n", i, fibonacci(i));
         i = i + 1;
     }
+
     return 0;
 }

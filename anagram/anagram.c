@@ -638,5 +638,7 @@ main(int cpchArgc, char **ppchArgv)
             Stat(libmin_printf("%lu:%lu probes\n", ulHighCount, ulLowCount);)
         }
     }
+
+    libmin_success();
     return 0;
 }

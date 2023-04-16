@@ -152,6 +152,7 @@ main()
   // print the colors after replacement
   libmin_printf("\nAFTER:\n"); printMatrix(mat);
 
+  libmin_success();
   return 0;
 }
 

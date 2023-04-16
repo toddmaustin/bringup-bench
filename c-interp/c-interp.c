@@ -1393,5 +1393,8 @@ int main(int argc, char **argv)
     *--sp = (long)argv;
     *--sp = (long)tmp;
 
-    return eval();
+    (void)eval();
+
+    libmin_success();
+    return 9;
 }

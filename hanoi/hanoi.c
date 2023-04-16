@@ -50,5 +50,7 @@ main(void)
 
       if (disk == 10) break;
     }
+
+  libmin_success();
   return 0;
 }

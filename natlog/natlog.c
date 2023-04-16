@@ -16,6 +16,8 @@ main(void)
     x *= y;
 
   libmin_printf("natlog: e=%f\n", x);
+
+  libmin_success();
   return 0;
 }
 

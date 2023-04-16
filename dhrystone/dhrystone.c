@@ -278,6 +278,7 @@ main(void)
   libmin_printf("        should be:   DHRYSTONE PROGRAM, 2'ND STRING\n");
   libmin_printf("\n");
 
+  libmin_success();
   return 0;
 }
 

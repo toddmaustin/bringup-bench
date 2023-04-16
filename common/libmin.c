@@ -1112,14 +1112,13 @@ dopr_outch(char *buffer, size_t *currlen, size_t maxlen, char c)
 void
 libmin_success(void)
 {
-  libmin_printf("** successful termination sentinel encountered **\n");
   libtarg_success();
 }
 
 void
 libmin_fail(int code)
 {
-  libmin_printf("** failure termination sentinel encountered **\n");
+  libmin_printf("ERROR: failure with termination code `%d'\n", code);
   libtarg_fail(code);
 }
 
