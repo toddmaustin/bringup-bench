@@ -39,17 +39,20 @@ size_t libmin_strlen(const char *str);
 
 /* return order of strings */
 int libmin_strcmp(const char *l, const char *r);
-
+size_t libmin_strspn(const char *s, const char *c);
+char *libmin_strtok(char *s, const char *sep);
 size_t libmin_strcspn(const char *s, const char *c);
 char * libmin_strpbrk(const char *s, const char *b);
 
 /* set a block of memory to a value */
-void * libmin_memset(void *dest, int c, size_t n);
+void *libmin_memset(void *dest, int c, size_t n);
 void *libmin_memcpy(void *dest, const void *src, size_t n);
+int libmin_memcmp(const void *vl, const void *vr, size_t n);
+
 
 #ifndef LIBTARG_SILENT
 /* print a message with format FMT to the co-simulation console */
-void libmin_printf(char *fmt, ...);
+int libmin_printf(char *fmt, ...);
 #else /* LIBTARG_SILENT */
 /* run silent */
 #define libmin_printf(FMT, ARGS...)	do { ; } while (0)

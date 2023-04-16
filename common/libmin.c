@@ -227,6 +227,46 @@ libmin_strcmp(const char *l, const char *r)
 
 #define BITOP(a,b,op) \
  ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
+
+size_t
+libmin_strspn(const char *s, const char *c)
+{
+	const char *a = s;
+	size_t byteset[32/sizeof(size_t)] = { 0 };
+
+	if (!c[0])
+    return 0;
+	if (!c[1]) {
+		for (; *s == *c; s++);
+		return s-a;
+	}
+
+	for (; *c && BITOP(byteset, *(unsigned char *)c, |=); c++);
+	for (; *s && BITOP(byteset, *(unsigned char *)s, &); s++);
+	return s-a;
+}
+
+
+char *
+libmin_strtok(char *s, const char *sep)
+{
+	static char *p;
+	if (!s && !(s = p))
+    return NULL;
+	s += libmin_strspn(s, sep);
+	if (!*s)
+    return p = 0;
+	p = s + libmin_strcspn(s, sep);
+	if (*p)
+    *p++ = 0;
+	else
+    p = 0;
+	return s;
+}
+
+
+#define BITOP(a,b,op) \
+ ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
 #define ALIGN (sizeof(size_t))
 #define ONES ((size_t)-1/UCHAR_MAX)
 #define HIGHS (ONES * (UCHAR_MAX/2+1))
@@ -312,6 +352,15 @@ libmin_memcpy(void *dest, const void *src, size_t n)
 	for (; n; n--) *d++ = *s++;
 	return dest;
 }
+
+int
+libmin_memcmp(const void *vl, const void *vr, size_t n)
+{
+	const unsigned char *l=vl, *r=vr;
+	for (; n && *l == *r; n--, l++, r++);
+	return n ? *l-*r : 0;
+}
+
 
 /*
  * Copyright Patrick Powell 1995
@@ -1074,20 +1123,25 @@ libmin_fail(int code)
   libtarg_fail(code);
 }
 
-void
+int
 libmin_printf(char *fmt, ...)
 {
   char buf[1024], *s;
   va_list ap;
 
   va_start(ap, fmt);
-  dopr(buf, 256, fmt, ap);
+  dopr(buf, 1024, fmt, ap);
   /* make sure the output string is terminated */
-  buf[255] = '\0';
+  buf[1023] = '\0';
   va_end(ap);
 
+  int cnt = 0;
   for (s=buf; *s; s++)
+  {
     libtarg_putc(*s);
+    cnt++;
+  }
+  return cnt;
 }
 
 void
@@ -1139,13 +1193,16 @@ libmin_mclose(MFILE *mfile)
 size_t
 libmin_mread(void *_ptr, size_t size, MFILE *mfile)
 {
-  if (libmin_feof(mfile)
+  if (libmin_meof(mfile))
     return 0;
 
   char *ptr = _ptr;
   size_t cnt = 0;
-  while (mfile->rdptr < mfile->data_sz && !libmin_feof(mfile))
+  while (mfile->rdptr < mfile->data_sz && cnt < size && !libmin_meof(mfile))
+  {
     *ptr++ = mfile->data[mfile->rdptr++];
+    cnt++;
+  }
   return cnt;
 }
 
