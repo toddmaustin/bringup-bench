@@ -188,5 +188,7 @@ double libmin_cos(double x);
 double libmin_sin(double x);
 double fabs(double x);
 double libmin_pow(double x, double y);
+double libmin_sqrt(double x);
+
 
 #endif /* LIBMIN_H */

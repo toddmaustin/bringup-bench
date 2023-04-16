@@ -1,0 +1,12 @@
+fibonacci( 0) = 1
+fibonacci( 1) = 1
+fibonacci( 2) = 2
+fibonacci( 3) = 3
+fibonacci( 4) = 5
+fibonacci( 5) = 8
+fibonacci( 6) = 13
+fibonacci( 7) = 21
+fibonacci( 8) = 34
+fibonacci( 9) = 55
+fibonacci(10) = 89
+exit(0)

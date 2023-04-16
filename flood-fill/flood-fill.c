@@ -103,10 +103,10 @@ void
 floodfill(char mat[M][N], char x, char y, char replacement)
 {
   // get the target color
-  char target = mat[x][y];
+  char target = mat[(int)x][(int)y];
  
   // replace the current pixel color with that of replacement
-  mat[x][y] = replacement;
+  mat[(int)x][(int)y] = replacement;
  
   // process all eight adjacent pixels of the current pixel and
   // recur for each valid pixel

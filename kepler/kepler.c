@@ -209,7 +209,7 @@ double e_series(double E, double e, double M, int reset)
 		a_n += s_k*bin_fact(n,k)*libmin_sin(n_2k*M);
 	}
 	n++;
-	return E + pow(e,n-1)*a_n;
+	return E + libmin_pow(e,n-1)*a_n;
 }
 	
 /* The eccentric anomaly is an odd periodic function in the Mean Anomoly

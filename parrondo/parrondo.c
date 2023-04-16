@@ -248,8 +248,8 @@ main(void)
 			loss_count, i-(win_count+loss_count));
 	libmin_printf("(Win/loss = %d/-%d, draw = no win/loss in %ld plays.)\n",
 			max_fortune,max_fortune,MAX_ITERATIONS);
-	libmin_printf("Average trial length = %g\n",n_bar);
-	libmin_printf("Site occupancy: 0 mod 3: %g%%, 1 mod 3: %g%%, 2 mod 3: %g%%\n",
+	libmin_printf("Average trial length = %lf\n",n_bar);
+	libmin_printf("Site occupancy: 0 mod 3: %lf%%, 1 mod 3: %lf%%, 2 mod 3: %lf%%\n",
 		100.0*((double)site_visits[0])/n_tot,
 		100.0*((double)site_visits[1])/n_tot,
 		100.0*((double)site_visits[2])/n_tot

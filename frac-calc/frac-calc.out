@@ -1,0 +1,24 @@
+-------------------
+FRACTION CALCULATOR
+Please entry the desired operation:
+(It is necessary to add a space between the fractions, like a/b + c/d)
+-> 
+EXPRESSION:  3/4 + 6 7/19FRACTION: 3/4 + 121/19
+INTERMEDIATE: 541/76
+RESULT: 541/76
+DECIMAL: 7.118
+
+Do you want to do another operation?
+enter 1 for yes
+-------------------
+FRACTION CALCULATOR
+Please entry the desired operation:
+(It is necessary to add a space between the fractions, like a/b + c/d)
+-> 
+EXPRESSION: 7/19 + 21/7FRACTION: 7/19 + 21/7
+INTERMEDIATE: 448/133
+RESULT: 64/19
+DECIMAL: 3.368
+
+Do you want to do another operation?
+enter 1 for yes

@@ -240,7 +240,7 @@ main(void)
   libmin_printf("Arr_2_Glob[8][7]:    %d\n", Arr_2_Glob[8][7]);
   libmin_printf("        should be:   Pnumber_of_runs + 10\n");
   libmin_printf("Ptr_Glob->\n");
-  libmin_printf("  Ptr_Comp:          0x%08lx\n", (int)(long) Ptr_Glob->Ptr_Comp);
+  libmin_printf("  Ptr_Comp:          (implementation-dependent)\n");
   libmin_printf("        should be:   (implementation-dependent)\n");
   libmin_printf("  Discr:             %d\n", Ptr_Glob->Discr);
   libmin_printf("        should be:   %d\n", 0);
@@ -251,7 +251,7 @@ main(void)
   libmin_printf("  Str_Comp:          %s\n", Ptr_Glob->variant.var_1.Str_Comp);
   libmin_printf("        should be:   DHRYSTONE PROGRAM, SOME STRING\n");
   libmin_printf("Next_Ptr_Glob->\n");
-  libmin_printf("  Ptr_Comp:          0x%08lx\n", (int)(long) Next_Ptr_Glob->Ptr_Comp);
+  libmin_printf("  Ptr_Comp:          (implementation-dependent)\n");
   libmin_printf("        should be:   (implementation-dependent), same as above\n");
   libmin_printf("  Discr:             %d\n", Next_Ptr_Glob->Discr);
   libmin_printf("        should be:   %d\n", 0);

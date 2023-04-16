@@ -36,7 +36,7 @@ TARGET_CFLAGS = -DLIBTAR_HOST
 TARGET_LIBS =
 TARGET_SIM =
 TARGET_DIFF = diff
-TARGET_EXE = $(PROG).na
+TARGET_EXE = $(PROG).host
 else ifeq ($(TARGET), standalong)
 TARGET_CFLAGS = -DLIBTARG_SA
 TARGET_LIBS =
@@ -67,7 +67,7 @@ $(TARGET_EXE): $(OBJS)
 	$(CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
 
 clean:
-	rm -f $(PROG).na $(PROG).do $(PROG).enc *.o core mem.out *.log FOO $(LOCAL_CLEAN)
+	rm -f $(PROG).host $(PROG).sa *.o core mem.out *.log FOO $(LOCAL_CLEAN)
 
 
 #
@@ -91,24 +91,24 @@ config-seal:
 
 run-tests:
 	@for _BMARK in $(BMARKS) ; do \
-	  for _MODE in na do enc ; do \
+	  for _TARGET in host ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
-	    echo "Running "$$_BMARK" in MODE="$$_MODE ; \
+	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
 	    echo "--------------------------------" ; \
-	    make MODE=$$_MODE clean build test ; \
+	    make TARGET=$$_TARGET clean build test ; \
 	    cd .. ; \
 	  done \
 	done
 
 all-clean: clean
 	@for _BMARK in $(BMARKS) ; do \
-	  for _MODE in na do enc ; do \
+	  for _TARGET in host ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
-	    echo "Running "$$_BMARK" in MODE="$$_MODE ; \
+	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
 	    echo "--------------------------------" ; \
-	    make MODE=$$_MODE clean ; \
+	    make TARGET=$$_TARGET clean ; \
 	    cd .. ; \
 	  done \
 	done

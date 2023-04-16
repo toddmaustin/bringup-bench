@@ -122,13 +122,15 @@ char *sbc(char *mend, char *shend)
 
 
 	for(i = 0; i<lm; i++){
-		if(need_borrow)
+		if (need_borrow)
+    {
 			if(mnd[lm-i-1] == '0')
 				mnd[lm-i-1] = '9'; /* need_borrow stays TRUE */
 			else {
 				--mnd[lm-i-1];
 				need_borrow = FALSE;
 			}
+    }
 		if( i < ls )
 		 need_borrow |= sub(mnd[lm-i-1],shend[ls-i-1],res+lm-i-1);
 		else

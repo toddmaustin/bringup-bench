@@ -43,7 +43,8 @@ int num_digits(int n) {
 	int d = 1;
 
 	
-	while(n=n/10)d++;
+	while((n=n/10) != 0)
+    d++;
 	return d;
 }
 

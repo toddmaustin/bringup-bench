@@ -1,11 +1,10 @@
 
-LOCAL_CFLAGS= -I../common
+LOCAL_CFLAGS=
 LOCAL_LIBS=
+LOCAL_OBJS=distinctness.o
 
 PROG=distinctness
-OBJS=distinctness.o ../common/utils.o
 
-include ../config.mk
 include ../Makefile
 
 test: $(TARGET_EXE)

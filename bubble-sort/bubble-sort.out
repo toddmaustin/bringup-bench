@@ -512,4 +512,5 @@ DATA DUMP:
   data[253] = 2108132720
   data[254] = 2133339313
   data[255] = 2145836301
+INFO: 16547 swaps executed.
 INFO: data is properly sorted.

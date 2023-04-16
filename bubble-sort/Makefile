@@ -1,11 +1,10 @@
 
-LOCAL_CFLAGS= -I../common
+LOCAL_CFLAGS=
 LOCAL_LIBS=
+LOCAL_OBJS=bubble-sort.o
 
 PROG=bubble-sort
-OBJS=bubble-sort.o ../common/utils.o
 
-include ../config.mk
 include ../Makefile
 
 test: $(TARGET_EXE)

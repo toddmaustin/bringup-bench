@@ -72,7 +72,7 @@ void next() {
     char *last_pos;
     long hash;
 
-    while (token = *src) {
+    while ((token = *src) != 0) {
         ++src;
 
         if (token == '\n') {
@@ -1138,7 +1138,6 @@ void global_declaration() {
 
 
     long type; // tmp, actual type for variable
-    long i; // tmp
 
     basetype = INT;
 
@@ -1287,7 +1286,7 @@ long eval() {
 int main(int argc, char **argv)
 {
 
-    long i, fd;
+    long i;
     long *tmp;
 
     argc--;

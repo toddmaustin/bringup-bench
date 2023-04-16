@@ -1,0 +1,1080 @@
+--------------------------------
+Running ackermann in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/ackermann'
+rm -f ackermann.host ackermann.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o ackermann.o -c ackermann.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o ackermann.host ackermann.o libmin.o libtarg.o  
+./ackermann.host > FOO 
+diff FOO ackermann.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/ackermann'
+--------------------------------
+Running anagram in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/anagram'
+rm -f anagram.host anagram.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o anagram.o -c anagram.c
+anagram.c:138:3: warning: pointer targets in initialization of ‘const uint8_t *’ {aka ‘const unsigned char *’} from ‘const char *’ differ in signedness [-Wpointer-sign]
+  138 |   __words,
+      |   ^~~~~~~
+anagram.c:138:3: note: (near initialization for ‘__mwords.data’)
+anagram.c:146:3: warning: pointer targets in initialization of ‘const uint8_t *’ {aka ‘const unsigned char *’} from ‘const char *’ differ in signedness [-Wpointer-sign]
+  146 |   __input,
+      |   ^~~~~~~
+anagram.c:146:3: note: (near initialization for ‘__minput.data’)
+anagram.c: In function ‘FindAnagram’:
+anagram.c:519:37: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  519 |         iq = alPhrase[achByFrequency[iLetter]].iq;
+      |                       ~~~~~~~~~~~~~~^~~~~~~~~
+anagram.c:520:40: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  520 |         qMask = alPhrase[achByFrequency[iLetter]].uBits <<
+      |                          ~~~~~~~~~~~~~~^~~~~~~~~
+anagram.c:521:40: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  521 |                 alPhrase[achByFrequency[iLetter]].uShift;
+      |                          ~~~~~~~~~~~~~~^~~~~~~~~
+anagram.c: In function ‘CompareFrequency’:
+anagram.c:582:30: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  582 |     return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
+      |                              ^~~~~
+anagram.c:582:57: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  582 |     return auGlobalFrequency[*pch1] < auGlobalFrequency[*pch2]
+      |                                                         ^~~~~
+anagram.c:584:30: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  584 |            auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
+      |                              ^~~~~
+anagram.c:584:58: warning: array subscript has type ‘char’ [-Wchar-subscripts]
+  584 |            auGlobalFrequency[*pch1] == auGlobalFrequency[*pch2]
+      |                                                          ^~~~~
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o anagram.host anagram.o libmin.o libtarg.o  
+./anagram.host words > FOO 
+diff FOO anagram.out
+3c3
+< 136 candidates
+---
+> 138 candidates
+5,8c5,39
+< USN Dido tat 
+< USN Dido AT&T 
+< USN toad tid 
+< USN toad it'd 
+---
+> USDA don IT&T 
+> USDA don ITT 
+> USDA don tit 
+> USDA dot nit 
+> USDA dot tin 
+> USDA nod tit 
+> USDA nod ITT 
+> USDA nod IT&T 
+> USDA not tid 
+> USDA not it'd 
+> USDA Ott din 
+> USDA tot din 
+> USDA ton it'd 
+> USDA ton tid 
+> tout did San 
+> tout Dis Dan 
+> tout Dis and 
+> tout Dis DNA 
+> tout din sad 
+> tout sin dad 
+> tout sin add 
+> tun Dido sat 
+> tun dot said 
+> tun dot dais 
+> tun Otis add 
+> tun Otis dad 
+> tun soda it'd 
+> tun soda tid 
+> tun Taos did 
+> tun toad Dis 
+> tuna DOD sit 
+> tuna dot Dis 
+> tuna odd sit 
+> tuna sod it'd 
+> tuna sod tid 
+23a55,76
+> USN Dido tat 
+> USN Dido AT&T 
+> USN toad tid 
+> USN toad it'd 
+> anus DOD ITT 
+> anus DOD IT&T 
+> anus DOD tit 
+> anus dot tid 
+> anus dot it'd 
+> anus odd ITT 
+> anus odd IT&T 
+> anus odd tit 
+> anus Ott did 
+> anus tot did 
+> astound it'd 
+> astound tid 
+> aunt DOD sit 
+> aunt dot Dis 
+> aunt odd sit 
+> aunt sod tid 
+> aunt sod it'd 
+> Austin Todd 
+32d84
+< suit dot DNA 
+34a87
+> suit dot DNA 
+39d91
+< suit odd Nat 
+40a93
+> suit odd Nat 
+44d96
+< sud ado tint 
+48d99
+< sud NATO tid 
+49a101
+> sud NATO tid 
+54,56c106
+< sud toad nit 
+< sud toad tin 
+< sud tao dint 
+---
+> sud ado tint 
+58,99c108,110
+< anus DOD ITT 
+< anus DOD tit 
+< anus DOD IT&T 
+< anus dot tid 
+< anus dot it'd 
+< anus odd ITT 
+< anus odd tit 
+< anus odd IT&T 
+< anus Ott did 
+< anus tot did 
+< astound it'd 
+< astound tid 
+< USDA don IT&T 
+< USDA don tit 
+< USDA don ITT 
+< USDA dot tin 
+< USDA dot nit 
+< USDA nod IT&T 
+< USDA nod tit 
+< USDA nod ITT 
+< USDA not it'd 
+< USDA not tid 
+< USDA Ott din 
+< USDA tot din 
+< USDA ton it'd 
+< USDA ton tid 
+< aunt DOD sit 
+< aunt dot Dis 
+< aunt odd sit 
+< aunt sod it'd 
+< aunt sod tid 
+< Austin Todd 
+< USA Dido TNT 
+< USA DOD tint 
+< USA don't tid 
+< USA don't it'd 
+< USA dot dint 
+< USA odd tint 
+< USA Todd tin 
+< USA Todd nit 
+< stun ado tid 
+< stun ado it'd 
+---
+> sud tao dint 
+> sud toad tin 
+> sud toad nit 
+102d112
+< stun Ito dad 
+103a114
+> stun Ito dad 
+104a116,117
+> stun ado it'd 
+> stun ado tid 
+106,111d118
+< unit DOD sat 
+< unit dot sad 
+< unit odd sat 
+< unit sod tad 
+< stud ado nit 
+< stud ado tin 
+112a120
+> stud dot Nazi 
+115d122
+< stud Ito and 
+117c124
+< stud not Ida 
+---
+> stud Ito and 
+118a126
+> stud not Ida 
+120,121c128,129
+< stud tao din 
+< stud ton Ida 
+---
+> stud ado tin 
+> stud ado nit 
+122a131,132
+> stud ton Ida 
+> stud tao din 
+126,128d135
+< situ DOD Nat 
+< situ DOD tan 
+< situ DOD ant 
+131d137
+< situ dot DNA 
+132a139
+> situ dot DNA 
+136,137d142
+< situ odd Nat 
+< situ odd tan 
+138a144,145
+> situ odd tan 
+> situ odd Nat 
+141,144c148,150
+< Saud don ITT 
+< Saud don IT&T 
+< Saud don tit 
+< Saud dot nit 
+---
+> situ DOD ant 
+> situ DOD tan 
+> situ DOD Nat 
+145a152
+> Saud dot nit 
+147d153
+< Saud nod IT&T 
+148a155
+> Saud nod IT&T 
+152d158
+< Saud tot din 
+155c161,164
+< out it'd sand 
+---
+> Saud tot din 
+> Saud don ITT 
+> Saud don tit 
+> Saud don IT&T 
+160d168
+< out did Stan 
+161a170
+> out did Stan 
+163,195c172
+< oust it'd DNA 
+< oust it'd and 
+< oust it'd Dan 
+< oust did ant 
+< oust did tan 
+< oust did Nat 
+< oust nit add 
+< oust nit dad 
+< oust din tad 
+< oust tin add 
+< oust tin dad 
+< oust tid DNA 
+< oust tid and 
+< oust tid Dan 
+< onus it'd tad 
+< onus ITT dad 
+< onus ITT add 
+< onus IT&T dad 
+< onus IT&T add 
+< onus tit dad 
+< onus tit add 
+< onus did tat 
+< onus did AT&T 
+< onus tid tad 
+< nut Dido sat 
+< nut Otis add 
+< nut Otis dad 
+< nut dot said 
+< nut dot dais 
+< nut soda tid 
+< nut soda it'd 
+< nut toad Dis 
+< nut Taos did 
+---
+> out it'd sand 
+202,203d178
+< dud Otis Nat 
+< dud Otis tan 
+204a180,181
+> dud Otis tan 
+> dud Otis Nat 
+208,210c185
+< dud tot Sian 
+< dud tot ANSI 
+< dud tao isn't 
+---
+> dud Toni sat 
+212c187
+< dud Taos nit 
+---
+> dud tao isn't 
+214c189,191
+< dud Toni sat 
+---
+> dud Taos nit 
+> dud tot ANSI 
+> dud tot Sian 
+216d192
+< dun Ott dais 
+217a194,195
+> dun Ott dais 
+> dun soda ITT 
+220c198,199
+< dun soda ITT 
+---
+> dun Taos it'd 
+> dun Taos tid 
+224,225d202
+< dun Taos tid 
+< dun Taos it'd 
+227,228c204,205
+< dust Ito and 
+< dust Ito DNA 
+---
+> dust dot ani 
+> dust dot Nazi 
+230c207,208
+< dust not aid 
+---
+> dust Ito DNA 
+> dust Ito and 
+231a210
+> dust not aid 
+233,237d211
+< dust dot ani 
+< dust tao din 
+< dust ton aid 
+< dust ton Ida 
+< dust ado tin 
+239c213,216
+< Dutton said 
+---
+> dust ado tin 
+> dust ton Ida 
+> dust ton aid 
+> dust tao din 
+241,262c218,264
+< tout din sad 
+< tout did San 
+< tout Dis and 
+< tout Dis DNA 
+< tout Dis Dan 
+< tout sin add 
+< tout sin dad 
+< tun Dido sat 
+< tun Otis dad 
+< tun Otis add 
+< tun dot dais 
+< tun dot said 
+< tun soda tid 
+< tun soda it'd 
+< tun toad Dis 
+< tun Taos did 
+< tuna odd sit 
+< tuna DOD sit 
+< tuna dot Dis 
+< tuna sod tid 
+< tuna sod it'd 
+< 313 candidates
+---
+> Dutton said 
+> oust din tad 
+> oust did ant 
+> oust did Nat 
+> oust did tan 
+> oust tid and 
+> oust tid Dan 
+> oust tid DNA 
+> oust tin add 
+> oust tin dad 
+> oust it'd and 
+> oust it'd Dan 
+> oust it'd DNA 
+> oust nit add 
+> oust nit dad 
+> onus did tat 
+> onus did AT&T 
+> onus IT&T add 
+> onus IT&T dad 
+> onus ITT add 
+> onus ITT dad 
+> onus tit add 
+> onus tit dad 
+> onus tid tad 
+> onus it'd tad 
+> nut dot dais 
+> nut dot said 
+> nut Otis dad 
+> nut Otis add 
+> nut soda tid 
+> nut soda it'd 
+> nut Taos did 
+> nut toad Dis 
+> nut Dido sat 
+> unit dot sad 
+> unit odd sat 
+> unit sod tad 
+> unit DOD sat 
+> USA dot dint 
+> USA odd tint 
+> USA DOD tint 
+> USA Todd nit 
+> USA Todd tin 
+> USA don't it'd 
+> USA don't tid 
+> USA Dido TNT 
+> 327 candidates
+267a270
+> abc torch zest 
+270a274,275
+> abc hertz Scot 
+> abc hertz cost 
+296d300
+< sob chert cat 
+297a302
+> sob chert cat 
+299,300d303
+< sob tech cart 
+< sob retch cat 
+301a305,306
+> sob retch cat 
+> sob tech cart 
+304a310,311
+> scab hertz cot 
+> scab hertz Oct 
+310c317
+< rob catch set 
+---
+> rob catch zest 
+311a319
+> rob catch set 
+313d320
+< rob chest cat 
+314a322
+> rob chest cat 
+323a332
+> orb catch zest 
+335c344,346
+< hob crest act 
+---
+> throb sac etc 
+> throb sec cat 
+> throb sec act 
+336a348
+> hob crest act 
+341d352
+< herb Scot act 
+343c354
+< herb cost act 
+---
+> herb Scot act 
+345c356
+< herb cast Oct 
+---
+> herb cost act 
+347c358
+< herb Acts Oct 
+---
+> herb cast Oct 
+348a360
+> herb Acts Oct 
+351,353d362
+< throb sec cat 
+< throb sec act 
+< throb sac etc 
+357d365
+< crab the Scot 
+358a367
+> crab the Scot 
+368d376
+< CBS chert oat 
+370c378
+< CBS chore AT&T 
+---
+> CBS chert oat 
+372,379c380,382
+< CBS ache tort 
+< CBS ache trot 
+< CBS torch eta 
+< CBS torch ate 
+< CBS torch eat 
+< CBS torch tea 
+< CBS torah etc 
+< CBS each tort 
+---
+> CBS chore AT&T 
+> CBS zeroth cat 
+> CBS zeroth act 
+380a384
+> CBS each tort 
+383a388,393
+> CBS torch eta 
+> CBS torch ate 
+> CBS torch tea 
+> CBS torch eat 
+> CBS torch zeta 
+> CBS torah etc 
+392c402
+< CBS hoc tater 
+---
+> CBS hertz coat 
+393a404
+> CBS hoc tater 
+395a407
+> CBS hot crate 
+398d409
+< CBS hot crate 
+402,403c413,415
+< CBS Thea ROTC 
+< CBS the actor 
+---
+> CBS Thor Aztec 
+> CBS ache tort 
+> CBS ache trot 
+406,407c418
+< CBS that core 
+< CBS retch oat 
+---
+> CBS Thea ROTC 
+409,410c420,423
+< CBS teach tor 
+< CBS teach rot 
+---
+> CBS retch oat 
+> CBS the actor 
+> CBS that core 
+> CBS Roth Aztec 
+412a426,427
+> CBS teach rot 
+> CBS teach tor 
+415d429
+< Bach cost ret 
+416a431
+> Bach cost ret 
+418a434,435
+> Bach zest ROTC 
+> Bach set ROTC 
+420a438
+> Bach EST ROTC 
+423,425d440
+< Bach set ROTC 
+< Bach EST ROTC 
+< bah coset CRT 
+427a443
+> bah coset CRT 
+431d446
+< bar etch Scot 
+433c448
+< bar tech Scot 
+---
+> bar etch Scot 
+434a450
+> bar tech Scot 
+438c454
+< bash ROTC etc 
+---
+> bash etc ROTC 
+446c462
+< batch sector 
+---
+> batch cos ret 
+450c466
+< batch cos ret 
+---
+> batch sector 
+460d475
+< Bert cash Oct 
+461a477
+> Bert cash Oct 
+463d478
+< Bert cosh act 
+464a480
+> Bert cosh act 
+468,469d483
+< berth sac Oct 
+< berth sac cot 
+471d484
+< berth cos cat 
+472a486,488
+> berth cos cat 
+> berth sac Oct 
+> berth sac cot 
+474d489
+< best char cot 
+475a491
+> best char cot 
+477d492
+< best arch Oct 
+478a494
+> best arch Oct 
+481d496
+< bet char Scot 
+482a498
+> bet char Scot 
+491,495d506
+< beth sac ROTC 
+< beth cost RCA 
+< beth cost arc 
+< beth cost car 
+< beth cos cart 
+498c509
+< beth Scot RCA 
+---
+> beth sac ROTC 
+500a512,518
+> beth Scot czar 
+> beth Scot RCA 
+> beth cost arc 
+> beth cost car 
+> beth cost czar 
+> beth cost RCA 
+> beth cos cart 
+504,505d521
+< Bohr sec tact 
+< Bohr sect cat 
+507,508c523,524
+< Bohr scat etc 
+< Bohr Acts etc 
+---
+> Bohr sect cat 
+> Bohr sec tact 
+510c526,528
+< Bosch CRT tea 
+---
+> Bohr Acts etc 
+> Bohr scat etc 
+> Bosch act ret 
+512a531
+> Bosch CRT zeta 
+513a533
+> Bosch CRT tea 
+515d534
+< Bosch act ret 
+520a540,542
+> botch sea CRT 
+> botch set car 
+> botch set czar 
+523c545,546
+< botch set car 
+---
+> botch EST car 
+> botch EST czar 
+526,528c549,552
+< botch EST car 
+< botch sea CRT 
+< botch sec tar 
+---
+> botch zest car 
+> botch zest czar 
+> botch zest arc 
+> botch zest RCA 
+529a554
+> botch sec tar 
+532c557,558
+< both sec cart 
+---
+> both sect car 
+> both sect czar 
+535c561
+< both sect car 
+---
+> both sec cart 
+538a565
+> bract hoc zest 
+543c570
+< brash etc Oct 
+---
+> brash Oct etc 
+546d572
+< Brest hoc act 
+547a574
+> Brest hoc act 
+549,550d575
+< broth sec cat 
+< broth sec act 
+552c577,578
+< cab chest rot 
+---
+> broth sec act 
+> broth sec cat 
+553a580
+> cab chest rot 
+554a582
+> cab torch zest 
+558a587,588
+> cab hertz cost 
+> cab hertz Scot 
+make[1]: *** [Makefile:12: test] Error 1
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/anagram'
+--------------------------------
+Running banner in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/banner'
+rm -f banner.host banner.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o banner.o -c banner.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o banner.host banner.o libmin.o libtarg.o  
+./banner.host > FOO 
+diff FOO banner.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/banner'
+--------------------------------
+Running boyer-moore-search in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/boyer-moore-search'
+rm -f boyer-moore-search.host boyer-moore-search.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o boyer-moore-search.o -c boyer-moore-search.c
+boyer-moore-search.c:45:29: error: expected ‘)’ before ‘<’ token
+   45 | void badCharHeuristic(vector<char> str, int size, int badchar[NO_OF_CHARS])
+      |                             ^
+      |                             )
+boyer-moore-search.c:62:19: error: expected ‘)’ before ‘<’ token
+   62 | void search(vector<char> txt, int n, vector<char> pat, int m, int *ret)
+      |                   ^
+      |                   )
+boyer-moore-search.c: In function ‘main’:
+boyer-moore-search.c:110:11: warning: implicit declaration of function ‘strlen’ [-Wimplicit-function-declaration]
+  110 |   int n = strlen(inp_txt); // String lengths are public
+      |           ^~~~~~
+boyer-moore-search.c:110:11: warning: incompatible implicit declaration of built-in function ‘strlen’
+boyer-moore-search.c:6:1: note: include ‘<string.h>’ or provide a declaration of ‘strlen’
+    5 | #include "libmin.h"
+  +++ |+#include <string.h>
+    6 | 
+boyer-moore-search.c:112:3: warning: implicit declaration of function ‘printf’ [-Wimplicit-function-declaration]
+  112 |   printf("n = %d, m = %d\n", n, m);
+      |   ^~~~~~
+boyer-moore-search.c:112:3: warning: incompatible implicit declaration of built-in function ‘printf’
+boyer-moore-search.c:6:1: note: include ‘<stdio.h>’ or provide a declaration of ‘printf’
+    5 | #include "libmin.h"
+  +++ |+#include <stdio.h>
+    6 | 
+boyer-moore-search.c:114:3: error: ‘vector’ undeclared (first use in this function)
+  114 |   vector<char> txt(n);
+      |   ^~~~~~
+boyer-moore-search.c:114:3: note: each undeclared identifier is reported only once for each function it appears in
+boyer-moore-search.c:114:10: error: expected expression before ‘char’
+  114 |   vector<char> txt(n);
+      |          ^~~~
+boyer-moore-search.c:116:5: error: ‘txt’ undeclared (first use in this function)
+  116 |     txt[k] = inp_txt[k];
+      |     ^~~
+boyer-moore-search.c:118:10: error: expected expression before ‘char’
+  118 |   vector<char> pat(m);
+      |          ^~~~
+boyer-moore-search.c:120:5: error: ‘pat’ undeclared (first use in this function)
+  120 |     pat[k] = inp_pat[k];
+      |     ^~~
+boyer-moore-search.c:124:35: error: ‘false’ undeclared (first use in this function)
+  124 |   for(int i=0; i<n; i++) ret[i] = false;
+      |                                   ^~~~~
+boyer-moore-search.c:128:3: warning: implicit declaration of function ‘search’ [-Wimplicit-function-declaration]
+  128 |   search(txt, n, pat, m, ret);
+      |   ^~~~~~
+make[1]: *** [../Makefile:59: boyer-moore-search.o] Error 1
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/boyer-moore-search'
+--------------------------------
+Running bubble-sort in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/bubble-sort'
+rm -f bubble-sort.host bubble-sort.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o bubble-sort.o -c bubble-sort.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o bubble-sort.host bubble-sort.o libmin.o libtarg.o  
+./bubble-sort.host > FOO 
+diff FOO bubble-sort.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/bubble-sort'
+--------------------------------
+Running c-interp in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/c-interp'
+rm -f c-interp.host c-interp.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o c-interp.o -c c-interp.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o c-interp.host c-interp.o libmin.o libtarg.o  
+./c-interp.host hello.c > FOO 
+diff FOO c-interp.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/c-interp'
+--------------------------------
+Running cipher in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/cipher'
+rm -f cipher.host cipher.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o cipher.o -c cipher.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o cipher.host cipher.o libmin.o libtarg.o  
+./cipher.host > FOO 
+diff FOO cipher.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/cipher'
+--------------------------------
+Running dhrystone in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/dhrystone'
+rm -f dhrystone.host dhrystone.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o dhrystone.o -c dhrystone.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o dhrystone.host dhrystone.o libmin.o libtarg.o  
+./dhrystone.host > FOO 
+diff FOO dhrystone.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/dhrystone'
+--------------------------------
+Running distinctness in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/distinctness'
+rm -f distinctness.host distinctness.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o distinctness.o -c distinctness.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o distinctness.host distinctness.o libmin.o libtarg.o  
+./distinctness.host > FOO 
+diff FOO distinctness.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/distinctness'
+--------------------------------
+Running fft-int in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/fft-int'
+rm -f fft-int.host fft-int.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o fft-int.o -c fft-int.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o fft-int.host fft-int.o libmin.o libtarg.o  
+./fft-int.host > FOO 
+diff FOO fft-int.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/fft-int'
+--------------------------------
+Running flood-fill in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/flood-fill'
+rm -f flood-fill.host flood-fill.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o flood-fill.o -c flood-fill.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o flood-fill.host flood-fill.o libmin.o libtarg.o  
+./flood-fill.host > FOO 
+diff FOO flood-fill.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/flood-fill'
+--------------------------------
+Running frac-calc in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/frac-calc'
+rm -f frac-calc.host frac-calc.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o frac-calc.o -c frac-calc.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o frac-calc.host frac-calc.o libmin.o libtarg.o  
+./frac-calc.host > FOO 
+diff FOO frac-calc.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/frac-calc'
+--------------------------------
+Running hanoi in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/hanoi'
+rm -f hanoi.host hanoi.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o hanoi.o -c hanoi.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o hanoi.host hanoi.o libmin.o libtarg.o  
+./hanoi.host > FOO 
+diff FOO hanoi.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/hanoi'
+--------------------------------
+Running heapsort in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/heapsort'
+rm -f heapsort.host heapsort.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o heapsort.o -c heapsort.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o heapsort.host heapsort.o libmin.o libtarg.o  
+./heapsort.host > FOO 
+diff FOO heapsort.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/heapsort'
+--------------------------------
+Running kepler in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/kepler'
+rm -f kepler.host kepler.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o kepler.o -c kepler.c
+kepler.c: In function ‘e_series’:
+kepler.c:212:13: warning: implicit declaration of function ‘pow’ [-Wimplicit-function-declaration]
+  212 |  return E + pow(e,n-1)*a_n;
+      |             ^~~
+kepler.c:212:13: warning: incompatible implicit declaration of built-in function ‘pow’
+kepler.c:66:1: note: include ‘<math.h>’ or provide a declaration of ‘pow’
+   65 | #include "libmin.h"
+  +++ |+#include <math.h>
+   66 | 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o kepler.host kepler.o libmin.o libtarg.o  
+/usr/bin/ld: kepler.o: in function `e_series':
+kepler.c:(.text+0x292): undefined reference to `pow'
+collect2: error: ld returned 1 exit status
+make[1]: *** [../Makefile:67: kepler.host] Error 1
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/kepler'
+--------------------------------
+Running longdiv in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/longdiv'
+rm -f longdiv.host longdiv.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o longdiv.o -c longdiv.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o longdiv.host longdiv.o libmin.o libtarg.o  
+./longdiv.host > FOO 
+diff FOO longdiv.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/longdiv'
+--------------------------------
+Running mandelbrot in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/mandelbrot'
+rm -f mandelbrot.host mandelbrot.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o mandelbrot.o -c mandelbrot.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o mandelbrot.host mandelbrot.o libmin.o libtarg.o  
+./mandelbrot.host > FOO 
+diff FOO mandelbrot.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/mandelbrot'
+--------------------------------
+Running mersenne in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/mersenne'
+rm -f mersenne.host mersenne.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o mersenne.o -c mersenne.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o mersenne.host mersenne.o libmin.o libtarg.o  
+./mersenne.host > FOO 
+diff FOO mersenne.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/mersenne'
+--------------------------------
+Running natlog in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/natlog'
+rm -f natlog.host natlog.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o natlog.o -c natlog.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o natlog.host natlog.o libmin.o libtarg.o  
+./natlog.host > FOO 
+diff FOO natlog.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/natlog'
+--------------------------------
+Running nr-solver in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/nr-solver'
+rm -f nr-solver.host nr-solver.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o nr-solver.o -c nr-solver.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o nr-solver.host nr-solver.o libmin.o libtarg.o  
+./nr-solver.host > FOO 
+diff FOO nr-solver.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/nr-solver'
+--------------------------------
+Running parrondo in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/parrondo'
+rm -f parrondo.host parrondo.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o parrondo.o -c parrondo.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o parrondo.host parrondo.o libmin.o libtarg.o  
+./parrondo.host > FOO 
+diff FOO parrondo.out
+diff: parrondo.out: No such file or directory
+make[1]: *** [Makefile:12: test] Error 2
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/parrondo'
+--------------------------------
+Running pascal in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/pascal'
+rm -f pascal.host pascal.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o pascal.o -c pascal.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o pascal.host pascal.o libmin.o libtarg.o  
+./pascal.host > FOO 
+diff FOO pascal.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/pascal'
+--------------------------------
+Running shortest-path in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/shortest-path'
+rm -f shortest-path.host shortest-path.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o shortest-path.o -c shortest-path.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o shortest-path.host shortest-path.o libmin.o libtarg.o  
+./shortest-path.host > FOO 
+diff FOO shortest-path.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/shortest-path'
+--------------------------------
+Running sieve in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/sieve'
+rm -f sieve.host sieve.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o sieve.o -c sieve.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o sieve.host sieve.o libmin.o libtarg.o  
+./sieve.host > FOO 
+diff FOO sieve.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/sieve'
+--------------------------------
+Running skeleton in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/skeleton'
+rm -f skeleton.host skeleton.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o skeleton.o -c skeleton.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o skeleton.host skeleton.o libmin.o libtarg.o  
+./skeleton.host > FOO 
+diff FOO skeleton.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/skeleton'
+--------------------------------
+Running totient in TARGET=host
+--------------------------------
+make[1]: Entering directory '/home/austin/Desktop/AgitaLabs/bringup-bench/totient'
+rm -f totient.host totient.sa *.o core mem.out *.log FOO 
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o totient.o -c totient.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libmin.o -c ../common/libmin.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -DTARGET_HOST -I../common/ -o libtarg.o -c ../common/libtarg.c
+cc -Wall  -Wno-strict-aliasing -DLIBTAR_HOST  -o totient.host totient.o libmin.o libtarg.o  
+./totient.host > FOO 
+diff FOO totient.out
+rm -f FOO
+make[1]: Leaving directory '/home/austin/Desktop/AgitaLabs/bringup-bench/totient'
