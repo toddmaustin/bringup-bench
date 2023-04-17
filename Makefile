@@ -39,7 +39,7 @@ TARGET_LIBS =
 TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).host
-else ifeq ($(TARGET), standalong)
+else ifeq ($(TARGET), standalone)
 TARGET_CFLAGS = -DLIBTARG_SA
 TARGET_LIBS =
 TARGET_SIM =
@@ -59,7 +59,7 @@ build: $(TARGET_EXE)
 %.o: %.c
 ifeq ($(TARGET), host)
 	$(CC) $(CFLAGS) -DTARGET_HOST -I../common/ -o $(notdir $@) -c $<
-else ifeq ($(TARGET), sa)
+else ifeq ($(TARGET), standalone)
 	$(CC) $(CFLAGS) -DTARGET_SA -I../common/ -o $(notdir $@) -c $<
 else
 	$(error MODE is not defined (add: TARGET={host|sa}).)
@@ -93,7 +93,7 @@ config-seal:
 
 run-tests:
 	@for _BMARK in $(BMARKS) ; do \
-	  for _TARGET in host ; do \
+	  for _TARGET in host standalone ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
 	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
@@ -105,7 +105,7 @@ run-tests:
 
 all-clean: clean
 	@for _BMARK in $(BMARKS) ; do \
-	  for _TARGET in host ; do \
+	  for _TARGET in host standalone ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
 	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \

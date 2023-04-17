@@ -59,14 +59,13 @@ void libtarg_fail(int code);
 /* output a single character, to whereever the target wants to send it... */
 void libtarg_putc(char c);
 
-/* set memory breakpoint */
-int libtarg_brk(void *addr);
-
 /* get some memory */
 void *libtarg_sbrk(size_t inc);
 
 /* define support for vararg functions */
-#ifdef TARGET_HOST
+#if defined(TARGET_HOST)
+#include <stdarg.h>
+#elif defined(TARGET_SA)
 #include <stdarg.h>
 #else
 #error Error: no definition for vararg functions!
