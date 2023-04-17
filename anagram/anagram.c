@@ -601,7 +601,7 @@ void SortCandidates(void) {
 
 char * GetPhrase(char * pch) {
     if (libmin_mgets(pch, 255, minput) == NULL) {
-	    libmin_success();
+	    return NULL;
     }
     // libmin_printf("Processing: %s...\n", pch);
     return(pch);

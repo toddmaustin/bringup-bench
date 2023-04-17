@@ -1,0 +1,7 @@
+*.o
+*.host
+*.sa
+*.swp
+*.enc
+*.na
+*.log

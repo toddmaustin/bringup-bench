@@ -14,7 +14,7 @@
 #endif
 
 #ifdef TARGET_SA
-#define MAX_OUTBUF    4096
+#define MAX_OUTBUF    (64*1024)
 static uint8_t __outbuf[MAX_OUTBUF];
 static uint32_t __outbuf_ptr = 0;
 #endif /* TARGET_SA */
@@ -75,7 +75,7 @@ libtarg_putc(char c)
 }
 
 #ifdef TARGET_SA
-#define MAX_HEAP    (64*1024)
+#define MAX_HEAP    (8*1024*1024)
 static uint8_t __heap[MAX_HEAP];
 static uint32_t __heap_ptr = 0;
 #endif /* TARGET_SA */

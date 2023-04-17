@@ -343,6 +343,8 @@ main(void)
 		E_old = E;
 		libmin_printf("n = %d\tE = %f\n",n++,sign*E);
 	}
+
+  libmin_success();
 	return 0;
 }
 #endif /* NO_MAIN */
@@ -460,7 +462,6 @@ kepler(double *E, double M, double e, double my_derror, int m)
 	*E = sign*(*E);
 	method(0.0,0.0,0.0,1);  /* reset */
 
-  libmin_success();
 	return count;
 }
 

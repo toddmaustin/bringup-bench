@@ -98,7 +98,7 @@ run-tests:
 	    echo "--------------------------------" ; \
 	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
 	    echo "--------------------------------" ; \
-	    make TARGET=$$_TARGET clean build test ; \
+	    $(MAKE) TARGET=$$_TARGET clean build test || exit 1; \
 	    cd .. ; \
 	  done \
 	done
@@ -110,7 +110,7 @@ all-clean: clean
 	    echo "--------------------------------" ; \
 	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
 	    echo "--------------------------------" ; \
-	    make TARGET=$$_TARGET clean ; \
+	    $(MAKE) TARGET=$$_TARGET clean ; \
 	    cd .. ; \
 	  done \
 	done
