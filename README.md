@@ -30,9 +30,9 @@ Each benchmark support three standard Makefile targets: build, test, and clean
 
 For example, to build, test and then clean the Bubble Sort benchmark in encrypted mode:
 ```
-make MODE=enc build
-make MODE=enc test
-make MODE=enc clean
+make TARGET=host build
+make TARGET=host test
+make TARGET=host clean
 ```
 
 To assist in running experiments, the top-level Makefile includes a few useful targets:
@@ -100,11 +100,97 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 ## Minimal library dependencies
 
+Bringup-Bench has no library dependencies, to reduce the amount of system infrastructure needed to get your first application running. Instead of needing system libraries, Bringup-bench implements its own library in "libmin". "libmin" includes most of what simple applications need, including:
+
+- printing values
+- parsing numbers from text
+- options parsing
+- string processing
+- memory copy and setting
+- program exit interfaces
+- pseudo-random number generation
+- dynamic storage allocator
+- code-based read-only file access functions
+- sorting functions
+- character class tests (from ctype.h)
+- floating matho functions
+
+See the file "common/libmin.h" for more details.
+
 ## Minimal system dependencies
+
+To minimize the system OS requirements, the Bringup-Bench only requires four system call interfaces to be implement. The interfaced required are as follows:
+```
+/* benchmark completed successfully */
+void libtarg_success(void);
+
+/* benchmark completed with error CODE */
+void libtarg_fail(int code);
+
+/* output a single character, to whereever the target wants to send it... */
+void libtarg_putc(char c);
+
+/* get some memory */
+void *libtarg_sbrk(size_t inc);
+```
+Once these four interfaces are implemented, all of the Bringup-Bench benchmarks can be built and run. To facilitate in testing, the "TARGET=host" target defines the four required system interfaces by passing them on to the Linux OS. In addition, the repo also provides a standalone target "TARGET=sa" which only requires that the target support provbable memory.
 
 ## Using the code-based read-only file system
 
+Using the code-based read-only file system, it is possible for a benchmark to access a read-only file that is incorporated into its code. To convert an input file to a read-only code-based file, use the following command (shown for the benchmark "anagram"):
+```
+python3 scriptsr/file2hex.py words words.h __words
+```
+Where "words" is the file to convert, "words.h" is the name of the output header file with the data, and "__words" is the name of the variable defined in the header file "words.h". The resulting file produces two values: __words_sz is the size of the data in the __words array. To access the file, include into a MFILE definition in the benchmark file, for example:
+```
+MFILE __mwords = {
+  "words",
+  __words_sz,
+  __words,
+  0
+};
+MFILE *mwords = &__mwords;
+```
+Now the code-based read-only memory file "mwords" is now available for opening, reading, and closing. The following interfaces are available to access memory files:
+```
+/* open an in-memory file */
+void libmin_mopen(MFILE *mfile, const char *mode);
+
+/* return in-memory file size */
+size_t libmin_msize(MFILE *mfile);
+
+/* at end of file */
+int libmin_meof(MFILE *mfile);
+
+/* close the in-memory file */
+void libmin_mclose(MFILE *mfile);
+
+/* read a buffer from the in-memory file */
+size_t libmin_mread(void *ptr, size_t size, MFILE *mfile);
+
+/* get a string from the in-memory file */
+char *libmin_mgets(char *s, size_t size, MFILE *mfile);
+
+/* read a character from the in-memory file */
+int libmin_mgetc(MFILE *mfile);
+```
+
 ## Porting the Bringup-Bench to other targets
+
+To port the Bringup-bench to your new CPU, accelerator, compiler, or operating system, you need only concern yourself with the "libtarg.h" and "libmin.c" files. First define a new target specifier in "Makefile" and then add it to the "libtarg.h" and "libtarg.c" files. Inside the "libtarg.h" file you will need to define basic data type sizes plus define how the benchmarks access "vararg" parameter arguments. Inside the "libtarg.c" file, you will need to define the following four system call interfaces:
+```
+/* benchmark completed successfully */
+void libtarg_success(void);
+
+/* benchmark completed with error CODE */
+void libtarg_fail(int code);
+
+/* output a single character, to whereever the target wants to send it... */
+void libtarg_putc(char c);
+
+/* get some memory */
+void *libtarg_sbrk(size_t inc);
+```
 
 ## Licensing details
 
