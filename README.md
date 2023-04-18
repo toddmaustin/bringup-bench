@@ -197,5 +197,5 @@ void *libtarg_sbrk(size_t inc);
 The portions of the benchmark suite that was built by the benchmark team are (C) 2021-2023 and available for use under
 the [Apache License, version 2.0](https://www.apache.org/licenses/LICENSE-2.0) 
 
-And, thanks to the respective authors of the benchmarks that were adapted for the VIP Benchmark Suite from other efforts.
+And, thanks to the respective authors of the benchmarks that were adapted for the Bringup-Bench Benchmark Suite from other efforts.
 
