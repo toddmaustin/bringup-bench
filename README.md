@@ -1,7 +1,7 @@
 # Bringup-Bench Benchmark Suite
 
 Bringup */bring-up/* **verb**
-Refers to the process of bringing a newly design and implement chip, compiler, or operating system to life and verifying its functionality.
+Refers to the process of bringing a newly designed and implemented CPU, accelerator, compiler, or operating system to life and verifying its functionality.
 
 ## Introduction
 
