@@ -127,7 +127,7 @@ void libtarg_success(void);
 /* benchmark completed with error CODE */
 void libtarg_fail(int code);
 
-/* output a single character, to whereever the target wants to send it... */
+/* output a single character, to wherever the target wants to send it... */
 void libtarg_putc(char c);
 
 /* get some memory */
@@ -185,7 +185,7 @@ void libtarg_success(void);
 /* benchmark completed with error CODE */
 void libtarg_fail(int code);
 
-/* output a single character, to whereever the target wants to send it... */
+/* output a single character, to wherever the target wants to send it... */
 void libtarg_putc(char c);
 
 /* get some memory */

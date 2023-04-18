@@ -60,7 +60,7 @@ SPIN_FAIL_ADDR:
 #endif
 }
 
-/* output a single character, to whereever the target wants to send it... */
+/* output a single character, to wherever the target wants to send it... */
 void
 libtarg_putc(char c)
 {
