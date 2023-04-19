@@ -14,7 +14,7 @@ HSORT(long m, long p)
   long size;
 
   long  msize, iran, ia, ic, im, ih, ir;
-  long  count, ca, cb, cc, cd, ce, cf;
+  long  count, ca;
 
   msize = m * bplong;
   size  = m - 1;
@@ -41,20 +41,16 @@ HSORT(long m, long p)
 
   k = (size >> 1) + 1;              /* Heap sort the array */
   l = size;
-  ca = 0; cb = 0; cc = 0;
-  cd = 0; ce = 0; cf = 0;
+  ca = 0;
 
   for (;;)
     {
-      ca++;
       if (k > 1)
 	{
-	  cb++;
 	  ir = *(base+(--k));
 	}
       else
 	{
-	  cc++;
 	  ir = *(base+l);
 	  *(base+l) = *(base+1);
 	  if (--l == 1)
@@ -69,17 +65,14 @@ HSORT(long m, long p)
 
       while (j <= l)
 	{
-	  cd++;
 	  if ( (j < l) && (*(base+j) < *(base+j+1)) ) ++j;
 	  if (ir < *(base+j))
 	    {
-	      ce++;
 	      *(base+i) = *(base+j);
 	      j += (i=j);
 	    }
 	  else
 	    {
-	      cf++;
 	      j = l + 1;
 	    }
 	}
