@@ -27,7 +27,7 @@
 #define LLONG_MAX     __LONG_LONG_MAX__
 
 /* size type */
-typedef unsigned long         size_t;
+typedef __SIZE_TYPE__   size_t;
 
 /* signed */
 typedef __INT8_TYPE__   int8_t;
