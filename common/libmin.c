@@ -1571,7 +1571,7 @@ libmin_free(void *block) {
 		return;
 	}
 
-	header = (memhdr_t * )(block - 1);
+	header = (memhdr_t * )block - 1;
 
 	void *pbreak = libtarg_sbrk(0);
 	memhdr_t *tmp;
