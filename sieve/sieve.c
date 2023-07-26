@@ -23,7 +23,7 @@ void err(char* s);
 static int
 SIEVE(long m, long p)
 {
-  register long i,prime=0,k,ci;
+  register long i,prime=0,k;
   register long count,size;
   long j;
 
@@ -41,7 +41,6 @@ SIEVE(long m, long p)
 	  *(flags+i) = TRUE;                                /* 1*size  */
 	}                                                 /* 3*size  */
       
-      ci = 0;
       for(i=0 ; i<=size ; i++)
 	{
 	  if(*(flags+i))                                /* 2*size  */
@@ -50,7 +49,6 @@ SIEVE(long m, long p)
 	      prime = i + i + 3;                            /* 3*count */
 	      for(k = i + prime ; k<=size ; k+=prime)     /* 3*count */
 		{
-		  ci++;                                       /* 1*ci    */
 		  *(flags+k)=FALSE;                           /* 1*ci    */
 		}                                           /* 3*ci    */
 	      /* 1*count */

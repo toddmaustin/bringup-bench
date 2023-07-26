@@ -283,10 +283,7 @@ main(void)
 }
 
 
-static int Proc_1 (Ptr_Val_Par)
-/******************/
-
-REG Rec_Pointer Ptr_Val_Par;
+static int Proc_1 (Rec_Pointer Ptr_Val_Par)
     /* executed once */
 {
   REG Rec_Pointer Next_Record = Ptr_Val_Par->Ptr_Comp;
@@ -318,12 +315,10 @@ REG Rec_Pointer Ptr_Val_Par;
 } /* Proc_1 */
 
 
-static int Proc_2 (Int_Par_Ref)
+static int Proc_2 (One_Fifty *Int_Par_Ref)
 /******************/
     /* executed once */
     /* *Int_Par_Ref == 1, becomes 4 */
-
-One_Fifty   *Int_Par_Ref;
 {
   One_Fifty  Int_Loc;
   Enumeration   Enum_Loc = 0;
@@ -342,13 +337,10 @@ One_Fifty   *Int_Par_Ref;
 } /* Proc_2 */
 
 
-static int Proc_3 (Ptr_Ref_Par)
+static int Proc_3 (Rec_Pointer *Ptr_Ref_Par)
 /******************/
     /* executed once */
     /* Ptr_Ref_Par becomes Ptr_Glob */
-
-Rec_Pointer *Ptr_Ref_Par;
-
 {
   if (Ptr_Glob != Null)
     /* then, executed */
@@ -358,7 +350,7 @@ Rec_Pointer *Ptr_Ref_Par;
 } /* Proc_3 */
 
 
-static int Proc_4 () /* without parameters */
+static int Proc_4 (void) /* without parameters */
 /*******/
     /* executed once */
 {
@@ -371,7 +363,7 @@ static int Proc_4 () /* without parameters */
 } /* Proc_4 */
 
 
-static int Proc_5 () /* without parameters */
+static int Proc_5 (void) /* without parameters */
 /*******/
     /* executed once */
 {
@@ -469,7 +461,7 @@ PProc_6 (Enumeration Enum_Val_Par, Enumeration *Enum_Ref_Par)
 
 
 int
-PProc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
+PProc_7 (int Int_1_Par_Val, int Int_2_Par_Val, int *Int_Par_Ref)
 /**********************************************/
     /* executed three times                                      */
     /* first call:      Int_1_Par_Val == 2, Int_2_Par_Val == 3,  */
@@ -478,9 +470,6 @@ PProc_7 (Int_1_Par_Val, Int_2_Par_Val, Int_Par_Ref)
     /*                  Int_Par_Ref becomes 17                   */
     /* third call:      Int_1_Par_Val == 6, Int_2_Par_Val == 10, */
     /*                  Int_Par_Ref becomes 18                   */
-int       Int_1_Par_Val;
-int       Int_2_Par_Val;
-int      *Int_Par_Ref;
 {
   One_Fifty Int_Loc;
 
@@ -490,15 +479,14 @@ int      *Int_Par_Ref;
 } /* PProc_7 */
 
 
-int PProc_8 (Arr_1_Par_Ref, Arr_2_Par_Ref, Int_1_Par_Val, Int_2_Par_Val)
+int PProc_8 (Arr_1_Dim Arr_1_Par_Ref,
+             Arr_2_Dim Arr_2_Par_Ref,
+             int Int_1_Par_Val,
+             int Int_2_Par_Val)
 /*********************************************************************/
     /* executed once      */
     /* Int_Par_Val_1 == 3 */
     /* Int_Par_Val_2 == 7 */
-Arr_1_Dim       Arr_1_Par_Ref;
-Arr_2_Dim       Arr_2_Par_Ref;
-int             Int_1_Par_Val;
-int             Int_2_Par_Val;
 {
   REG One_Fifty Int_Index;
   REG One_Fifty Int_Loc;
@@ -516,15 +504,12 @@ int             Int_2_Par_Val;
 } /* PProc_8 */
 
 
-Enumeration PFunc_1 (Ch_1_Par_Val, Ch_2_Par_Val)
+Enumeration PFunc_1 (Capital_Letter Ch_1_Par_Val, Capital_Letter Ch_2_Par_Val)
 /*************************************************/
     /* executed three times                                         */
     /* first call:      Ch_1_Par_Val == 'H', Ch_2_Par_Val == 'R'    */
     /* second call:     Ch_1_Par_Val == 'A', Ch_2_Par_Val == 'C'    */
     /* third call:      Ch_1_Par_Val == 'B', Ch_2_Par_Val == 'C'    */
-
-Capital_Letter   Ch_1_Par_Val;
-Capital_Letter   Ch_2_Par_Val;
 {
   Capital_Letter        Ch_1_Loc;
   Capital_Letter        Ch_2_Loc;
@@ -542,14 +527,11 @@ Capital_Letter   Ch_2_Par_Val;
 } /* PFunc_1 */
 
 
-Boolean PFunc_2 (Str_1_Par_Ref, Str_2_Par_Ref)
+Boolean PFunc_2 (Str_30 Str_1_Par_Ref, Str_30 Str_2_Par_Ref)
 /*************************************************/
     /* executed once */
     /* Str_1_Par_Ref == "DHRYSTONE PROGRAM, 1'ST STRING" */
     /* Str_2_Par_Ref == "DHRYSTONE PROGRAM, 2'ND STRING" */
-
-Str_30  Str_1_Par_Ref;
-Str_30  Str_2_Par_Ref;
 {
   REG One_Thirty        Int_Loc;
       Capital_Letter    Ch_Loc = 0;
@@ -583,11 +565,10 @@ Str_30  Str_2_Par_Ref;
 } /* PFunc_2 */
 
 
-Boolean PFunc_3 (Enum_Par_Val)
+Boolean PFunc_3 (Enumeration Enum_Par_Val)
 /***************************/
     /* executed once        */
     /* Enum_Par_Val == Ident_3 */
-Enumeration Enum_Par_Val;
 {
   Enumeration Enum_Loc;
 
