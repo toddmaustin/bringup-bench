@@ -1,8 +1,5 @@
 define HELP_TEXT
 Please choose one of the following target
-  config-vip     - configure VIP-Bench to target the VIP-Bench functional library
-  config-meso    - configure VIP-Bench to target Agita Labs' Mesosphere secure computation SDK
-  config-seal    - configure VIP-Bench to target Microsoft's SEAL Homomorphic Encryption library
   run-tests      - clean, build, and test all benchmarks in all target modes (NA,DO,ENC)
   all-clean      - clean all benchmark directories
 
@@ -16,9 +13,9 @@ Note that benchmark builds must be parameterized with the build MODE, such as:
   TARGET=standalone - build in DATA-OBLIVIOUS ENCRYPTED mode, data-oblivious build with encrpytion
 
 Example benchmark builds:
-  make MODE=na clean build test
-  make MODE=enc build
-  make MODE=do clean
+  make TARGET=host clean build test
+  make TARGET=standalone build
+  make TARGET=host clean
 endef
 
 export HELP_TEXT
@@ -29,12 +26,12 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp cipher dhrystone distinctness fft-int flood-fill frac-calc hanoi heapsort kepler longdiv mandelbrot mersenne natlog nr-solver parrondo pascal shortest-path sieve skeleton totient
+BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp cipher dhrystone distinctness fft-int flood-fill frac-calc hanoi heapsort kepler longdiv mandelbrot mersenne natlog nr-solver parrondo pascal satomi shortest-path sieve skeleton totient
 
 OPT_CFLAGS = -O0 -g
 
 ifeq ($(TARGET), host)
-TARGET_CFLAGS = -DLIBTAR_HOST
+TARGET_CFLAGS = -DLIBTARG_HOST
 TARGET_LIBS =
 TARGET_SIM =
 TARGET_DIFF = diff
@@ -47,7 +44,7 @@ TARGET_DIFF = diff
 TARGET_EXE = $(PROG).sa
 else
 # default is an error
-#$(error No build TARGET defined, e.g., make TARGET=host ...)
+$(error No build TARGET defined, e.g., make TARGET=host ...)
 endif
 
 CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAGS)
@@ -75,21 +72,6 @@ clean:
 #
 # top-level Makefile interfaces
 #
-
-config-vip:
-	@echo "Configuring VIP-Bench for VIP functional library..."
-	ln -sf configs/config.mk.vip config.mk
-	ln -sf configs/config.h.vip config.h
-
-config-mesa:
-	@echo "Configuring VIP-Bench for Agita Labs' Mesosphere SDK..."
-	ln -sf configs/config.mk.meso config.mk
-	ln -sf configs/config.h.meso config.h
-
-config-seal:
-	@echo "Configuring VIP-Bench for Microsoft SEAL HE library..."
-	ln -sf configs/config.mk.seal config.mk
-	ln -sf configs/config.h.seal config.h
 
 run-tests:
 	@for _BMARK in $(BMARKS) ; do \
