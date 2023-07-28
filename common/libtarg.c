@@ -85,6 +85,9 @@ void *
 libtarg_sbrk(size_t inc)
 {
 #if defined(TARGET_HOST)
+#if __clang__
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+#endif /* __clang__ */
   return sbrk(inc);
 #elif defined(TARGET_SA)
   uint8_t *ptr = &__heap[__heap_ptr];
