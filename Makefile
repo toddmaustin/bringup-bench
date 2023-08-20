@@ -28,6 +28,7 @@ error:
 #
 BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp cipher dhrystone distinctness fft-int flood-fill frac-calc hanoi heapsort kepler longdiv mandelbrot mersenne natlog nr-solver parrondo pascal satomi shortest-path sieve skeleton totient
 
+CC = gcc
 OPT_CFLAGS = -O0 -g
 
 ifeq ($(TARGET), host)

@@ -6,11 +6,7 @@
 // See LICENSE for details.
 //
 //===------------------------------------------------------------------------===
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <math.h>
-
+#include "libmin.h"
 #include "clause.h"
 #include "solver.h" 
 #include "mem.h"
@@ -79,8 +75,8 @@ satomi_default_opts(satomi_opts_t *opts)
 void
 satomi_configure(satomi_t *s, satomi_opts_t *user_opts)
 {
-	assert(user_opts);
-	memcpy(&s->opts, user_opts, sizeof(satomi_opts_t));
+	libmin_assert(user_opts);
+	libmin_memcpy(&s->opts, user_opts, sizeof(satomi_opts_t));
 }
 
 void
@@ -101,7 +97,7 @@ satomi_add_clause(solver_t *s, uint32_t *lits, uint32_t size)
 {
 	uint32_t max_var;
 
-	qsort((void *) lits, size, sizeof(uint32_t), stm_ui32_comp_desc);
+	libmin_qsort((void *) lits, size, sizeof(uint32_t), stm_ui32_comp_desc);
 	max_var = lit2var(lits[0]);
 	while (max_var >= vec_size(s->var_order))
 		satomi_add_variable(s);
@@ -135,8 +131,7 @@ satomi_solve(solver_t *s)
 {
 	int status = SATOMI_UNDEC;
 
-	assert(s);
-	s->stats.init_time = stm_clock();
+	libmin_assert(s);
 	status = solver_search(s);
 	return status;
 }
@@ -144,10 +139,9 @@ satomi_solve(solver_t *s)
 void
 satomi_print_stats(solver_t *s)
 {
-	double elapsed_time = stm_clock() - s->stats.init_time;
-	fprintf(stdout, "conflicts    : %-12ld\n", s->stats.n_conflicts);
-	fprintf(stdout, "decisions    : %-12ld\n", s->stats.n_decisions);
-	fprintf(stdout, "propagations : %-12ld\n", s->stats.n_propagations);
+	libmin_printf("conflicts    : %-12ld\n", s->stats.n_conflicts);
+	libmin_printf("decisions    : %-12ld\n", s->stats.n_decisions);
+	libmin_printf("propagations : %-12ld\n", s->stats.n_propagations);
 	// fprintf(stdout, "cpu time     : %g s\n", elapsed_time);
 }
 
@@ -159,7 +153,7 @@ satomi_print_clauses(solver_t *s)
 {
 	uint32_t i;
 	uint32_t cref;
-	fprintf(stdout, "Print Clauses :\n");
+	libmin_printf("Print Clauses :\n");
 	vec_ui32_foreach(s->clauses, cref, i) {
 		struct clause *c = clause_read(s, cref);
 		clause_print(c);

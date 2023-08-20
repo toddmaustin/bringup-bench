@@ -264,6 +264,30 @@ libmin_strtok(char *s, const char *sep)
 	return s;
 }
 
+/* duplicate S, returning an identical malloc'd string */
+char *
+libmin_strdup (const char *s)
+{
+  size_t len = libmin_strlen(s) + 1;
+  void *new = libmin_malloc(len);
+
+  if (new == NULL)
+    return NULL;
+
+  return (char *)libmin_memcpy(new, s, len);
+}
+
+char *
+libmin_strrchr(const char *s, int c)
+{
+  char *rtnval = 0;
+
+  do {
+    if (*s == c)
+      rtnval = (char*)s;
+  } while (*s++);
+  return rtnval;
+}
 
 #define BITOP(a,b,op) \
  ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
@@ -359,6 +383,27 @@ libmin_memcmp(const void *vl, const void *vr, size_t n)
 	const unsigned char *l=vl, *r=vr;
 	for (; n && *l == *r; n--, l++, r++);
 	return n ? *l-*r : 0;
+}
+
+void *
+libmin_memmove(void *dest, const void *src, size_t n)
+{
+  size_t i;
+  const unsigned char *usrc = src;
+  unsigned char *udest = dest;
+
+  if (udest < usrc)
+  {
+    for (i = 0; i < n; i++)
+      udest[i] = usrc[i];
+  }
+  else if (udest > usrc)
+  {
+    for (i = n; i > 0; i--)
+      udest[i-1] = usrc[i-1];
+  }
+
+  return dest;
 }
 
 
@@ -943,6 +988,12 @@ my_modf(double x0, double *iptr)
   return x - (*iptr);
 }
 
+/* return the absolute value of I  */
+int
+libmin_abs(int i)
+{
+  return i < 0 ? -i : i;
+}
 
 static void
 fmtfp (char *buffer, size_t *currlen, size_t maxlen,

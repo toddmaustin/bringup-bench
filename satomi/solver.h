@@ -9,11 +9,7 @@
 #ifndef SATOMI__SOLVER_H
 #define SATOMI__SOLVER_H
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <assert.h>
-
+#include "libmin.h"
 #include "cdb.h"
 #include "clause.h"
 #include "satomi.h"

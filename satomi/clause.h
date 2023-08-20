@@ -9,8 +9,7 @@
 #ifndef SATOMI__CLAUSE_H
 #define SATOMI__CLAUSE_H
 
-#include <stdint.h>
-#include <stdio.h>
+#include "libmin.h"
 
 struct clause {
 	uint32_t size;
@@ -23,10 +22,10 @@ struct clause {
 static inline void
 clause_print(struct clause *clause)
 {
-	fprintf(stdout, "{ ");
+	libmin_printf("{ ");
 	for (uint32_t i = 0; i < clause->size; i++)
-		fprintf(stdout, "%u ", clause->lits[i]);
-	fprintf(stdout, "}\n");
+		libmin_printf("%u ", clause->lits[i]);
+	libmin_printf("}\n");
 }
 
 #endif /* SATOMI__CLAUSE_H */

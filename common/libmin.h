@@ -41,6 +41,8 @@ size_t libmin_strlen(const char *str);
 int libmin_strcmp(const char *l, const char *r);
 size_t libmin_strspn(const char *s, const char *c);
 char *libmin_strtok(char *s, const char *sep);
+char *libmin_strdup (const char *s);
+char *libmin_strrchr(const char *s, int c);
 size_t libmin_strcspn(const char *s, const char *c);
 char * libmin_strpbrk(const char *s, const char *b);
 
@@ -48,6 +50,7 @@ char * libmin_strpbrk(const char *s, const char *b);
 void *libmin_memset(void *dest, int c, size_t n);
 void *libmin_memcpy(void *dest, const void *src, size_t n);
 int libmin_memcmp(const void *vl, const void *vr, size_t n);
+void *libmin_memmove(void *dest, const void *src, size_t n);
 
 
 #ifndef LIBTARG_SILENT
@@ -61,6 +64,10 @@ int libmin_printf(char *fmt, ...);
 /* print one character */
 void libmin_putc(char c);
 
+/* failure/success codes */
+#define EXIT_FAILURE  1 /* failing exit status */
+#define EXIT_SUCCESS  0 /* successful exit status */
+
 /* successfully exit co-simulation */
 void libmin_success(void);
 
@@ -69,6 +76,9 @@ void libmin_fail(int code);
 
 /* largest random number */
 #define RAND_MAX (0x7fffffff)
+
+/* largest numbers */
+#define UINT32_MAX (0xFFFFFFFFU)
 
 /* see the random integer generator */
 void libmin_srand(unsigned int seed);
@@ -190,5 +200,9 @@ double fabs(double x);
 double libmin_pow(double x, double y);
 double libmin_sqrt(double x);
 
+int libmin_abs(int i);
+
+/* libmin assertions */
+#define libmin_assert(P)    ((P) ? (void)0 : (void)libmin_fail(1))
 
 #endif /* LIBMIN_H */

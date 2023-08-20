@@ -9,7 +9,7 @@
 #ifndef SATOMI__SATOMI_H
 #define SATOMI__SATOMI_H
 
-#include <stdint.h>
+#include "libmin.h"
 
 /** Return valeus */
 enum {
@@ -46,7 +46,7 @@ extern satomi_t *satomi_create(char *);
 extern void satomi_destroy(satomi_t *);
 extern void satomi_default_opts(satomi_opts_t *);
 extern void satomi_configure(satomi_t *, satomi_opts_t *);
-extern int  satomi_parse_dimacs(char *, satomi_t **);
+extern int  satomi_parse_dimacs(MFILE *, satomi_t **);
 extern void satomi_add_variable(satomi_t *);
 extern int  satomi_add_clause(satomi_t *, uint32_t *, uint32_t);
 extern int  satomi_solve(satomi_t *);

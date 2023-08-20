@@ -6,12 +6,8 @@
 // See LICENSE for details.
 //
 //===------------------------------------------------------------------------===
-#include <assert.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
 
+#include "libmin.h"
 #include "satomi.h"
 #include "solver.h"
 #include "mem.h"
@@ -24,21 +20,19 @@
  *
  */
 static char *
-file_open(const char *fname)
+file_open(MFILE *mfile)
 {
-	FILE *file = fopen(fname, "rb");
+	libmin_mopen(mfile, "r");
 	char *buffer;
 	size_t sz_file;
 
-	if (file == NULL) {
-		fprintf(stdout, "Couldn't open file: %s\n", fname);
-		exit(EXIT_FAILURE);
+	if (mfile == NULL) {
+		libmin_printf("Couldn't open file\n");
+		libmin_fail(EXIT_FAILURE);
 	}
-	fseek(file, 0, SEEK_END);
-	sz_file = ftell(file);
-	rewind(file);
+	sz_file = libmin_msize(mfile);
 	buffer = STM_ALLOC(char, sz_file + 3);
-	fread(buffer, sz_file, 1, file);
+	libmin_mread(buffer, sz_file, mfile);
 	buffer[sz_file + 0] = '\n';
 	buffer[sz_file + 1] = '\0';
 	return buffer;
@@ -47,14 +41,14 @@ file_open(const char *fname)
 static void
 skip_spaces(char **pos)
 {
-	assert(pos != NULL);
+	libmin_assert(pos != NULL);
 	for (; isspace(**pos); (*pos)++);
 }
 
 static void
 skip_line(char **pos)
 {
-	assert(pos != NULL);
+	libmin_assert(pos != NULL);
 	for(; **pos != '\n' && **pos != '\r' && **pos != EOF; (*pos)++);
 	if (**pos != EOF)
 		(*pos)++;
@@ -75,8 +69,8 @@ read_int(char **token)
 		(*token)++;
 
 	if (!isdigit(**token)) {
-		fprintf(stdout, "Parsing error. Unexpected char: %c.\n", **token);
-		exit(EXIT_FAILURE);
+		libmin_printf("Parsing error. Unexpected char: %c.\n", **token);
+		libmin_fail(EXIT_FAILURE);
 	}
 	while (isdigit(**token)) {
 		value = (value * 10) + (**token - '0');
@@ -97,7 +91,7 @@ read_clause(char **token, vec_ui32_t *lits)
 		if (var == 0)
 			break;
 		sign = (var > 0);
-		var = abs(var) - 1;
+		var = libmin_abs(var) - 1;
 		vec_push_back(lits, var2lit((uint32_t) var, !sign));
 	}
 }
@@ -107,14 +101,14 @@ read_clause(char **token, vec_ui32_t *lits)
  * Returns false upon immediate conflict.
  */
 int
-satomi_parse_dimacs(char *fname, satomi_t **solver)
+satomi_parse_dimacs(MFILE *mfile, satomi_t **solver)
 {
 	satomi_t *p = NULL;
 	vec_ui32_t *lits = NULL;
 	int n_var;
 	int n_clause;
-	char *token = file_open(fname);
-	char *name = strrchr(fname, '/') + 1;
+	char *token = file_open(mfile);
+	char *name = libmin_strrchr(mfile->fname, '/') + 1;
 
 	while (1) {
 		skip_spaces(&token);
@@ -134,7 +128,7 @@ satomi_parse_dimacs(char *fname, satomi_t **solver)
 			p = satomi_create(name);
 		} else {
 			if (lits == NULL) {
-				fprintf(stdout, "There is no parameter line.\n");
+				libmin_printf("There is no parameter line.\n");
 				return -1;
 			}
 			read_clause(&token, lits);

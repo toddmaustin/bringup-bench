@@ -9,12 +9,12 @@
 #ifndef SATOMI__UTILS__MEM_H
 #define SATOMI__UTILS__MEM_H
 
-#include <stdlib.h>
+#include "libmin.h"
 
-#define STM_ALLOC(type, n) ((type *) malloc((n) * sizeof(type)))
-#define STM_CALLOC(type, n) ((type *) calloc((n), sizeof(type)))
-#define STM_REALLOC(type, ptr, n) ((type *) realloc(ptr, (n) * sizeof(type)))
-#define STM_FREE(p) do { free(p); p = NULL; } while(0)
+#define STM_ALLOC(type, n) ((type *) libmin_malloc((n) * sizeof(type)))
+#define STM_CALLOC(type, n) ((type *) libmin_calloc((n), sizeof(type)))
+#define STM_REALLOC(type, ptr, n) ((type *) libmin_realloc(ptr, (n) * sizeof(type)))
+#define STM_FREE(p) do { libmin_free(p); p = NULL; } while(0)
 
 #endif /* SATOMI__UTILS__MEM_H */
 

@@ -6,11 +6,7 @@
 // See LICENSE for details.
 //
 //===------------------------------------------------------------------------===
-#include <stdio.h>
-#include <assert.h>
-#include <string.h>
-#include <math.h>
-
+#include "libmin.h"
 #include "clause.h"
 #include "solver.h"
 #include "watch_list.h"
@@ -39,7 +35,7 @@ solver_decide(solver_t *s)
 static inline void
 solver_new_decision(solver_t *s, uint32_t lit)
 {
-	assert(var_value(s, lit2var(lit)) == VAR_UNASSING);
+	libmin_assert(var_value(s, lit2var(lit)) == VAR_UNASSING);
 	vec_push_back(s->trail_lim, vec_size(s->trail));
 	solver_enqueue(s, lit, UNDEF);
 }
@@ -125,12 +121,12 @@ solver_analyze(solver_t *s, uint32_t cref, vec_ui32_t *learnt, uint32_t *bt_leve
 		uint32_t *lits;
 		uint32_t j;
 
-		assert(cref != UNDEF);
+		libmin_assert(cref != UNDEF);
 		clause = clause_read(s, cref);
 		lits = &(clause->lits[0]);
 
 		if (p != UNDEF && clause->size == 2 && lit_value(s, lits[0]) == LIT_FALSE) {
-			assert(lit_value(s, lits[1]) == LIT_TRUE);
+			libmin_assert(lit_value(s, lits[1]) == LIT_TRUE);
 			STM_SWAP(uint32_t, lits[0], lits[1] );
 		}
 
@@ -188,7 +184,7 @@ solver_create_graph_mark_vars(solver_t *s)
 }
 
 static inline void
-solver_create_graph_edges(solver_t *s, FILE *file)
+solver_create_graph_edges(solver_t *s)
 {
 	uint32_t i, lit;
 	vec_ui32_foreach(s->trail, lit, i) {
@@ -207,22 +203,20 @@ solver_create_graph_edges(solver_t *s, FILE *file)
 			if (lits[j] == lit || var_dlevel(s, lit2var(lits[j])) == 0)
 				continue;
 
-			fprintf(file, "x%d -> x%d", lit2var(lits[j]), lit2var(lit));
-			fprintf(file, "[ label=\"");
+			libmin_printf("x%d -> x%d", lit2var(lits[j]), lit2var(lit));
+			libmin_printf("[ label=\"");
 			for (uint32_t k = 0; k < c->size; k++) {
 				if (var_dlevel(s, lit2var(lits[k])) == 0)
 					continue;
-				fprintf(file, "%s%d ", 
-				        lit_polarity(lits[k]) ? "-" : "", 
-					lit2var(lits[k]));
+				libmin_printf("%s%d ", lit_polarity(lits[k]) ? "-" : "", lit2var(lits[k]));
 			}
-			fprintf(file, "\", fontsize=8 ];\n");
+			libmin_printf("\", fontsize=8 ];\n");
 		}
 	}
 }
 
 static inline void
-solver_create_graph_nodes(solver_t *s, FILE *file)
+solver_create_graph_nodes(solver_t *s)
 {
 	uint32_t i, lit;
 	vec_ui32_foreach(s->trail, lit, i) {
@@ -232,13 +226,13 @@ solver_create_graph_nodes(solver_t *s, FILE *file)
 			continue;
 		vec_assign(s->seen, var, 0);
 
-		fprintf(file, "x%d [ shape=\"box\", style=\"filled\"", var);
+		libmin_printf("x%d [ shape=\"box\", style=\"filled\"", var);
 		if (var_reason(s, var) == UNDEF)
-			fprintf(file, ", color=\"#b3cde3\"");
+			libmin_printf(", color=\"#b3cde3\"");
 		else
-			fprintf(file, ", color=\"#ccebc5\"");
+			libmin_printf(", color=\"#ccebc5\"");
 
-		fprintf(file, ", label=\"%sx%d @ %d\" ];\n",  
+		libmin_printf(", label=\"%sx%d @ %d\" ];\n",  
 		        (lit_polarity(lit) ? "-" : ""), var, var_dlevel(s, var));
 	}
 }
@@ -247,31 +241,20 @@ static inline void
 solver_create_graph(solver_t *s, uint32_t cref, vec_ui32_t *learnt, uint32_t *bt_level)
 {
 	uint32_t i, lit;
-	char path[PATH_MAX];
-	char fname[4196];
-	FILE *file;
 
-	sprintf(path, "confls/%s", s->fname);
-	mkdir_p(path);
-	sprintf(fname, "%s/confl_%ld.dot", path, s->stats.n_conflicts);
-	file = fopen(fname, "w");
-	if (file == NULL) {
-		fprintf(stdout, "Couldn't open file: %s\n", fname);
-		exit(EXIT_FAILURE);
-	}
 	solver_analyze(s, cref, s->temp_lits, bt_level);
 
-	fprintf(file, "digraph G {\n");
-	fprintf(file, "vertK -> dummy [style=invis];\n");
-	fprintf(file, " dummy [ shape=record, label=\"{");
-	fprintf(file, " Learnt Clause: ");
+	libmin_printf("digraph G {\n");
+	libmin_printf("vertK -> dummy [style=invis];\n");
+	libmin_printf(" dummy [ shape=record, label=\"{");
+	libmin_printf(" Learnt Clause: ");
 	vec_ui32_foreach(learnt, lit, i) 
-		fprintf(file, "%s%d ", lit_polarity(lit) ? "-" : "", lit2var(lit));		
-	fprintf(file, "| Backtrack Level: %d", *bt_level);
+		libmin_printf("%s%d ", lit_polarity(lit) ? "-" : "", lit2var(lit));		
+	libmin_printf("| Backtrack Level: %d", *bt_level);
 	// fprintf(file, " | {resol: | " << res << " }");
-	fprintf(file, "}\"");
-	fprintf(file, " , fontsize=8");
-	fprintf(file, " ];\n");
+	libmin_printf("}\"");
+	libmin_printf(" , fontsize=8");
+	libmin_printf(" ];\n");
 
 	struct clause *clause = clause_read(s, cref);
 	uint32_t *lits = &(clause->lits[0]);
@@ -282,28 +265,25 @@ solver_create_graph(solver_t *s, uint32_t cref, vec_ui32_t *learnt, uint32_t *bt
 	}
 
 	for (uint32_t j = 0; j < clause->size; j++) {
-	        fprintf(file, "x%d  -> vertK", lit2var(lits[j]));
-		fprintf(file, "[ label=\"");
+	        libmin_printf("x%d  -> vertK", lit2var(lits[j]));
+		libmin_printf("[ label=\"");
 		vec_ui32_foreach(s->stack, lit, i) 
-			fprintf(file, "%s%d ", 
-			        lit_polarity(lit) ? "-" : "", lit2var(lit));
-		fprintf(file, "\", fontsize=8 ];\n");
+			libmin_printf("%s%d ", lit_polarity(lit) ? "-" : "", lit2var(lit));
+		libmin_printf("\", fontsize=8 ];\n");
 	}
 
 	/* Special conflict node */
-	fprintf(file, "vertK [ shape=\"box\", style=\"filled\", ");
-	fprintf(file, "color=\"#fbb4ae\", label=\"C : ");
+	libmin_printf("vertK [ shape=\"box\", style=\"filled\", ");
+	libmin_printf("color=\"#fbb4ae\", label=\"C : ");
 	vec_ui32_foreach(s->stack, lit, i) 
-		fprintf(file, "%s%d ", 
-		        lit_polarity(lit) ? "-" : "", lit2var(lit));
-	fprintf(file, "\"];\n");
+		libmin_printf("%s%d ", lit_polarity(lit) ? "-" : "", lit2var(lit));
+	libmin_printf("\"];\n");
 
 	solver_create_graph_mark_vars(s);
-	solver_create_graph_edges(s, file);
-	solver_create_graph_nodes(s, file);
+	solver_create_graph_edges(s);
+	solver_create_graph_nodes(s);
 
-	fprintf(file, "}\n");
-	fclose(file);
+	libmin_printf("}\n");
 }
 //===------------------------------------------------------------------------===
 // Solver external functions
@@ -324,13 +304,13 @@ solver_clause_create(solver_t *s, vec_ui32_t *lits)
 	uint32_t cref;
 	uint32_t n_words;
 
-	assert(vec_size(lits) > 1);
+	libmin_assert(vec_size(lits) > 1);
 
 	n_words = 1 + vec_size(lits);
 	cref = cdb_append(s->clause_db, n_words);
 	clause = clause_read(s, cref);
 	clause->size = vec_size(lits);
-	memcpy(&(clause->lits[0]), vec_data(lits), sizeof(uint32_t) * vec_size(lits));
+	libmin_memcpy(&(clause->lits[0]), vec_data(lits), sizeof(uint32_t) * vec_size(lits));
 
 	vec_push_back(s->clauses, cref);
 	s->stats.n_lits += vec_size(lits);
@@ -379,7 +359,7 @@ solver_propagate(solver_t *s)
 			neg_lit = lit_neg(lit);
 			if (lits[0] == neg_lit)
 				STM_SWAP(uint32_t, lits[0], lits[1]);
-			assert(lits[1] == neg_lit);
+			libmin_assert(lits[1] == neg_lit);
 
 			w.cref = i->cref;
 			w.blocker = lits[0];

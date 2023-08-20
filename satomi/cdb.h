@@ -9,9 +9,7 @@
 #ifndef SATOMI__CDB_H
 #define SATOMI__CDB_H
 
-#include <assert.h>
-#include <stdint.h>
-
+#include "libmin.h"
 #include "clause.h"
 #include "mem.h"
 
@@ -48,9 +46,9 @@ cdb_grow(struct cdb *p, uint32_t cap)
 	while (p->cap < cap) {
 		uint32_t delta = ((p->cap >> 1) + (p->cap >> 3) + 2) & (uint32_t)(~1);
 		p->cap += delta;
-		assert(p->cap >= prev_cap);
+		libmin_assert(p->cap >= prev_cap);
 	}
-	assert(p->cap > 0);
+	libmin_assert(p->cap > 0);
 	p->data = STM_REALLOC(uint32_t, p->data, p->cap);
 }
 
@@ -75,11 +73,11 @@ static inline uint32_t
 cdb_append(struct cdb *p, uint32_t size)
 {
 	uint32_t prev_size;
-	assert(size > 0);
+	libmin_assert(size > 0);
 	cdb_grow(p, p->size + size);
 	prev_size = p->size;
 	p->size += size;
-	assert(p->size > prev_size);
+	libmin_assert(p->size > prev_size);
 	return prev_size;
 }
 

@@ -6,41 +6,34 @@
 // See LICENSE for details.
 //
 //===------------------------------------------------------------------------===
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
+#include "libmin.h"
 #include "satomi.h"
 #include "solver_api.h"
 
 static satomi_t *solver;
 
-static void satomi_usage(int status) __attribute__((noreturn));
-static void exit_SIGINT(int sig_num) __attribute__((noreturn));
-
 static void
 satomi_usage(int status)
 {
 	if (status == EXIT_FAILURE)
-		fprintf(stdout, "Try 'satomi -h' for more information\n");
+		libmin_printf("Try 'satomi -h' for more information\n");
 	else
-		fprintf(stdout, "Usage: satomi [-v] [-h] <input_file>\n\n" \
+		libmin_printf("Usage: satomi [-v] [-h] <input_file>\n\n" \
 		        "Options:\n"                                   \
 		        "\t-h"     "\t : display available options.\n" \
 		        "\t-v"     "\t : version.\n\n");
-	exit(status);
+	libmin_fail(status);
 }
 
-static void
-exit_SIGINT(int sig_num)
-{
-	if (sig_num == SIGINT) {
-		fprintf(stdout, "\n /!\\ SATOMI INTERRUPTED /!\\ \n");
-	}
-	exit(EXIT_SUCCESS);
-}
+#include "cnffile.h"
+MFILE __mcnffile = {
+  "zebra_v155_c1135.cnf",
+  __cnffile_sz,
+  __cnffile,
+  0
+};
+MFILE *mcnffile = &__mcnffile;
+
 
 int 
 main(int argc, char **argv)
@@ -52,20 +45,17 @@ main(int argc, char **argv)
 	/* Opts parsing */
 	int opt;
 	extern int optind;
-	extern int optopt;
-	extern char* optarg;
 
-	signal(SIGINT, exit_SIGINT);
 	satomi_default_opts(&options);
-	while ((opt = getopt(argc, argv, "wvh")) != -1) {
+	while ((opt = libmin_getopt(argc, argv, "wvh")) != -1) {
 		switch (opt) {
 		case 'w':
 			options.verbose = 2;
 			break;
 
 		case 'v':
-			fprintf(stdout, "[satomi] Version: 2.0\n");
-			exit(EXIT_SUCCESS);
+			libmin_printf("[satomi] Version: 2.0\n");
+			libmin_success();
 
 		case 'h':
 			satomi_usage(EXIT_SUCCESS);
@@ -77,29 +67,29 @@ main(int argc, char **argv)
 	if (optind == argc)
 		satomi_usage(EXIT_FAILURE);
 
-	fprintf(stdout, "[satomi] Version: 2.0\n");
+	libmin_printf("[satomi] Version: 2.0\n");
 
-	fname = strdup(argv[optind]);
-	if ((dot = strrchr(fname, '.')) == NULL) {
-		fprintf(stderr, "[satomi] Unrecognized file format.\n");
+	fname = libmin_strdup(argv[optind]);
+	if ((dot = libmin_strrchr(fname, '.')) == NULL) {
+		libmin_printf("[satomi] Unrecognized file format.\n");
 		return 1;
 	}
-	if (strcmp(dot, ".cnf")) {
-		fprintf(stderr, "[satomi] Unsupported file format: %s\n", dot);
+	if (libmin_strcmp(dot, ".cnf")) {
+		libmin_printf("[satomi] Unsupported file format: %s\n", dot);
 		return 1;
 	}
 
-	satomi_parse_dimacs(fname, &solver);
+	satomi_parse_dimacs(mcnffile, &solver);
 	satomi_configure(solver, &options);
 	status = satomi_solve(solver);
 	if (1)
 		satomi_print_stats(solver);
 	if (status == SATOMI_UNDEC)
-		fprintf(stdout, "UNDECIDED    \n");
+		libmin_printf("UNDECIDED    \n");
 	else if (status == SATOMI_SAT)
-		fprintf(stdout, "SATISFIABLE  \n");
+		libmin_printf("SATISFIABLE  \n");
 	else
-		fprintf(stdout, "UNSATISFIABLE\n");
+		libmin_printf("UNSATISFIABLE\n");
 	satomi_destroy(solver);
 }
 
