@@ -1200,6 +1200,13 @@ libmin_putc(char c)
   libtarg_putc(c);
 }
 
+void
+libmin_puts(char *s)
+{
+  for (; *s; s++)
+    libtarg_putc(*s);
+}
+
 /* in-memory file I/O */
 
 /* open an in-memory file */

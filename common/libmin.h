@@ -64,6 +64,9 @@ int libmin_printf(char *fmt, ...);
 /* print one character */
 void libmin_putc(char c);
 
+/* print one string */
+void libmin_puts(char *s);
+
 /* failure/success codes */
 #define EXIT_FAILURE  1 /* failing exit status */
 #define EXIT_SUCCESS  0 /* successful exit status */
