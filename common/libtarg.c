@@ -14,7 +14,7 @@
 #endif
 
 #ifdef TARGET_SA
-#define MAX_OUTBUF    (64*1024)
+#define MAX_OUTBUF    (128*1024)
 static uint8_t __outbuf[MAX_OUTBUF];
 static uint32_t __outbuf_ptr = 0;
 #endif /* TARGET_SA */
