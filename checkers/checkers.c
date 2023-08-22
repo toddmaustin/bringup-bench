@@ -9,20 +9,27 @@
 #include "functions.h"
 
 int
-main(int argc, char *argv[]) {
-    board_t* board = (board_t*)malloc(sizeof(board_t)); // main board pointer
+main(int argc, char *argv[])
+{
+  if (argc != 2)
+  {
+    printf("USAGE: checkers <movefile.txt>\n");
+    exit(1);
+  }
 
-    fill_print_initial(board);
-    print_board(board);
+  board_t* board = (board_t*)malloc(sizeof(board_t)); // main board pointer
+
+  fill_print_initial(board);
+  print_board(board);
     
-    int black_action = 1, action = 1, error; //, board_cost;
-    char col1, row1, col2, row2; 
-		// col1/row1 is source cell,  col2/row2 is target cell
-		// deliberately kept separate, square_t type not used
+  int black_action = 1, action = 1, error; //, board_cost;
+  char col1, row1, col2, row2; 
+	// col1/row1 is source cell,  col2/row2 is target cell
+	// deliberately kept separate, square_t type not used
 	
 	// scan input moves
 	char buf[64];
-	gets(buf);
+	fgets(buf, 64, stdin);
 	while (libmin_sscanf(buf, "%c%c-%c%c\n", &col1, &row1, &col2, &row2)==4) {
 		// check errors 1-5, terminate function if any found
 		error = check_move_error_1_to_5(*board, col1, row1, col2, row2, 
