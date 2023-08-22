@@ -20,6 +20,7 @@ long libmin_atol(const char *s);
 /* standard atoi/atof implementation */
 int libmin_atoi(const char *s);
 double libmin_atof(const char *s);
+long libmin_strtol(const char *s, char **endptr, int base);
 
 /* getopt() hooks */
 extern char *optarg;
@@ -66,6 +67,9 @@ void libmin_putc(char c);
 
 /* print one string */
 void libmin_puts(char *s);
+
+/* scan a string */
+int libmin_sscanf(const char *buf, const char *fmt, ...);
 
 /* failure/success codes */
 #define EXIT_FAILURE  1 /* failing exit status */
