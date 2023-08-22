@@ -1,0 +1,7 @@
+Version 1.1
+  - lots of new benchmarks
+  - improved support for standalone operation
+  - expanded interface support for libmin()
+
+Version 1.0
+  - initial version

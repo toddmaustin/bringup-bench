@@ -18,7 +18,7 @@ This command will first "clean" the benchmark directory and then "build" the app
 
 - **Linux host target - TARGET=host** - This target builds the benchmark to run as a Linux application.
 
-- **Standalone target - TARGET=sa** - This target builds the benchmark to run as a memory-only standalone application. For this target, all benchmark output is spooled to a pre-defined memory buffer, and the libmin\_success() and libmin\_fail() intefaces result in the application spinning at a specific code address. This mode is designed for bringing up CPUs and accelerators that do not yet have any OS or device I/O support.
+- **Standalone target - TARGET=sa** - This target builds the benchmark to run as a memory-only standalone application. For this target, all benchmark output is spooled to a pre-defined memory buffer, and the libmin\_success() and libmin\_fail() intefaces result in the application spinning at a specific code address. This mode is designed for bringing up CPUs and accelerators that do not yet have any OS or device I/O support. See common/libtarg.c for the internal intefaces used to spool program output to internal buffers. This particular target is useful in bringing up CPUs when they still have no I/O support, simply spool benchmark output to DRAM, and dump the DRAM after the benchmark completes.
 
 Each benchmark support three standard Makefile targets: build, test, and clean
 
@@ -56,6 +56,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **bubble-sort** - Performs a bubble sort on a randomly generated internal list of integers.
 
+- **checkers** - Checkers game based on minimax search.
+
 - **c-interp** - A C language interpreter that interprets the test program "hello.c". This benchmark uses code-based read-only file access.
 
 - **cipher** - A TEA cipher implementation the encrypts and decrypts some fixed test data.
@@ -63,6 +65,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 - **dhrystone** - An old-school Dhrystone benchmark.
 
 - **distinctness** - Computes if every element of an array is unique.
+
+- **donut** - A donut in code and action that defies proper explanation!
 
 - **fft-int** - Performs an integer fast-Fourier-transform on fixed integer input data.
 
@@ -78,6 +82,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **longdiv** - Computes a long division using the pencil-on-paper method.
 
+- **lz-compress** - A compression/decompress tool based on the LZ compression algorithm.
+
 - **mandelbrot** - Calculate and print using ASCII graphics a Mendelbrot fractal.
 
 - **mersenne** - Generate a sequence of pseudo-random numbers using the Mersenne Twister algorithm.
@@ -90,11 +96,21 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **pascal** - Compute Pascal's triangle, to a specified depth.
 
+- **pi-calc** - An integer based high-precision PI calculator.
+
+- **quine** - A C program that prints itself.
+
+- **rho-factor** - A Pollard's Rho integer factorization algorithm.
+
 - **shortest-path** - Solves the all-pairs shortest path problem using the Floyd-Warshall algorithm.
 
 - **sieve** - Computes the prime values within a specified range, using the Sieve of Eratosthenes algorithmm
 
 - **skeleton** - A minimal program, for use a starting point for new application ports and developments.
+
+- **spelt2num** - A spelled-out number to binary number converter.
+
+- **strange** - A strange C program that acts strangely in an expected manner.
 
 - **totient** - Calculates the Euler totient function phi.
 
