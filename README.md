@@ -42,7 +42,7 @@ make all-clean   # clean all benchmark directories
 ```
 You should be able to adapt these targets to your own project-specific tasks.
 
-## Maximum benchmarks
+## Benchmarks
 
 The Bringup-Bench benchmarks were selected for their minimal library and system dependencies, while still being interesting and non-trival codes.i Currently, the benchmark suite supports the following benchmarks. Note that the benchmarks tagged with (FP) require some form of floating point support, and the remaining benchmarks only require integer and string computation.
 
