@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <limits.h>
+#include "libmin.h"
 
 #include "consttypes.h"
 #include "functions.h"
@@ -9,9 +6,9 @@
 // fill and print information on the initial board configuration
 void fill_print_initial(board_t* board) {
 	// specify initial setup 
-	printf("BOARD SIZE: %dx%d\n", BOARD_SIZE, BOARD_SIZE);
-	printf("#BLACK PIECES: %d\n", ORIGINAL_PIECES_COUNT);
-	printf("#WHITE PIECES: %d\n", ORIGINAL_PIECES_COUNT);
+	libmin_printf("BOARD SIZE: %dx%d\n", BOARD_SIZE, BOARD_SIZE);
+	libmin_printf("#BLACK PIECES: %d\n", ORIGINAL_PIECES_COUNT);
+	libmin_printf("#WHITE PIECES: %d\n", ORIGINAL_PIECES_COUNT);
 	
 	// fill board with the original board configuration
 	for (int i=0; i<BOARD_SIZE; i++) {
@@ -57,24 +54,24 @@ char row_to_char(int row) {return (char) (ASCII_1 + row - 1);}
 
 // print a nice visual representation of the board given a board_t input
 void print_board(board_t* board_input) {
-	printf("     A   B   C   D   E   F   G   H"); 
+	libmin_printf("     A   B   C   D   E   F   G   H"); 
 	// note: main loop iterating through board row, sub loop iterates column
 		// hence switched around iterating variables for clarity
 	for (int j=0; j<BOARD_SIZE; j++) {//row
 		for (int i=0; i<BOARD_SIZE; i++) {//column
 			if (i==0) { 
-				printf("\n   +---+---+---+---+---+---+---+---+\n");
-				printf(" %d |", j + 1);
+				libmin_printf("\n   +---+---+---+---+---+---+---+---+\n");
+				libmin_printf(" %d |", j + 1);
 			}
 			if ((*board_input)[i][j] == CELL_EMPTY) {
-				printf(" . |");
+				libmin_printf(" . |");
 			}
 			else {
-				printf(" %c |", (*board_input)[i][j]);
+				libmin_printf(" %c |", (*board_input)[i][j]);
 			}
 		}
 	}
-	printf("\n   +---+---+---+---+---+---+---+---+\n");
+	libmin_printf("\n   +---+---+---+---+---+---+---+---+\n");
 }
 
 // lazy evaluation, systematically check for move errors 1-5
@@ -153,7 +150,7 @@ void change_board(board_t* board, char col1, char row1, char col2, char row2) {
 			= being_moved_temp;
 	}
 	// if capturing, captured middle piece must be removed as well
-	if (abs(char_to_col(col2) - char_to_col(col1)) == CAPTURE_JUMP) {
+	if (libmin_abs(char_to_col(col2) - char_to_col(col1)) == CAPTURE_JUMP) {
 		int middle_col = min(char_to_col(col1), char_to_col(col2)) + 1;
 		int middle_row = min(char_to_row(row1), char_to_row(row2)) + 1;
 		(*board)[middle_col - 1][middle_row - 1] = CELL_EMPTY;
@@ -381,22 +378,22 @@ int min(int a, int b) {
 // simple function to print various error messages
 void print_error_message(int error_code) {
 	if (error_code == 1) {
-		printf("ERROR: Source cell is outside of the board.\n");
+		libmin_printf("ERROR: Source cell is outside of the board.\n");
 	}
 	if (error_code == 2) {
-		printf("ERROR: Target cell is outside of the board.\n");
+		libmin_printf("ERROR: Target cell is outside of the board.\n");
 	}
 	if (error_code == 3) {
-		printf("ERROR: Source cell is emtpy.\n");
+		libmin_printf("ERROR: Source cell is emtpy.\n");
 	}
 	if (error_code == 4) {
-		printf("ERROR: Target cell is not empty.\n");
+		libmin_printf("ERROR: Target cell is not empty.\n");
 	}
 	if (error_code == 5) {
-		printf("ERROR: Source cell holds opponent's piece/tower.\n");
+		libmin_printf("ERROR: Source cell holds opponent's piece/tower.\n");
 	}
 	if (error_code == 6) {
-		printf("ERROR: Illegal action.\n");
+		libmin_printf("ERROR: Illegal action.\n");
 	}
 }
 
@@ -426,19 +423,19 @@ int board_cost(board_t board_input) {
 //print some headers regarding move information
 void print_move_information(int generated_move, int black_action, 
 	board_t board_input, int col1, int row1, int col2, int row2, int action) {
-	printf("=====================================\n");
+	libmin_printf("=====================================\n");
 	if (generated_move) {
-		printf("*** ");
+		libmin_printf("*** ");
 	}
 	if (black_action) {
-		printf("%s ACTION #%d: %c%c-%c%c\n", 
+		libmin_printf("%s ACTION #%d: %c%c-%c%c\n", 
 			BLACK, action, col1, row1, col2, row2);
 	}
 	else {
-		printf("%s ACTION #%d: %c%c-%c%c\n", 
+		libmin_printf("%s ACTION #%d: %c%c-%c%c\n", 
 			WHITE, action, col1, row1, col2, row2);
 	}
-	printf("BOARD COST: %d\n", board_cost(board_input));
+	libmin_printf("BOARD COST: %d\n", board_cost(board_input));
 }
 
 // find and link node children for a given tree/subtree root 
@@ -493,7 +490,7 @@ void link_new_node(tree_node_t* parent_node,
 	char col1, char row1, char col2, char row2, int depth) {
 	// create a new tree node ready to link
 		// first copy over new board after move is made
-	tree_node_t* new_node = (tree_node_t*)malloc(sizeof(tree_node_t));
+	tree_node_t* new_node = (tree_node_t*)libmin_malloc(sizeof(tree_node_t));
 	new_node->depth = depth;
 	for (int i=0; i<BOARD_SIZE; i++) {
 		for (int j=0; j<BOARD_SIZE; j++) {
@@ -514,7 +511,7 @@ void link_new_node(tree_node_t* parent_node,
 	// create a list member to contain the address of the new node, 
 		// which is dynamically linked to children_list of the parent node
 	linked_list_member_t* new_list_member
-		= (linked_list_member_t*)malloc(sizeof(linked_list_member_t));
+		= (linked_list_member_t*)libmin_malloc(sizeof(linked_list_member_t));
 	new_list_member->child_node = (void*)new_node; // raw address of new node
 	new_list_member->next = NULL;
 	
@@ -612,7 +609,7 @@ int move_score_forced(tree_node_t* node) {
 void free_tree(tree_node_t* node) {
 	// base case, node is leaf
 	if (node->children_count == 0) {
-		free(node);
+		libmin_free(node);
 	}
 	// recursive case, have to recurse down to the leaf of the node first
 	else {
@@ -629,7 +626,7 @@ void free_tree(tree_node_t* node) {
 				// we are free to unlink the list member too
 			linked_list_member_t* redundant_list_member = list_member;
 			list_member = list_member->next;
-			free(redundant_list_member);
+			libmin_free(redundant_list_member);
 		}
 	}
 }

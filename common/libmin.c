@@ -177,7 +177,7 @@ libmin_strtol(const char  *nptr, char** endptr, int base)
 	    c = (int)(unsigned)*q;
 	    if (isupper(c))
 		    c = tolower(c);
-	    pos = strchr(digits,c);
+	    pos = libmin_strchr(digits,c);
 	    if (pos == (char*)NULL)
 		    break;
 	    digit = (int)(pos - digits);
@@ -197,7 +197,7 @@ libmin_strtol(const char  *nptr, char** endptr, int base)
 	    c = (int)(unsigned)*q;
 	    if (isupper(c))
 		    c = tolower(c);
-	    pos = strchr(digits,c);
+	    pos = libmin_strchr(digits,c);
 	    if (pos == (char*)NULL)
 		    break;
 	    digit = (int)(pos - digits);
@@ -347,7 +347,6 @@ libmin_strncat(char *d, const char *s, size_t n)
 	return a;
 }
 
-
 size_t
 libmin_strlen(const char *str)
 {
@@ -418,6 +417,17 @@ libmin_strdup (const char *s)
     return NULL;
 
   return (char *)libmin_memcpy(new, s, len);
+}
+
+char *
+libmin_strchr(const char *s, char c)
+{
+  do
+  {
+    if (*s == c)
+	    return (char*)s;
+  } while (*s++);
+  return NULL;
 }
 
 char *
@@ -1358,7 +1368,6 @@ libmin_sscanf(const char *buf, const char *fmt, ...)
 {
   va_list vl;
   int i, j=0, ret=0;
-  char tmp[64], c;
   char *out_loc;
  	va_start(vl, fmt);
 
@@ -1386,7 +1395,7 @@ libmin_sscanf(const char *buf, const char *fmt, ...)
         }
         case 'x': 
         {
-	        *(int *)va_arg(vl, int*) = strtol(&buf[j], &out_loc, 16);
+	        *(int *)va_arg(vl, int*) = libmin_strtol(&buf[j], &out_loc, 16);
 	        j += (out_loc - &buf[j]);
 	        ret++;
 	        break;

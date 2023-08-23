@@ -43,6 +43,7 @@ int libmin_strcmp(const char *l, const char *r);
 size_t libmin_strspn(const char *s, const char *c);
 char *libmin_strtok(char *s, const char *sep);
 char *libmin_strdup (const char *s);
+char *libmin_strchr(const char *s, char c);
 char *libmin_strrchr(const char *s, int c);
 size_t libmin_strcspn(const char *s, const char *c);
 char * libmin_strpbrk(const char *s, const char *b);

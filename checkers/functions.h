@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "consttypes.h"
+#include "libmin.h"
 
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H

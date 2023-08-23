@@ -1,23 +1,23 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdint.h>
-#include <limits.h>
-#include <assert.h>
 #include "libmin.h"
 
 #include "consttypes.h"
 #include "functions.h"
 
+#include "test0-txt.h"
+MFILE __infile = {
+  "test0.txt",
+  __test0_sz,
+  __test0,
+  0
+};
+MFILE *infile = &__infile;
+
 int
 main(int argc, char *argv[])
 {
-  if (argc != 2)
-  {
-    printf("USAGE: checkers <movefile.txt>\n");
-    exit(1);
-  }
+  libmin_mopen(infile, "r");
 
-  board_t* board = (board_t*)malloc(sizeof(board_t)); // main board pointer
+  board_t* board = (board_t*)libmin_malloc(sizeof(board_t)); // main board pointer
 
   fill_print_initial(board);
   print_board(board);
@@ -29,14 +29,14 @@ main(int argc, char *argv[])
 	
 	// scan input moves
 	char buf[64];
-	fgets(buf, 64, stdin);
+	libmin_mgets(buf, 64, infile);
 	while (libmin_sscanf(buf, "%c%c-%c%c\n", &col1, &row1, &col2, &row2)==4) {
 		// check errors 1-5, terminate function if any found
 		error = check_move_error_1_to_5(*board, col1, row1, col2, row2, 
 			black_action);
 		if (error) {
 			print_error_message(error);
-			return error;
+			libmin_fail(error);
 		}
 		// check error 6
 			// all the possible moves of the source cell are generated
@@ -54,7 +54,7 @@ main(int argc, char *argv[])
 			// return main function with error exit code 6
 		if (illegal) {
 			print_error_message(6);
-			return 6;
+			libmin_fail(6);
 		}
 		
 		change_board(board, col1, row1, col2, row2);
@@ -69,7 +69,7 @@ main(int argc, char *argv[])
 		action += 1;
 
     // get the next move
-    gets(buf);
+    libmin_mgets(buf, 64, infile);
 	}
 	
 	char next_action = col1;
@@ -82,13 +82,13 @@ main(int argc, char *argv[])
 		repititions = 1;
 	}
 	if (next_action == 'P') { // stage 2
-		repititions = 10;
+		repititions = 100;
 	}
 			
 	for (int i=0; i<repititions; i++) {
 		// stage 1
 			// create the level 0 node first, and fill with relevent info.
-		tree_node_t* level_0_node = (tree_node_t*)malloc(sizeof(tree_node_t));
+		tree_node_t* level_0_node = (tree_node_t*)libmin_malloc(sizeof(tree_node_t));
 		level_0_node->depth = 0;
 		for (int i=0; i<BOARD_SIZE;i++) {
 			for (int j=0; j<BOARD_SIZE; j++) {
@@ -104,12 +104,12 @@ main(int argc, char *argv[])
 		// check if there isn't any possible moves, indicating game over
 		if (level_0_node->children_count == 0) {
 			if (black_action) {
-				printf("%s WIN!\n", WHITE);
-				return EXIT_SUCCESS;
+				libmin_printf("%s WIN!\n", WHITE);
+        libmin_success();
 			}
 			else {
-				printf("%s WIN!\n", BLACK);
-				return EXIT_SUCCESS;
+				libmin_printf("%s WIN!\n", BLACK);
+        libmin_success();
 			}
 		}
 		
@@ -150,8 +150,8 @@ main(int argc, char *argv[])
 			// no need for it anymore
 	}
 	
-	free(board);
-    return EXIT_SUCCESS;            // exit program with the success code
+	libmin_free(board);
+  libmin_success(); // exit program with the success code
 }
 // algorithms are fun
 

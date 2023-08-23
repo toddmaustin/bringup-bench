@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
+#include "libmin.h"
 
 #ifndef CONSTTYPES_h
 #define CONSTTYPES_h
