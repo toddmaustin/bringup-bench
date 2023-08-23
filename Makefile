@@ -26,7 +26,7 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc hanoi heapsort kepler longdiv lz-compress mandelbrot mersenne natlog nr-solver parrondo pascal pi-calc quine rho-factor shortest-path sieve skeleton spelt2num strange totient
+BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc hanoi heapsort kepler life longdiv lz-compress mandelbrot mersenne natlog nr-solver parrondo pascal pi-calc quine rho-factor shortest-path sieve skeleton spelt2num strange totient
 
 CC = gcc
 OPT_CFLAGS = -O0 -g
