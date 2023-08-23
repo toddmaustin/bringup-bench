@@ -1,7 +1,8 @@
 Version 1.1
-  - lots of new benchmarks
-  - improved support for standalone operation
-  - expanded interface support for libmin()
+  - Incorporated user-made pull requests
+  - New benchmarks: checkers, donut, life, lz-compress, pi-calc, quine, rho-factor, spelt2num, strange
+  - Improved support for standalone operation
+  - Expanded interface support for libmin()
 
 Version 1.0
-  - initial version
+  - Initial version

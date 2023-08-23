@@ -80,6 +80,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **kepler** - Calculates an orbital path for a planetary body based on the Kepler parameters.
 
+- **life** - Conway's game of life simulation.
+
 - **longdiv** - Computes a long division using the pencil-on-paper method.
 
 - **lz-compress** - A compression/decompress tool based on the LZ compression algorithm.
