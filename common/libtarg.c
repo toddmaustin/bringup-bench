@@ -1,4 +1,5 @@
 #include "libtarg.h"
+#include "libmin.h"
 
 #if defined(TARGET_HOST)
 #include <stdio.h>
@@ -9,6 +10,87 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_SPIN  10000     /* make this larger for a real hardware platform */
+#elif defined TARGET_SIMPLE
+#include <stdlib.h>
+
+/* simple system MMAP'ed registers */
+#define SIMPLE_CTRL_BASE 0x20000
+#define SIMPLE_CTRL_OUT 0x0
+#define SIMPLE_CTRL_CTRL 0x8
+
+/* MMAP'ed register accessors */
+#define SIMPLE_DEV_WRITE(addr, val) (*((volatile uint32_t *)(addr)) = val)
+#define SIMPLE_DEV_READ(addr, val) (*((volatile uint32_t *)(addr)))
+
+extern inline int
+simple_putchar(char c)
+{
+  SIMPLE_DEV_WRITE(SIMPLE_CTRL_BASE + SIMPLE_CTRL_OUT, (unsigned char)c);
+  return c;
+}
+
+extern inline void
+simple_halt(void)
+{
+  SIMPLE_DEV_WRITE(SIMPLE_CTRL_BASE + SIMPLE_CTRL_CTRL, 1);
+}
+
+void *
+memset(void *dest, int val, size_t len)
+{
+  return libmin_memset(dest, val, len);
+}
+
+void *
+memcpy(void *dest, const void *src, size_t len)
+{
+  return libmin_memcpy(dest, src, len);
+}
+
+extern inline uint32_t
+simple_get_mepc(void)
+{
+  uint32_t result;
+  __asm__ volatile("csrr %0, mepc;" : "=r"(result));
+  return result;
+}
+
+extern inline uint32_t
+simple_get_mcause(void)
+{
+  uint32_t result;
+  __asm__ volatile("csrr %0, mcause;" : "=r"(result));
+  return result;
+}
+
+extern inline uint32_t
+simple_get_mtval(void)
+{
+  uint32_t result;
+  __asm__ volatile("csrr %0, mtval;" : "=r"(result));
+  return result;
+}
+
+void
+simple_exc_handler(void)
+{
+  libmin_printf("EXCEPTION!!!\n");
+  libmin_printf("============\n");
+  libmin_printf("MEPC:0x%08x, CAUSE:0x%08x, MTVAL:0x%08x\n", simple_get_mepc(), simple_get_mcause(), simple_get_mtval());
+
+  simple_halt();
+  while(1);
+}
+
+void
+simple_timer_handler(void)
+{
+  libmin_printf("TIMER EXCEPTION!!!\n");
+
+  simple_halt();
+  while(1);
+}
+
 #else /* undefined target */
 #error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
@@ -39,6 +121,11 @@ SPIN_SUCCESS_ADDR:
 
   /* exit if we ever get here */
   exit(0);
+#elif defined(TARGET_SIMPLE)
+  // libmin_printf("EXIT: success\n");
+  simple_halt();
+#else
+#error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
 }
 
@@ -57,6 +144,11 @@ SPIN_FAIL_ADDR:
     goto SPIN_FAIL_ADDR;
   /* exit if we ever get here */
   exit(code);
+#elif defined(TARGET_SIMPLE)
+  // libmin_printf("EXIT: fail code = %d\n", code);
+  simple_halt();
+#else
+#error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
 }
 
@@ -71,6 +163,10 @@ libtarg_putc(char c)
   if (__outbuf_ptr >= MAX_OUTBUF)
     libtarg_fail(1);
   __outbuf[__outbuf_ptr++] = c;
+#elif defined(TARGET_SIMPLE)
+  simple_putchar(c);
+#else
+#error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
 }
 
@@ -78,7 +174,13 @@ libtarg_putc(char c)
 #define MAX_HEAP    (8*1024*1024)
 static uint8_t __heap[MAX_HEAP];
 static uint32_t __heap_ptr = 0;
-#endif /* TARGET_SA */
+#endif /* TARGET_SA || TARGET_SIMPLE */
+
+#ifdef TARGET_SIMPLE
+#define MAX_HEAP    (32*1024)
+static uint8_t __heap[MAX_HEAP];
+static uint32_t __heap_ptr = 0;
+#endif /* TARGET_SA || TARGET_SIMPLE */
 
 /* get some memory */
 void *
@@ -89,7 +191,7 @@ libtarg_sbrk(size_t inc)
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif /* __clang__ */
   return sbrk(inc);
-#elif defined(TARGET_SA)
+#elif defined(TARGET_SA) || defined(TARGET_SIMPLE)
   uint8_t *ptr = &__heap[__heap_ptr];
   if (inc == 0)
     return ptr;
@@ -99,6 +201,8 @@ libtarg_sbrk(size_t inc)
     libtarg_fail(1);
 
   return ptr;
+#else
+#error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
 }
 

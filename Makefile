@@ -28,21 +28,35 @@ error:
 #
 BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc hanoi heapsort kepler life longdiv lz-compress mandelbrot mersenne natlog nr-solver parrondo pascal pi-calc quine rho-factor shortest-path sieve skeleton spelt2num strange totient
 
-CC = gcc
 OPT_CFLAGS = -O0 -g
 
 ifeq ($(TARGET), host)
-TARGET_CFLAGS = -DLIBTARG_HOST
+TARGET_CC = gcc
+TARGET_CFLAGS = -DTARGET_HOST
 TARGET_LIBS =
 TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).host
+TARGET_CLEAN =
+TARGET_BMARKS = $(BMARKS)
 else ifeq ($(TARGET), standalone)
-TARGET_CFLAGS = -DLIBTARG_SA
+TARGET_CC = gcc
+TARGET_CFLAGS = -DTARGET_SA
 TARGET_LIBS =
 TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).sa
+TARGET_CLEAN =
+TARGET_BMARKS = $(BMARKS)
+else ifeq ($(TARGET), simple)
+TARGET_CC = riscv32-unknown-elf-gcc
+TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imc -mabi=ilp32 -static -mcmodel=medany -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding  -MMD
+TARGET_LIBS = -lgcc
+TARGET_SIM = ../target/simple_sim.sh ../../Snowflake-IoT/ibex/build/lowrisc_ibex_ibex_simple_system_0/sim-verilator/Vibex_simple_system
+TARGET_DIFF = mv ibex_simple_system.log FOO; diff
+TARGET_EXE = $(PROG).elf
+TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
+TARGET_BMARKS = banner bubble-sort cipher dhrystone fft-int flood-fill hanoi heapsort kepler life longdiv mandelbrot mersenne natlog nr-solver parrondo pascal shortest-path sieve skeleton strange totient
 else
 # default is an error
 $(error No build TARGET defined, e.g., make TARGET=host ...)
@@ -55,19 +69,21 @@ LIBS = $(LOCAL_LIBS) $(TARGET_LIBS)
 build: $(TARGET_EXE)
 
 %.o: %.c
+	$(TARGET_CC) $(CFLAGS) -I../common/ -o $(notdir $@) -c $<
+
+$(TARGET_EXE): $(OBJS)
 ifeq ($(TARGET), host)
-	$(CC) $(CFLAGS) -DTARGET_HOST -I../common/ -o $(notdir $@) -c $<
+	$(TARGET_CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
 else ifeq ($(TARGET), standalone)
-	$(CC) $(CFLAGS) -DTARGET_SA -I../common/ -o $(notdir $@) -c $<
+	$(TARGET_CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
+else ifeq ($(TARGET), simple)
+	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $(notdir $^) ../target/simple-crt0.S -o $@ $(LIBS)
 else
 	$(error MODE is not defined (add: TARGET={host|sa}).)
 endif
 
-$(TARGET_EXE): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
-
 clean:
-	rm -f $(PROG).host $(PROG).sa *.o core mem.out *.log FOO $(LOCAL_CLEAN)
+	rm -f $(PROG).host $(PROG).sa $(PROG).elf *.o core mem.out *.log FOO $(LOCAL_CLEAN) $(TARGET_CLEAN)
 
 
 #
@@ -75,13 +91,13 @@ clean:
 #
 
 run-tests:
-	@for _BMARK in $(BMARKS) ; do \
+	@for _BMARK in $(TARGET_BMARKS) ; do \
 	  for _TARGET in host standalone ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
 	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
 	    echo "--------------------------------" ; \
-	    $(MAKE) TARGET=$$_TARGET clean build test || exit 1; \
+	    $(MAKE) TARGET=$$TARGET clean build test || exit 1; \
 	    cd .. ; \
 	  done \
 	done
@@ -91,9 +107,9 @@ clean-all all-clean: clean
 	  for _TARGET in host standalone ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
-	    echo "Running "$$_BMARK" in TARGET="$$_TARGET ; \
+	    echo "Cleaning "$$_BMARK" in TARGET="$$_TARGET ; \
 	    echo "--------------------------------" ; \
-	    $(MAKE) TARGET=$$_TARGET clean ; \
+	    $(MAKE) TARGET=$$TARGET clean ; \
 	    cd .. ; \
 	  done \
 	done

@@ -55,13 +55,13 @@ int libmin_memcmp(const void *vl, const void *vr, size_t n);
 void *libmin_memmove(void *dest, const void *src, size_t n);
 
 
-#ifndef LIBTARG_SILENT
+#ifndef TARGET_SILENT
 /* print a message with format FMT to the co-simulation console */
 int libmin_printf(char *fmt, ...);
-#else /* LIBTARG_SILENT */
+#else /* TARGET_SILENT */
 /* run silent */
 #define libmin_printf(FMT, ARGS...)	do { ; } while (0)
-#endif /* LIBTARG_SILENT */
+#endif /* TARGET_SILENT */
 
 /* print one character */
 void libmin_putc(char c);
@@ -85,8 +85,10 @@ void libmin_fail(int code);
 /* largest random number */
 #define RAND_MAX (0x7fffffff)
 
+#ifdef notdef
 /* largest numbers */
 #define UINT32_MAX (0xFFFFFFFFU)
+#endif /* notdef */
 
 /* see the random integer generator */
 void libmin_srand(unsigned int seed);

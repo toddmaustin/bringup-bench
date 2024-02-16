@@ -23,7 +23,7 @@
                 /* Berkeley UNIX C returns process times in seconds/HZ */
 
 #ifdef  NOSTRUCTASSIGN
-#define structassign(d, s)      memcpy(&(d), &(s), sizeof(d))
+#define structassign(d, s)      libmin_memcpy(&(d), &(s), sizeof(d))
 #else
 #define structassign(d, s)      d = s
 #endif
@@ -371,19 +371,6 @@ static int Proc_5 (void) /* without parameters */
   Bool_Glob = false;
   return 0;
 } /* Proc_5 */
-
-
-        /* Procedure for the assignment of structures,          */
-        /* if the C compiler doesn't support this feature       */
-#ifdef  NOSTRUCTASSIGN
-memcpy (d, s, l)
-register char   *d;
-register char   *s;
-register int    l;
-{
-        while (l--) *d++ = *s++;
-}
-#endif
 
 
 /*

@@ -1,6 +1,19 @@
 #ifndef LIBTARG_H
 #define LIBTARG_H
 
+/* define support for vararg functions */
+#if defined(TARGET_HOST)
+#include <stdarg.h>
+#elif defined(TARGET_SA)
+#include <stdarg.h>
+#elif defined(TARGET_SIMPLE)
+#include <stdarg.h>
+#include <stdint.h>
+#include <stddef.h>
+#else
+#error Error: no definition for vararg functions!
+#endif
+
 /* basic numerics and data types */
 
 #if '\xff' > 0
@@ -54,9 +67,12 @@ typedef __UINTPTR_TYPE__ uintptr_t;
 #define LONG_MAX __LONG_MAX
 #define LLONG_MAX  0x7fffffffffffffffLL
 
+#ifdef notdef
 /* size type */
 typedef unsigned long         size_t;
+#endif /* notdef */
 
+#ifdef notdef
 /* signed */
 typedef signed char           int8_t;
 typedef short int             int16_t;
@@ -72,6 +88,7 @@ typedef unsigned long int     uint64_t;
 /* pointer as an int type */
 typedef int64_t               intptr_t;
 typedef uint64_t              uintptr_t;
+#endif /* notdef */
 
 #endif
 
@@ -96,14 +113,5 @@ void libtarg_putc(char c);
 
 /* get some memory */
 void *libtarg_sbrk(size_t inc);
-
-/* define support for vararg functions */
-#if defined(TARGET_HOST)
-#include <stdarg.h>
-#elif defined(TARGET_SA)
-#include <stdarg.h>
-#else
-#error Error: no definition for vararg functions!
-#endif
 
 #endif /* LIBTARG_H */

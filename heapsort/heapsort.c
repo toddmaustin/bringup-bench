@@ -1,20 +1,20 @@
 #include "libmin.h"
 
-static long bplong;
-static long base[2048];
+static int64_t bplong;
+static int64_t base[2048];
 
 /*************************/
 /*  Heap Sort Program    */
 /*************************/
 
 int
-HSORT(long m, long p)
+HSORT(int64_t m, int64_t p)
 {
-  long i,j,k,l;
-  long size;
+  int64_t i,j,k,l;
+  int64_t size;
 
-  long  msize, iran, ia, ic, im, ih, ir;
-  long  count, ca;
+  int64_t  msize, iran, ia, ic, im, ih, ir;
+  int64_t  count, ca;
 
   msize = m * bplong;
   size  = m - 1;
@@ -86,7 +86,7 @@ HSORT(long m, long p)
   ir = (ir + ca) / 2;
 
   if ( p != 0L )
-    libmin_printf("   %10ld\n", msize);
+    libmin_printf("   %10ld\n", (int)msize);
 
   /* check the array */
   for(i = 0; i < size-1; i++)
@@ -105,12 +105,12 @@ HSORT(long m, long p)
 int
 main(void)
 {
-  long  j, p;
+  int64_t  j, p;
 
-  bplong = sizeof(long);
+  bplong = sizeof(int64_t);
 
   libmin_printf("\n   Heap Sort C Program\n");
-  libmin_printf("   Size of long (bytes): %ld\n\n", bplong);
+  libmin_printf("   Size of long (bytes): %ld\n\n", (long)bplong);
   libmin_printf("   Array Size (bytes)\n");
 
 				   /* Predetermine runtime (sec) for  */
