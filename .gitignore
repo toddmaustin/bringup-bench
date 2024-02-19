@@ -1,8 +1,11 @@
 FOO
 *.o
+*.d
 *.host
 *.sa
+*.elf
 *.swp
 *.enc
 *.na
 *.log
+ibex_simple_system_pcount.csv

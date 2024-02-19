@@ -1,3 +1,7 @@
+Version 1.2
+  - much more robust Makefile with more error guidance
+  - target support for RISC-V's Simple_System simulation environment, see here for details: https://github.com/lowRISC/ibex/tree/master/examples/simple_system
+
 Version 1.1
   - Incorporated user-made pull requests
   - New benchmarks: checkers, donut, life, lz-compress, pi-calc, quine, rho-factor, spelt2num, strange

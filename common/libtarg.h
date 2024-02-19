@@ -4,8 +4,12 @@
 /* define support for vararg functions */
 #if defined(TARGET_HOST)
 #include <stdarg.h>
+#include <stdint.h>
+#include <stddef.h>
 #elif defined(TARGET_SA)
 #include <stdarg.h>
+#include <stdint.h>
+#include <stddef.h>
 #elif defined(TARGET_SIMPLE)
 #include <stdarg.h>
 #include <stdint.h>
