@@ -16,9 +16,11 @@ make TARGET=<target> clean build test
 ```
 This command will first "clean" the benchmark directory and then "build" the application, and "test" that it is running correctly. The \<target> indicates the specific target that the application should be built for. Currently, Bringup-Bench support the following targets: 
 
-- **Linux host target - TARGET=host** - This target builds the benchmark to run as a Linux application.
+- **Linux host target - TARGET=host** - This target builds the benchmarks to run as a Linux application.
 
-- **Standalone target - TARGET=sa** - This target builds the benchmark to run as a memory-only standalone application. For this target, all benchmark output is spooled to a pre-defined memory buffer, and the libmin\_success() and libmin\_fail() intefaces result in the application spinning at a specific code address. This mode is designed for bringing up CPUs and accelerators that do not yet have any OS or device I/O support. See common/libtarg.c for the internal intefaces used to spool program output to internal buffers. This particular target is useful in bringing up CPUs when they still have no I/O support, simply spool benchmark output to DRAM, and dump the DRAM after the benchmark completes.
+- **Standalone target - TARGET=sa** - This target builds the benchmarks to run as a memory-only standalone application. For this target, all benchmark output is spooled to a pre-defined memory buffer, and the libmin\_success() and libmin\_fail() intefaces result in the application spinning at a specific code address. This mode is designed for bringing up CPUs and accelerators that do not yet have any OS or device I/O support. See common/libtarg.c for the internal intefaces used to spool program output to internal buffers. This particular target is useful in bringing up CPUs when they still have no I/O support, simply spool benchmark output to DRAM, and dump the DRAM after the benchmark completes.
+
+- **Simple_System target - TARGET=simple** - This target build the benchmarks to run in the RISC-V Simple_System simulation environment. Simple_system allows hardware developers to ... By default, this is an integer computation only mode, so any FP in the benchmarks will be emulated with GCC's soft-float support.
 
 Each benchmark support three standard Makefile targets: build, test, and clean
 
@@ -37,8 +39,8 @@ make TARGET=host clean
 
 To assist in running experiments, the top-level Makefile includes a few useful targets:
 ```
-make run-tests   # clean, build, and test all benchmarks in all target modes (host,sa)
-make all-clean   # clean all benchmark directories
+make TARGET=<target> run-tests   # clean, build, and test all benchmarks in all target modes (host, standalone, simple)
+make all-clean   # clean all benchmark directories for all supported targets
 ```
 You should be able to adapt these targets to your own project-specific tasks.
 
