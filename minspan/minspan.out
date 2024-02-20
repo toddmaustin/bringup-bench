@@ -1,0 +1,24 @@
+           Home  z-mall  st.pet  office  school   motel  restr. library airport  barber
+    Home       0       9       0       2       4       3       0       1       0       0
+  z-mall       9       0       1       8       0       7       5       7       0       5
+  st.pet       0       1       0       6       0       5       9       4       0       0
+  office       2       8       6       0       0       9       0       9       5       1
+  school       4       0       0       0       0       5       2       4       4       9
+   motel       3       7       5       9       5       0       9       3       0       0
+  restr.       0       5       9       0       2       9       0       6       6       9
+ library       1       7       4       9       4       3       6       0       6       3
+ airport       0       0       0       5       4       0       6       6       0       4
+  barber       0       5       0       1       9       0       9       3       4       0
+
+
+minimum spanning tree:
+    z-mall <-1->   st.pet
+    st.pet <-4->  library
+    office <-2->     Home
+    school <-4->     Home
+     motel <-3->     Home
+    restr. <-2->   school
+   library <-1->     Home
+   airport <-4->   barber
+    barber <-1->   office
+total cost = 22

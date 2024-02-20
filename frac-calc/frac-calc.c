@@ -450,7 +450,7 @@ void misto(int mist, int frac[MAX], int i) /* fraction to mixed number */
 /* ---------------------------------------------------------------------- */
 float calcula(int frac[MAX], int r[MAX]) /* computes the fraction */
 {
-    float dec, a, b;
+    float dec = 0, a, b;
 
     r[0] = frac[1] * frac[3]; /* mmc */
     switch(frac[MAX - 1]) /* operation */
