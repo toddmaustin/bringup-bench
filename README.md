@@ -54,6 +54,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **banner** - Prints out a fancy vertical banner.
 
+- **blake2b** - Reference implementation and test of BLAKE2b, a cryptographic hash function based on Daniel J. Bernstein's ChaCha stream cipher.
+
 - **boyer-moore-search** - Performs a Boyer-Moore optimized search, given a test string and a large string to search.
 
 - **bubble-sort** - Performs a bubble sort on a randomly generated internal list of integers.
@@ -76,6 +78,10 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **frac-calc** - Computes calculations on proper and improper fractions.
 
+- **fy-shuffle** - A Fisher-Yates perfect random vector shuffle implementation.
+
+- **gcd-list** - Computes the greatest common divisor for a list of integers using the division algorithm.
+
 - **hanoi** - Solves the Tower's of Hanoi problem for a variable number of towers.
 
 - **heapsort** - Performs a heap sort on a randomly generated data set
@@ -90,7 +96,11 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **mandelbrot** - Calculate and print using ASCII graphics a Mendelbrot fractal.
 
+- **max-subseq** - Computes the longest subsequence common (LSC) to all sequences in a set of sequences using the dynamic programming method.
+
 - **mersenne** - Generate a sequence of pseudo-random numbers using the Mersenne Twister algorithm.
+
+- **minspan** - Finds the minimal spanning tree of a graph (via Kruscal's algorithm over the graph's adjacency matrix).
 
 - **natlog** - Compute the value of natural log e, using an iterative method.
 
@@ -102,7 +112,11 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **pi-calc** - An integer based high-precision PI calculator.
 
+- **primal-test** - Performs the Miller-Rabin stochastic primarility test to extremely high certainty.
+
 - **quine** - A C program that prints itself.
+
+- **rabinkarp-search** - Implements the very efficient Rabin-Karp data-oblivious string search algorithm. This search algorithm is O(N) in the length of the string searched.
 
 - **rho-factor** - A Pollard's Rho integer factorization algorithm.
 
@@ -116,7 +130,11 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **strange** - A strange C program that acts strangely in an expected manner.
 
+- **topo-sort** - Tolologically sorts a graph and prints the result in breadth-first order.
+
 - **totient** - Calculates the Euler totient function phi.
+
+- **weekday** - Given a year, month, and day, deterime the day of the week for the specified date.
 
 ## Minimal library dependencies
 
