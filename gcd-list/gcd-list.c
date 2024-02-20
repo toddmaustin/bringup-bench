@@ -49,6 +49,8 @@ main(void)
   libmin_printf("GCD of list: %u\n", gcd_of_n);
 
   libmin_free(a);
+
+  libmin_success();
   return 0;
 }
 

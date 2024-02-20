@@ -1758,7 +1758,7 @@ libmin_rand(void)
   y ^= TEMPERING_SHIFT_T(y) & TEMPERING_MASK_C;
   y ^= TEMPERING_SHIFT_L(y);
 
-  return y;
+  return y & RAND_MAX;
 }
 #endif
 

@@ -1,24 +1,24 @@
            Home  z-mall  st.pet  office  school   motel  restr. library airport  barber
-    Home       0       9       0       2       4       3       0       1       0       0
-  z-mall       9       0       1       8       0       7       5       7       0       5
-  st.pet       0       1       0       6       0       5       9       4       0       0
-  office       2       8       6       0       0       9       0       9       5       1
-  school       4       0       0       0       0       5       2       4       4       9
-   motel       3       7       5       9       5       0       9       3       0       0
-  restr.       0       5       9       0       2       9       0       6       6       9
- library       1       7       4       9       4       3       6       0       6       3
- airport       0       0       0       5       4       0       6       6       0       4
-  barber       0       5       0       1       9       0       9       3       4       0
+    Home       0       9       0       7       8       7       9       1       0       6
+  z-mall       9       0       8       9       0       7       6       5       2       2
+  st.pet       0       8       0       6       7       1       4       2       3       1
+  office       7       9       6       0       0       1       7       3       5       2
+  school       8       0       7       0       0       6       0       0       1       5
+   motel       7       7       1       1       6       0       2       8       8       6
+  restr.       9       6       4       7       0       2       0       1       6       3
+ library       1       5       2       3       0       8       1       0       6       5
+ airport       0       2       3       5       1       8       6       6       0       9
+  barber       6       2       1       2       5       6       3       5       9       0
 
 
 minimum spanning tree:
-    z-mall <-1->   st.pet
-    st.pet <-4->  library
-    office <-2->     Home
-    school <-4->     Home
-     motel <-3->     Home
-    restr. <-2->   school
+    z-mall <-2->   barber
+    st.pet <-2->  library
+    office <-1->    motel
+    school <-1->  airport
+     motel <-1->   st.pet
+    restr. <-1->  library
    library <-1->     Home
-   airport <-4->   barber
-    barber <-1->   office
-total cost = 22
+   airport <-2->   z-mall
+    barber <-1->   st.pet
+total cost = 12

@@ -82,7 +82,7 @@ void libmin_success(void);
 /* exit co-simulation with failure exit code CODE */
 void libmin_fail(int code);
 
-/* largest random number */
+/* largest random number, must be power-of-two-minus-one! */
 #define RAND_MAX (0x7fffffff)
 
 #ifdef notdef

@@ -119,7 +119,7 @@ main(int argc, char *argv[])
 		
 		// find the choice node which yields this score
 		linked_list_member_t* list_member = (level_0_node->children_list).first;
-		tree_node_t* choice_node;
+		tree_node_t* choice_node = NULL;
 		for (int i=0; i<(level_0_node->children_count); i++) {
 			choice_node = (tree_node_t*)(list_member->child_node);
 			if (move_score_forced(choice_node) == best_score) {

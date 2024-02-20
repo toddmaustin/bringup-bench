@@ -218,6 +218,7 @@ main()
 	// displayGraph1(graph, path);
 	displayTree(graph, path);
 
+  libmin_success();
   return 0;
 }
 

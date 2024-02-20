@@ -169,5 +169,7 @@ main(void)
     else if (q[i].prim == PT_PRIME_LIKELY)
       libmin_printf("Value %u is `likely prime' with failure probability (1 in %.0lf)\n", q[i].val, libmin_pow(4.0, K));
   }
+
+  libmin_success();
   return 0;
 }

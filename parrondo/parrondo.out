@@ -1,5 +1,5 @@
 Simulating 100 trials ...
-0 wins, 100 losses, 0 draws
+11 wins, 89 losses, 0 draws
 (Win/loss = 50/-50, draw = no win/loss in 1000000 plays.)
-Average trial length = 101.220000
-Site occupancy: 0 mod 3: 32.671409%, 1 mod 3: 37.875320%, 2 mod 3: 29.253112%
+Average trial length = 3859.980000
+Site occupancy: 0 mod 3: 38.327142%, 1 mod 3: 36.875321%, 2 mod 3: 24.771631%

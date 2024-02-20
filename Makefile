@@ -27,9 +27,9 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc gcd-list hanoi heapsort kepler life longdiv lz-compress mandelbrot mersenne minspan natlog nr-solver parrondo pascal pi-calc primal-test quine rabinkarp-search rho-factor shortest-path sieve skeleton spelt2num strange totient
+BMARKS = ackermann anagram banner boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv lz-compress mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal pi-calc primal-test quine rabinkarp-search rho-factor shortest-path sieve skeleton spelt2num strange totient weekday
 
-OPT_CFLAGS = -O0 -g
+OPT_CFLAGS = -O6 -g
 
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
@@ -59,7 +59,7 @@ TARGET_SIM = ../target/simple_sim.sh ../../Snowflake-IoT/ibex/build/lowrisc_ibex
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = banner boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc gcd-list hanoi heapsort kepler life longdiv mandelbrot mersenne minspan natlog nr-solver parrondo pascal primal-test rabinkarp-search shortest-path sieve skeleton strange totient
+TARGET_BMARKS = banner boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal primal-test rabinkarp-search shortest-path sieve skeleton strange totient weekday
 TARGET_CONFIGURED = 1
 else
 # default is an unconfigured
