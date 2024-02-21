@@ -29,7 +29,7 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram banner blake2b boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv lz-compress mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal pi-calc primal-test quine rabinkarp-search rho-factor shortest-path sieve skeleton spelt2num strange topo-sort totient weekday
+BMARKS = ackermann anagram banner blake2b boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv lz-compress mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal pi-calc primal-test quine rabinkarp-search rho-factor shortest-path sieve simple-grep skeleton spelt2num strange topo-sort totient weekday
 
 OPT_CFLAGS = -O6 -g
 
@@ -61,7 +61,7 @@ TARGET_SIM = ../target/simple_sim.sh ../../Snowflake-IoT/ibex/build/lowrisc_ibex
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = banner blake2b boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal primal-test rabinkarp-search shortest-path sieve skeleton strange topo-sort totient weekday
+TARGET_BMARKS = banner blake2b boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal primal-test rabinkarp-search shortest-path sieve simple-grep skeleton strange topo-sort totient weekday
 TARGET_CONFIGURED = 1
 else
 # default is an unconfigured

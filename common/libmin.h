@@ -40,13 +40,15 @@ size_t libmin_strlen(const char *str);
 
 /* return order of strings */
 int libmin_strcmp(const char *l, const char *r);
+int libmin_strncmp(const char *s1, const char *s2, register size_t n);
 size_t libmin_strspn(const char *s, const char *c);
 char *libmin_strtok(char *s, const char *sep);
 char *libmin_strdup (const char *s);
 char *libmin_strchr(const char *s, char c);
 char *libmin_strrchr(const char *s, int c);
 size_t libmin_strcspn(const char *s, const char *c);
-char * libmin_strpbrk(const char *s, const char *b);
+char *libmin_strpbrk(const char *s, const char *b);
+const char *libmin_strstr (const char *s1, const char *s2);
 
 /* set a block of memory to a value */
 void *libmin_memset(void *dest, int c, size_t n);

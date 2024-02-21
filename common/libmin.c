@@ -367,6 +367,23 @@ libmin_strcmp(const char *l, const char *r)
 	return *(unsigned char *)l - *(unsigned char *)r;
 }
 
+int
+libmin_strncmp(const char *s1, const char *s2, register size_t n)
+{
+  unsigned char u1, u2;
+
+  while (n-- > 0)
+    {
+      u1 = (unsigned char) *s1++;
+      u2 = (unsigned char) *s2++;
+      if (u1 != u2)
+	      return u1 - u2;
+      if (u1 == '\0')
+	      return 0;
+    }
+  return 0;
+}
+
 #define BITOP(a,b,op) \
  ((a)[(size_t)(b)/(8*sizeof *(a))] op (size_t)1<<((size_t)(b)%(8*sizeof *(a))))
 
@@ -483,6 +500,23 @@ libmin_strpbrk(const char *s, const char *b)
 {
 	s += libmin_strcspn(s, b);
 	return *s ? (char *)s : 0;
+}
+
+const char *
+libmin_strstr(const char *s1, const char *s2)
+{
+  const char *p = s1;
+  const size_t len = libmin_strlen(s2);
+
+  if (!len)
+    return s1;
+
+  for (; (p = libmin_strchr(p, *s2)) != 0; p++)
+    {
+      if (libmin_strncmp (p, s2, len) == 0)
+	      return (char *)p;
+    }
+  return NULL;
 }
 
 void *
