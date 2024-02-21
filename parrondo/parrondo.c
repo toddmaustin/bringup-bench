@@ -71,7 +71,7 @@ Print information on simulations of Parrondo's paradoxical game.\n\n\
 /* Default values */
 #define MAX_FORTUNE 50
 #define MAX_ITERATIONS 1000000L
-#define TRIALS 10000
+#define TRIALS 1000
 #define INITIAL_SEED 3445
 #ifndef _MAX_RAND
 #define _MAX_RAND RAND_MAX
@@ -118,7 +118,7 @@ int play_c(int fortune)
 
 
 int argc=6;
-char *argv[] = { "parrondo", "-2", "-t", "100", "-S", "1" };
+char *argv[] = { "parrondo", "-2", "-t", "10", "-S", "1" };
 
 int
 main(void)
