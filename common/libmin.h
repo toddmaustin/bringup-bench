@@ -106,7 +106,9 @@ void *libmin_realloc(void *block, size_t size);
 /* free memory */
 void libmin_free(void * addr);
 
+#ifndef __clang__
 #define NULL	((void *)0)
+#endif
 
 /* in-memory file I/O */
 struct _MFILE {

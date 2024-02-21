@@ -31,10 +31,11 @@ error:
 #
 BMARKS = ackermann anagram banner blake2b boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv lz-compress mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal pi-calc primal-test quine rabinkarp-search rho-factor shortest-path sieve simple-grep skeleton spelt2num strange topo-sort totient weekday
 
-OPT_CFLAGS = -O6 -g
+OPT_CFLAGS = -O3 -g
 
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
+#TARGET_CC = clang
 TARGET_CFLAGS = -DTARGET_HOST
 TARGET_LIBS =
 TARGET_SIM =
@@ -45,6 +46,7 @@ TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), standalone)
 TARGET_CC = gcc
+#TARGET_CC = clang
 TARGET_CFLAGS = -DTARGET_SA
 TARGET_LIBS =
 TARGET_SIM =
@@ -55,6 +57,7 @@ TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
+#TARGET_CC = riscv32-unknown-elf-clang
 TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imc -mabi=ilp32 -static -mcmodel=medany -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding  -MMD
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../target/simple_sim.sh ../../Snowflake-IoT/ibex/build/lowrisc_ibex_ibex_simple_system_0/sim-verilator/Vibex_simple_system
