@@ -171,7 +171,7 @@ void libtarg_putc(char c);
 /* get some memory */
 void *libtarg_sbrk(size_t inc);
 ```
-Once these four interfaces are implemented, all of the Bringup-Bench benchmarks can be built and run. To facilitate in testing, the "TARGET=host" target defines the four required system interfaces by passing them on to the Linux OS. In addition, the repo also provides a standalone target "TARGET=sa" which only requires that the target support provbable memory.
+Once these four interfaces are implemented, all of the Bringup-Bench benchmarks can be built and run. To facilitate testing, the "TARGET=host" target defines the four required system interfaces by passing them on to the Linux OS. In addition, the repo also provides a standalone target "TARGET=sa" which only requires that the target support provbable memory.
 
 ## Using the code-based read-only file system
 
