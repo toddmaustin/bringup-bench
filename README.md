@@ -39,7 +39,7 @@ make TARGET=host clean
 
 To assist in running experiments, the top-level Makefile includes a few useful targets:
 ```
-make TARGET=<target> run-tests   # clean, build, and test all benchmarks in all target modes (host, standalone, simple)
+make TARGET=<target> run-tests   # clean, build, and test all benchmarks in the specified target mode (host, standalone, simple)
 make all-clean   # clean all benchmark directories for all supported targets
 ```
 You should be able to adapt these targets to your own project-specific tasks.
