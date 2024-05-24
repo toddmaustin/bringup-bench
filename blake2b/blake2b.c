@@ -40,16 +40,6 @@
 #define CEIL(a, b) (((a) / (b)) + ((a) % (b) != 0))
 
 /**
- * @brief returns minimum value
- */
-#define MIN(a, b) ((a) < (b) ? (a) : (b))
-
-/**
- * @brief returns maximum value
- */
-#define MAX(a, b) ((a) > (b) ? (a) : (b))
-
-/**
  * @brief macro to rotate 64-bit ints to the right
  * Ripped from RFC 7693
  */

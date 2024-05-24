@@ -17,13 +17,6 @@
 
 #include "libmin.h"
 
-#ifndef FALSE
-#define FALSE 0
-#endif
-#ifndef TRUE
-#define TRUE 1
-#endif
-
 #define PROGRAM_NAME "pascal"
 #define VERSION "1.0"
 #define MAX_ROWS 30

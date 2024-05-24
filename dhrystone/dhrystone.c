@@ -311,7 +311,7 @@ static int Proc_1 (Rec_Pointer Ptr_Val_Par)
   }
   else /* not executed */
     structassign (*Ptr_Val_Par, *Ptr_Val_Par->Ptr_Comp);
-    return 0;
+  return 0;
 } /* Proc_1 */
 
 

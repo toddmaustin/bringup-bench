@@ -1,8 +1,5 @@
 #include "libmin.h"
 
-#define TRUE  1
-#define FALSE 0
-
 // supported sizes: 256 (default), 512, 1024, 2048
 #define DATASET_SIZE 256
 int data[DATASET_SIZE];

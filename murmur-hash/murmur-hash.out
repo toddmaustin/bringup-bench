@@ -1,0 +1,3 @@
+murmurhash("kinkajou") = 0xb6d99cf8
+murmurhash("The bringup-bench benchmark MURMUR made this.") = 0xf128bc51
+murmurhash("It has to start somewhere, it has to start sometime, what better place than here? What better time than now?") = 0x5050d9f9

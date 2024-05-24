@@ -49,6 +49,8 @@ char *libmin_strrchr(const char *s, int c);
 size_t libmin_strcspn(const char *s, const char *c);
 char *libmin_strpbrk(const char *s, const char *b);
 const char *libmin_strstr (const char *s1, const char *s2);
+char *libmin_strcasestr(const char *h, const char *n);
+int libmin_strncasecmp(const char *_l, const char *_r, size_t n);
 
 /* set a block of memory to a value */
 void *libmin_memset(void *dest, int c, size_t n);
@@ -168,24 +170,6 @@ extern unsigned short *_pctype; // pointer to table for char's
 
 int _isctype(int c, int mask);
 
-#ifdef notdef
-int isspace(int c);
-int isupper(int c);
-int islower(int c);
-int isdigit(int c);
-int isxdigit(int c);
-int ispunct(int c);
-int isalpha(int c);
-int isalnum(int c);
-int isprint(int c);
-int isgraph(int c);
-int iscntrl(int c);
-int isleadbyte(int c);
-
-int toupper(int c);
-int tolower(int c);
-#endif
-
 #define isalpha(c)     (_pctype[(int)(c)] & (_UPPER | _LOWER))
 #define isupper(c)     (_pctype[(int)(c)] & _UPPER)
 #define islower(c)     (_pctype[(int)(c)] & _LOWER)
@@ -204,6 +188,106 @@ int tolower(int c);
 
 /* math functions */
 
+#define FORCE_EVAL(x) do {                        \
+	if (sizeof(x) == sizeof(float)) {         \
+		volatile float __x;               \
+		__x = (x); (void)__x;                        \
+	} else if (sizeof(x) == sizeof(double)) { \
+		volatile double __x;              \
+		__x = (x); (void)__x;                        \
+	} else {                                  \
+		volatile long double __x;         \
+		__x = (x); (void)__x;                        \
+	}                                         \
+} while(0)
+
+/* Get two 32 bit ints from a double.  */
+#define EXTRACT_WORDS(hi,lo,d)                    \
+do {                                              \
+  union {double f; uint64_t i;} __u;              \
+  __u.f = (d);                                    \
+  (hi) = __u.i >> 32;                             \
+  (lo) = (uint32_t)__u.i;                         \
+} while (0)
+
+/* Get the more significant 32 bit int from a double.  */
+#define GET_HIGH_WORD(hi,d)                       \
+do {                                              \
+  union {double f; uint64_t i;} __u;              \
+  __u.f = (d);                                    \
+  (hi) = __u.i >> 32;                             \
+} while (0)
+
+/* Get the less significant 32 bit int from a double.  */
+#define GET_LOW_WORD(lo,d)                        \
+do {                                              \
+  union {double f; uint64_t i;} __u;              \
+  __u.f = (d);                                    \
+  (lo) = (uint32_t)__u.i;                         \
+} while (0)
+
+/* Set a double from two 32 bit ints.  */
+#define INSERT_WORDS(d,hi,lo)                     \
+do {                                              \
+  union {double f; uint64_t i;} __u;              \
+  __u.i = ((uint64_t)(hi)<<32) | (uint32_t)(lo);  \
+  (d) = __u.f;                                    \
+} while (0)
+
+/* Set the more significant 32 bits of a double from an int.  */
+#define SET_HIGH_WORD(d,hi)                       \
+do {                                              \
+  union {double f; uint64_t i;} __u;              \
+  __u.f = (d);                                    \
+  __u.i &= 0xffffffff;                            \
+  __u.i |= (uint64_t)(hi) << 32;                  \
+  (d) = __u.f;                                    \
+} while (0)
+
+/* Set the less significant 32 bits of a double from an int.  */
+#define SET_LOW_WORD(d,lo)                        \
+do {                                              \
+  union {double f; uint64_t i;} __u;              \
+  __u.f = (d);                                    \
+  __u.i &= 0xffffffff00000000ull;                 \
+  __u.i |= (uint32_t)(lo);                        \
+  (d) = __u.f;                                    \
+} while (0)
+
+/* Get a 32 bit int from a float.  */
+#define GET_FLOAT_WORD(w,d)                       \
+do {                                              \
+  union {float f; uint32_t i;} __u;               \
+  __u.f = (d);                                    \
+  (w) = __u.i;                                    \
+} while (0)
+
+/* Set a float from a 32 bit int.  */
+#define SET_FLOAT_WORD(d,w)                       \
+do {                                              \
+  union {float f; uint32_t i;} __u;               \
+  __u.i = (w);                                    \
+  (d) = __u.f;                                    \
+} while (0)
+
+#undef __CMPLX
+#undef CMPLX
+#undef CMPLXF
+#undef CMPLXL
+
+#define __CMPLX(x, y, t) \
+	((union { _Complex t __z; t __xy[2]; }){.__xy = {(x),(y)}}.__z)
+
+#define CMPLX(x, y) __CMPLX(x, y, double)
+#define CMPLXF(x, y) __CMPLX(x, y, float)
+#define CMPLXL(x, y) __CMPLX(x, y, long double)
+
+#if FLT_EVAL_METHOD==0 || FLT_EVAL_METHOD==1
+#define EPS DBL_EPSILON
+#elif FLT_EVAL_METHOD==2
+#define EPS LDBL_EPSILON
+#endif
+
 #define DBL_EPSILON 2.22044604925031308085e-16
 
 double libmin_floor(double x);
@@ -216,7 +300,15 @@ double libmin_sqrt(double x);
 
 int libmin_abs(int i);
 
+/* internal mathlib interfaces */
+int __rem_pio2_large(double *x, double *y, int e0, int nx, int prec);
+int __rem_pio2(double x, double *y);
+
 /* libmin assertions */
 #define libmin_assert(P)    ((P) ? (void)0 : (void)libmin_fail(1))
+
+/* MIN/MAX functions */
+#define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
+#define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
 #endif /* LIBMIN_H */

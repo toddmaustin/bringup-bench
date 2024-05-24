@@ -1,8 +1,5 @@
 #include "libmin.h"
 
-#define TRUE  1
-#define FALSE 0
-
 //
 // Compute the minimal spanning tree of a randomly generated graph.
 // This program implements Kruscal's algorithm (https://en.wikipedia.org/wiki/Kruskal%27s_algorithm)

@@ -1,3 +1,7 @@
+Version 1.3
+  - added support for fine-grained library object files, resulting in an average code size reduction of 40%
+  - added more benchmarks
+
 Version 1.2
   - much more robust Makefile with more error guidance
   - target support for RISC-V's Simple_System simulation environment, see here for details: https://github.com/lowRISC/ibex/tree/master/examples/simple_system
