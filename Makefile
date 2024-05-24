@@ -67,7 +67,7 @@ TARGET_SIM = ../target/simple_sim.sh ../../Snowflake-IoT/ibex/build/lowrisc_ibex
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = banner blake2b boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal primal-test rabinkarp-search shortest-path sieve simple-grep skeleton strange topo-sort totient weekday
+TARGET_BMARKS = banner blake2b boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent hanoi heapsort kadane kepler knapsack life longdiv mandelbrot max-subseq mersenne minspan murmur-hash natlog nr-solver parrondo pascal primal-test rabinkarp-search regex-parser shortest-path sieve simple-grep skeleton strange topo-sort totient weekday
 TARGET_CONFIGURED = 1
 else
 # default is an unconfigured
