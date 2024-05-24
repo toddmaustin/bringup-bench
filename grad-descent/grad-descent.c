@@ -83,6 +83,7 @@ main(void)
 	gradientDescent(&weight, &bias);
 	libmin_printf("The function is: %.4lfx + %.4lf\n", weight, bias);
 
-	return 0;
+  libmin_success();
+  return 0;
 }
 

@@ -80,6 +80,7 @@ main(void)
   }
   libmin_printf("Total weight: %d\n", W - w);
 
+  libmin_success();
   return 0;
 }
 

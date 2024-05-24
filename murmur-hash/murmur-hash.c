@@ -106,5 +106,6 @@ main(void)
       libmin_printf("murmurhash(\"%s\") = 0x%x\n", key, hash);
     }
 
+    libmin_success();
     return 0;
 }

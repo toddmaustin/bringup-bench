@@ -672,6 +672,10 @@ int main()
     // printf("\n");
     libmin_printf("%lu/%lu tests succeeded.\n", ntests - nfailed, ntests);
 
-    return nfailed; /* 0 if all tests passed */
+    if (nfailed != 0)
+      return nfailed; /* 0 if all tests passed */
+    else
+      libmin_success();
+    return 0;
 }
 

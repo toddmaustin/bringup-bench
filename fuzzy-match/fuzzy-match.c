@@ -348,6 +348,7 @@ main(void)
     libmin_printf("\n");
   }
 
-	return EXIT_SUCCESS;
+  libmin_success();	
+  return 0;
 }
 
