@@ -1,0 +1,29 @@
+*** Integer sorting...
+7 | 3 | 4 | 1 | -1 | 23 | 12 | 43 | 2 | -4 | 5 | 
+-4 | -1 | 1 | 2 | 3 | 4 | 5 | 7 | 12 | 23 | 43 | 
+*** String sorting...
+Zorro | Alex | Celine | Bill | Forest | Dexter | 
+Alex | Bill | Celine | Dexter | Forest | Zorro | 
+*** Struct sorting (price)...
+[ product: mp3 player 	 price: $299.00 ]
+[ product: plasma tv 	 price: $2200.00 ]
+[ product: notebook 	 price: $1300.00 ]
+[ product: smartphone 	 price: $499.99 ]
+[ product: dvd player 	 price: $150.00 ]
+[ product: matches 	 price: $0.20 ]
+--
+[ product: matches 	 price: $0.20 ]
+[ product: dvd player 	 price: $150.00 ]
+[ product: mp3 player 	 price: $299.00 ]
+[ product: smartphone 	 price: $499.99 ]
+[ product: notebook 	 price: $1300.00 ]
+[ product: plasma tv 	 price: $2200.00 ]
+--
+*** Struct sorting (product)...
+[ product: dvd player 	 price: $150.00 ]
+[ product: matches 	 price: $0.20 ]
+[ product: mp3 player 	 price: $299.00 ]
+[ product: notebook 	 price: $1300.00 ]
+[ product: plasma tv 	 price: $2200.00 ]
+[ product: smartphone 	 price: $499.99 ]
+--
