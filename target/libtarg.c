@@ -10,7 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_SPIN  10000     /* make this larger for a real hardware platform */
-#elif defined TARGET_SIMPLE
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
 #include <stdlib.h>
 
 /* simple system MMAP'ed registers */
@@ -121,7 +121,7 @@ SPIN_SUCCESS_ADDR:
 
   /* exit if we ever get here */
   exit(0);
-#elif defined(TARGET_SIMPLE)
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   // libmin_printf("EXIT: success\n");
   simple_halt();
 #else
@@ -144,7 +144,7 @@ SPIN_FAIL_ADDR:
     goto SPIN_FAIL_ADDR;
   /* exit if we ever get here */
   exit(code);
-#elif defined(TARGET_SIMPLE)
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   // libmin_printf("EXIT: fail code = %d\n", code);
   simple_halt();
 #else
@@ -163,7 +163,7 @@ libtarg_putc(char c)
   if (__outbuf_ptr >= MAX_OUTBUF)
     libtarg_fail(1);
   __outbuf[__outbuf_ptr++] = c;
-#elif defined(TARGET_SIMPLE)
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   simple_putchar(c);
 #else
 #error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
@@ -174,13 +174,13 @@ libtarg_putc(char c)
 #define MAX_HEAP    (8*1024*1024)
 static uint8_t __heap[MAX_HEAP];
 static uint32_t __heap_ptr = 0;
-#endif /* TARGET_SA || TARGET_SIMPLE */
+#endif /* TARGET_SA */
 
-#ifdef TARGET_SIMPLE
+#if defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
 #define MAX_HEAP    (32*1024)
 static uint8_t __heap[MAX_HEAP];
 static uint32_t __heap_ptr = 0;
-#endif /* TARGET_SA || TARGET_SIMPLE */
+#endif /* TARGET_SIMPLE || TARGET_SPIKE */
 
 /* get some memory */
 void *
@@ -191,7 +191,7 @@ libtarg_sbrk(size_t inc)
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif /* __clang__ */
   return sbrk(inc);
-#elif defined(TARGET_SA) || defined(TARGET_SIMPLE)
+#elif defined(TARGET_SA) || defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   uint8_t *ptr = &__heap[__heap_ptr];
   if (inc == 0)
     return ptr;

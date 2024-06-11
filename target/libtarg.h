@@ -10,7 +10,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
-#elif defined(TARGET_SIMPLE)
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
