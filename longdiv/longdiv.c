@@ -27,8 +27,6 @@
 
 #include "libmin.h"
 
-#define TRUE 1
-#define FALSE 0
 #define RADIX 10 /* Actually, base 10 is assumed at many points in the pgm,
                     so porting this to handle other bases will involve more
                     than just changing this define. */

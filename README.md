@@ -39,7 +39,7 @@ make TARGET=host clean
 
 To assist in running experiments, the top-level Makefile includes a few useful targets:
 ```
-make TARGET=<target> run-tests   # clean, build, and test all benchmarks in all target modes (host, standalone, simple)
+make TARGET=<target> run-tests   # clean, build, and test all benchmarks in the specified target mode (host, standalone, simple)
 make all-clean   # clean all benchmark directories for all supported targets
 ```
 You should be able to adapt these targets to your own project-specific tasks.
@@ -171,7 +171,7 @@ void libtarg_putc(char c);
 /* get some memory */
 void *libtarg_sbrk(size_t inc);
 ```
-Once these four interfaces are implemented, all of the Bringup-Bench benchmarks can be built and run. To facilitate in testing, the "TARGET=host" target defines the four required system interfaces by passing them on to the Linux OS. In addition, the repo also provides a standalone target "TARGET=sa" which only requires that the target support provbable memory.
+Once these four interfaces are implemented, all of the Bringup-Bench benchmarks can be built and run. To facilitate testing, the "TARGET=host" target defines the four required system interfaces by passing them on to the Linux OS. In addition, the repo also provides a standalone target "TARGET=sa" which only requires that the target support provbable memory.
 
 ## Using the code-based read-only file system
 

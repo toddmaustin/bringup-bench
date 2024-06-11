@@ -1,5 +1,6 @@
 FOO
 *.o
+*.a
 *.d
 *.host
 *.sa

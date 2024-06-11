@@ -107,7 +107,7 @@ would have a(x,x) + 1 < a(x,m). But this is contradiction when x = m.
 
 #include "libmin.h"
 
-#define MAX 5  /* largest arguments to contemplate. This is waaaaaaaaaay more than sufficient! */
+#define AMAX 5  /* largest arguments to contemplate. This is waaaaaaaaaay more than sufficient! */
 
 /* Play around with these definitions. Can you get a(1,4)? */
 #define MAX_X 0xFFFF  /* rows in storage array */
@@ -153,7 +153,7 @@ main(void)
 	unsigned y,k; 
 
   max_depth = 0;
-	for(k=0;k<=MAX;k++)
+	for(k=0;k<=AMAX;k++)
   {
 		libmin_printf("\nx+y=%d:\n\n",k);
 		for(y=0;y<=k;y++)

@@ -1,9 +1,6 @@
 // C Program to implement Topological Sorting 
 #include "libmin.h"
 
-#define TRUE  1
-#define FALSE 0
-
 // Structure to represent a stack 
 struct Stack { 
     int data; 

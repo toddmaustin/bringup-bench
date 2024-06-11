@@ -1,8 +1,5 @@
 #include "libmin.h"
 
-#define TRUE  1
-#define FALSE 0
-
 typedef double (*fn_type)(double x);
 
 double sqrt_value;

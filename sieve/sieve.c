@@ -5,11 +5,6 @@
 		     /* and Clones or you can experiment with higher*/
 		     /* values, but '13' is currently the max.      */
 		     /***********************************************/
-#ifndef TRUE
-#define TRUE 1
-#define FALSE 0
-#endif
-
 static long L_Prime,N_Prime;      /* Last Prime and Number of Primes Found */
 
 static char flags[8192];

@@ -30,12 +30,14 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram banner blake2b boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv lz-compress mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal pi-calc primal-test quine rabinkarp-search rho-factor shortest-path sieve simple-grep skeleton spelt2num strange topo-sort totient weekday
+BMARKS = ackermann anagram banner blake2b boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent hanoi heapsort kadane kepler knapsack life longdiv lz-compress mandelbrot max-subseq mersenne minspan murmur-hash natlog nr-solver parrondo pascal pi-calc primal-test qsort-demo quine rabinkarp-search regex-parser rho-factor shortest-path sieve simple-grep skeleton spelt2num strange topo-sort totient weekday
 
-OPT_CFLAGS = -O6 -g
+OPT_CFLAGS = -O3 -g
 
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
+#TARGET_CC = clang
+TARGET_AR = ar
 TARGET_CFLAGS = -DTARGET_HOST
 TARGET_LIBS =
 TARGET_SIM =
@@ -46,6 +48,8 @@ TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), standalone)
 TARGET_CC = gcc
+#TARGET_CC = clang
+TARGET_AR = ar
 TARGET_CFLAGS = -DTARGET_SA
 TARGET_LIBS =
 TARGET_SIM =
@@ -56,13 +60,15 @@ TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
-TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imc -mabi=ilp32 -static -mcmodel=medany -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding  -MMD
+#TARGET_CC = riscv32-unknown-elf-clang
+TARGET_AR = riscv32-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../target/simple_sim.sh ../../Snowflake-IoT.alt/ibex/build/lowrisc_ibex_ibex_simple_system_0/sim-verilator/Vibex_simple_system
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = banner blake2b boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fy-shuffle gcd-list hanoi heapsort kepler life longdiv mandelbrot max-subseq mersenne minspan natlog nr-solver parrondo pascal primal-test rabinkarp-search shortest-path sieve simple-grep skeleton strange topo-sort totient weekday
+TARGET_BMARKS = banner blake2b boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent hanoi heapsort kadane kepler knapsack life longdiv mandelbrot max-subseq mersenne minspan murmur-hash natlog nr-solver parrondo pascal primal-test qsort-demo rabinkarp-search regex-parser shortest-path sieve simple-grep skeleton strange topo-sort totient weekday
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), spike)
 TARGET_CC = riscv32-unknown-elf-gcc
@@ -85,27 +91,42 @@ TARGET_CONFIGURED = 0
 endif
 
 CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAGS)
-OBJS = $(LOCAL_OBJS) ../common/libmin.o ../common/libtarg.o
-LIBS = $(LOCAL_LIBS) $(TARGET_LIBS)
+OBJS = $(LOCAL_OBJS) ../common/libtarg.o
+__LIBMIN_SRCS = libmin_abs.c libmin_atof.c libmin_atoi.c libmin_atol.c libmin_ctype.c \
+  libmin_fabs.c libmin_fail.c libmin_floor.c libmin_getopt.c libmin_malloc.c libmin_mclose.c \
+  libmin_memcmp.c libmin_memcpy.c libmin_memmove.c libmin_memset.c libmin_meof.c libmin_mgetc.c \
+  libmin_mgets.c libmin_mopen.c libmin_mread.c libmin_msize.c libmin_pow.c libmin_printf.c \
+  libmin_putc.c libmin_puts.c libmin_qsort.c libmin_rand.c libmin_rempio2.c libmin_scalbn.c \
+  libmin_scanf.c libmin_sincos.c libmin_sqrt.c libmin_strcat.c libmin_strchr.c libmin_strcmp.c \
+  libmin_strcpy.c libmin_strcspn.c libmin_strdup.c libmin_strlen.c libmin_strncat.c libmin_strncmp.c \
+  libmin_strncpy.c libmin_strpbrk.c libmin_strrchr.c libmin_strspn.c libmin_strstr.c libmin_strcasestr.c \
+  libmin_strtok.c libmin_strtol.c libmin_success.c libmin_strncasecmp.c
+LIBMIN_SRCS = $(addprefix ../common/,$(basename $(__LIBMIN_SRCS)))
+LIBMIN_OBJS = $(addprefix ../common/,$(addsuffix .o,$(basename $(__LIBMIN_SRCS))))
+
+LIBS = ../common/libmin.a
 
 build: $(TARGET_EXE)
 
 %.o: %.c
-	$(TARGET_CC) $(CFLAGS) -I../common/ -o $(notdir $@) -c $<
+	$(TARGET_CC) $(CFLAGS) -I../common/ -o $@ -c $<
 
-$(TARGET_EXE): $(OBJS)
+../common/libmin.a: $(LIBMIN_OBJS)
+	$(TARGET_AR) rcs ../common/libmin.a $(LIBMIN_OBJS)
+
+$(TARGET_EXE): $(OBJS) $(LIBS)
 ifeq ($(TARGET), host)
-	$(TARGET_CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
+	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), standalone)
-	$(TARGET_CC) $(CFLAGS) -o $@ $(notdir $^) $(LIBS)
+	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), simple)
-	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $(notdir $^) ../target/simple-crt0.S -o $@ $(LIBS)
+	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else
 	$(error MODE is not defined (add: TARGET={host|sa}).)
 endif
 
 clean:
-	rm -f $(PROG).host $(PROG).sa $(PROG).elf *.o core mem.out *.log FOO $(LOCAL_CLEAN) $(TARGET_CLEAN)
+	rm -f $(PROG).host $(PROG).sa $(PROG).elf *.o ../common/*.o ../common/libmin.a *.d ../common/*.d core mem.out *.log FOO $(LOCAL_CLEAN) $(TARGET_CLEAN)
 
 
 #

@@ -17,9 +17,6 @@ char getDownLeft(int x, int y);
 char getDownRight(int x, int y);
 void sleep(unsigned int mseconds);
 
-#define TRUE	1
-#define FALSE	0
-
 #define MS_DELAY	1
 #define GRID_WIDTH	70
 #define GRID_HEIGHT	22
