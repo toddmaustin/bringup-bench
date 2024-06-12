@@ -3,3 +3,4 @@
 #define X(s)S(s)
 #define S(s)#s
 B(X(B(x)))
+
