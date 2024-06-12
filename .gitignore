@@ -10,3 +10,4 @@ FOO
 *.na
 *.log
 ibex_simple_system_pcount.csv
+target/simple_mmio_plugin.so

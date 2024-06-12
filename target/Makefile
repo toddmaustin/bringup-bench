@@ -1,5 +1,5 @@
 CXX = g++
-SPIKE_DIR = ../../riscv-isa-sim/
+SPIKE_DIR = ../../../riscv-isa-sim/
 
 CFLAGS = -Wall -Werror -g -I $(SPIKE_DIR)
 
