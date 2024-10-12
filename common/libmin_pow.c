@@ -148,7 +148,7 @@ libmin_pow(double x, double y)
 		}
 	}
 
-	ax = fabs(x);
+	ax = libmin_fabs(x);
 	/* special value of x */
 	if (lx == 0) {
 		if (ix == 0x7ff00000 || ix == 0 || ix == 0x3ff00000) { /* x is +-0,+-inf,+-1 */

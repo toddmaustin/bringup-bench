@@ -141,6 +141,9 @@ size_t libmin_mread(void *ptr, size_t size, MFILE *mfile);
 /* get a string from the in-memory file */
 char *libmin_mgets(char *s, size_t size, MFILE *mfile);
 
+/* get a line from the in-memory file */
+int libmin_getline(char **s, size_t *n, MFILE *f);
+
 /* read a character from the in-memory file */
 int libmin_mgetc(MFILE *mfile);
 
@@ -290,15 +293,57 @@ do {                                              \
 
 #define DBL_EPSILON 2.22044604925031308085e-16
 
+#define FP_NAN       0
+#define FP_INFINITE  1
+#define FP_ZERO      2
+#define FP_SUBNORMAL 3
+#define FP_NORMAL    4
+
+static __inline unsigned __FLOAT_BITS(float __f)
+{
+	union {float __f; unsigned __i;} __u;
+	__u.__f = __f;
+	return __u.__i;
+}
+static __inline unsigned long long __DOUBLE_BITS(double __f)
+{
+	union {double __f; unsigned long long __i;} __u;
+	__u.__f = __f;
+	return __u.__i;
+}
+
+static __inline int __fpclassify(double x)
+{
+	union {double f; uint64_t i;} u = {x};
+	int e = u.i>>52 & 0x7ff;
+	if (!e) return u.i<<1 ? FP_SUBNORMAL : FP_ZERO;
+	if (e==0x7ff) return u.i<<12 ? FP_NAN : FP_INFINITE;
+	return FP_NORMAL;
+}
+
+#define libmin_isfinite(x) ( \
+	sizeof(x) == sizeof(float) ? (__FLOAT_BITS(x) & 0x7fffffff) < 0x7f800000 : \
+	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & -1ULL>>1) < 0x7ffULL<<52 : \
+	__fpclassify(x) > FP_INFINITE)
+
+#define libmin_isnan(x) ( \
+	sizeof(x) == sizeof(float) ? (__FLOAT_BITS(x) & 0x7fffffff) > 0x7f800000 : \
+	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & (uint64_t)-1>>1) > (uint64_t)0x7ff<<52 : \
+	__fpclassify(x) == FP_NAN)
+
+
 double libmin_floor(double x);
 double libmin_scalbn(double x, int n);
 double libmin_cos(double x);
 double libmin_sin(double x);
-double fabs(double x);
+double libmin_fabs(double x);
+float libmin_fabsf(float x);
 double libmin_pow(double x, double y);
 double libmin_sqrt(double x);
-
+double libmin_exp(double x);
 int libmin_abs(int i);
+
+#define libmin_fmax(a,b)   (((a) > (b)) ? (a) : (b))
 
 /* internal mathlib interfaces */
 int __rem_pio2_large(double *x, double *y, int e0, int nx, int prec);

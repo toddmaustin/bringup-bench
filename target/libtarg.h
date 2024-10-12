@@ -45,6 +45,7 @@
 
 /* size type */
 typedef __SIZE_TYPE__   size_t;
+typedef signed __SIZE_TYPE__   ssize_t;
 
 /* signed */
 typedef __INT8_TYPE__   int8_t;
@@ -74,6 +75,7 @@ typedef __UINTPTR_TYPE__ uintptr_t;
 #ifdef notdef
 /* size type */
 typedef unsigned long         size_t;
+typedef signed long           ssize_t;
 #endif /* notdef */
 
 #ifdef notdef

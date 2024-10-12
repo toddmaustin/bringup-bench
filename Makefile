@@ -89,7 +89,7 @@ endif
 
 CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAGS)
 OBJS = $(LOCAL_OBJS) ../target/libtarg.o
-__LIBMIN_SRCS = libmin_abs.c libmin_atof.c libmin_atoi.c libmin_atol.c libmin_ctype.c \
+__LIBMIN_SRCS = libmin_abs.c libmin_atof.c libmin_atoi.c libmin_atol.c libmin_ctype.c libmin_exp.c \
   libmin_fabs.c libmin_fail.c libmin_floor.c libmin_getopt.c libmin_malloc.c libmin_mclose.c \
   libmin_memcmp.c libmin_memcpy.c libmin_memmove.c libmin_memset.c libmin_meof.c libmin_mgetc.c \
   libmin_mgets.c libmin_mopen.c libmin_mread.c libmin_msize.c libmin_pow.c libmin_printf.c \
