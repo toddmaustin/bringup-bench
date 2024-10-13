@@ -1,0 +1,10 @@
+Using 1 kilobytes for filter.
+
+True positives: 1047
+True negatives: 776
+False positives: 225
+False negatives: 0
+
+89.10% success rate
+
+Test PASSED.
