@@ -22,7 +22,6 @@ This command will first "clean" the benchmark directory and then "build" the app
 
 - **Simple_System target - TARGET=simple** - This target build the benchmarks to run in the RISC-V Simple_System simulation environment. Simple_system allows hardware developers to do SystemVerilog development on Verilator, with fast SystemVerilog simulation using the Simple_System target. The Simple_System target supports a character output device, plus a simple memory system. By default, this is an integer computation only mode, so any FP in the benchmarks will be emulated with GCC's soft-float support. To learn more about the RISC-V Simple_System, go here: https://github.com/lowRISC/ibex/blob/master/examples/simple_system/README.md. The current version of the Simple_System target was tested with: 1) Ibex "small" core, 2) Simple_System default devices and memory configuration.
 
-
 - **RISC-V Spike target = TARGET=spike** - This target is identicle to the "simple" target, as it build RISC-V binaries to be run on the Spike instruction set simulator (ISS). Spike is configured to support the Simple_system RISC-V I/O devices. This target is useful as a "golden" model to compare against execution traces occurring on a (perhaps buggy) RTL design target.
 
 Each benchmark support three standard Makefile targets: build, test, and clean
@@ -49,15 +48,22 @@ You should be able to adapt these targets to your own project-specific tasks.
 
 ## Benchmarks
 
+
 The Bringup-Bench benchmarks were selected for their minimal library and system dependencies, while still being interesting and non-trival codes.i Currently, the benchmark suite supports the following benchmarks. Note that the benchmarks tagged with (FP) require some form of floating point support, and the remaining benchmarks only require integer and string computation.
 
 - **ackermann** - Calculates the Ackermann function for a variety of input values.
 
 - **anagram** - Computes anagrams for the phrases in "input.txt" using the diction in the "words". This benchmark uses code-based read-only file access for multiple files.
 
+- **audio-codec** - Implements the A-Law compression algorithm for 16-bit PCM audio streams.
+
+- **avl-tree** - An AVL tree implmenetation with test code.
+
 - **banner** - Prints out a fancy vertical banner.
 
 - **blake2b** - Reference implementation and test of BLAKE2b, a cryptographic hash function based on Daniel J. Bernstein's ChaCha stream cipher.
+
+- **bloom-filter** - A Bloom filter implementation with test code that measures accuracy and false-positive rates.
 
 - **boyer-moore-search** - Performs a Boyer-Moore optimized search, given a test string and a large string to search.
 
@@ -81,15 +87,31 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **frac-calc** - Computes calculations on proper and improper fractions.
 
+- **fuzzy-match** - Performs fuzzy matching of strings (e.g., slightly misspelled strings will match), with test code.
+
 - **fy-shuffle** - A Fisher-Yates perfect random vector shuffle implementation.
 
 - **gcd-list** - Computes the greatest common divisor for a list of integers using the division algorithm.
+
+- **grad-descent** - Gradient descent with linear regression implementation, with test code.
+
+- **graph-tests** - A graph data-structure manipulation library with many tests.
 
 - **hanoi** - Solves the Tower's of Hanoi problem for a variable number of towers.
 
 - **heapsort** - Performs a heap sort on a randomly generated data set
 
+- **indirect-test** - A few specialized tests to validate indirect jumps, switch tables, and function returns.
+
+- **kadane** - Implementation of Kadane's algorithm, which finds find the maximum sum of a contiguous subarray.
+
 - **kepler** - Calculates an orbital path for a planetary body based on the Kepler parameters.
+
+- **k-means** - A K-Means clustering algorithm running on synthetic data.
+
+- **knapsack** - A knapsack packing algorithm running various tests.
+
+- **knights-tour** - A dynamic programming implementation of the Knight's Tour problem (i.e., one chess knight visits all board squares).
 
 - **life** - Conway's game of life simulation.
 
@@ -121,21 +143,33 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **rabinkarp-search** - Implements the very efficient Rabin-Karp data-oblivious string search algorithm. This search algorithm is O(N) in the length of the string searched.
 
+- **regex-parser** - A regular-expression parser running a battery of tests.
+
 - **rho-factor** - A Pollard's Rho integer factorization algorithm.
+
+- **rle-compress** - A run-length-encoding (RLE) compressor, with multiple tests.
 
 - **shortest-path** - Solves the all-pairs shortest path problem using the Floyd-Warshall algorithm.
 
 - **sieve** - Computes the prime values within a specified range, using the Sieve of Eratosthenes algorithmm
 
+- **simple-grep** - A simplified implementation of the Unix grep command.
+
 - **skeleton** - A minimal program, for use a starting point for new application ports and developments.
 
 - **spelt2num** - A spelled-out number to binary number converter.
 
+- **spirograph** - A spirograph simulation that produces a sequence of resulting data points.
+
 - **strange** - A strange C program that acts strangely in an expected manner.
+
+- **tiny-NN** - A deep neural net (DNN) implementation, with training and inference tests.
 
 - **topo-sort** - Tolologically sorts a graph and prints the result in breadth-first order.
 
 - **totient** - Calculates the Euler totient function phi.
+
+- **vectors-3d** - A 3D vector library running a battery of tests.
 
 - **weekday** - Given a year, month, and day, deterime the day of the week for the specified date.
 
