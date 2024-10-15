@@ -1,6 +1,6 @@
 Version 1.4
-  - added RISC-V Spike instruction set simulator (ISS) support, which is 100% compatible with the "simple" RTL target
-  - 12 new benchmarks added, from AI, compress, audio processing, data processing, etc.
+  - added RISC-V Spike instruction set simulator (ISS) support, which is 100% compatible with the "Simple_System" RTL target
+  - 12 new benchmarks added, from AI, compression, audio processing, data processing, etc.
   - many improvements to libmin, including a much more complete math library
 
 Version 1.3
