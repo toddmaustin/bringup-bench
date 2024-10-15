@@ -32,8 +32,8 @@ error:
 #
 BMARKS = ackermann anagram audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort indirect-test k-means kadane kepler knapsack knights-tour life longdiv lz-compress mandelbrot max-subseq mersenne minspan murmur-hash natlog nr-solver parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo quine rabinkarp-search regex-parser rho-factor rle-compress shortest-path sieve simple-grep skeleton spelt2num spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 
-OPT_CFLAGS = -O0 -g
-#OPT_CFLAGS = -O3 -g
+#OPT_CFLAGS = -O0 -g
+OPT_CFLAGS = -O3 -g
 
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
