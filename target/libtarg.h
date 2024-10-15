@@ -69,7 +69,7 @@ typedef __UINTPTR_TYPE__ uintptr_t;
 #define SCHAR_MAX 127
 #define SHRT_MAX  0x7fff
 #define INT_MAX  0x7fffffff
-#define LONG_MAX __LONG_MAX
+#define LONG_MAX 9223372036854775807L
 #define LLONG_MAX  0x7fffffffffffffffLL
 
 #ifdef notdef
@@ -103,6 +103,12 @@ typedef uint64_t              uintptr_t;
 #define INT_MIN       (-INT_MAX - 1)
 #define LONG_MIN      (-LONG_MAX - 1)
 #define LLONG_MIN     (-LLONG_MAX - 1)
+
+#define DBL_MAX        1.7976931348623157e+308
+#define DBL_MIN        2.2250738585072014e-308
+#define FLT_MAX        3.4028234663852886e+38
+#define FLT_MIN        1.1754943508222875e-38
+
 
 /* floating point */
 typedef float                 float_t;

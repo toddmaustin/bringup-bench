@@ -119,6 +119,7 @@ int main()
     }
     printPQ(&pq);
 
+    libmin_success();
     return 0;
 }
 

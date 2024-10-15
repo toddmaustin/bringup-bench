@@ -99,6 +99,8 @@ int
 main(void)
 {
     solveKT();
+
+    libmin_success();
     return 0;
 }
 

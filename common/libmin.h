@@ -62,6 +62,7 @@ void *libmin_memmove(void *dest, const void *src, size_t n);
 #ifndef TARGET_SILENT
 /* print a message with format FMT to the co-simulation console */
 int libmin_printf(char *fmt, ...);
+int libmin_snprintf(char *s, size_t size, char *fmt, ...);
 #else /* TARGET_SILENT */
 /* run silent */
 #define libmin_printf(FMT, ARGS...)	do { ; } while (0)
@@ -331,6 +332,9 @@ static __inline int __fpclassify(double x)
 	sizeof(x) == sizeof(double) ? (__DOUBLE_BITS(x) & (uint64_t)-1>>1) > (uint64_t)0x7ff<<52 : \
 	__fpclassify(x) == FP_NAN)
 
+#define M_PI		3.14159265358979323846	/* pi */
+#define NAN     (__builtin_nanf(""))
+
 
 double libmin_floor(double x);
 double libmin_scalbn(double x, int n);
@@ -342,6 +346,10 @@ double libmin_pow(double x, double y);
 double libmin_sqrt(double x);
 double libmin_exp(double x);
 int libmin_abs(int i);
+double libmin_acos(double x);
+double libmin_asin(double x);
+double libmin_atan2(double y, double x);
+double libmin_atan(double x);
 
 #define libmin_fmax(a,b)   (((a) > (b)) ? (a) : (b))
 

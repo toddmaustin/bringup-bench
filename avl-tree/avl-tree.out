@@ -1,0 +1,75 @@
+Start  -->  Finished
+.........................
+
+Going to delete the rootNode: 972168696
+success! new root is 995603468
+
+Going to delete leftMost child... found item: 124766229
+success! new root: 995603468
+
+Going to delete rightMost child... found item: 2032060776
+success! new root: 995603468
+
+Name11 -> 995603468, Balance -1
+Left: Name7 -> 606076108, Balance 1
+ Left: Name10 -> 535365453, Balance 0
+  Left: Name12 -> 272094241, Balance 0
+   Left: Name19 -> 124766229, Balance 1
+    Left: 
+    Right: Name20 -> 266106667, Balance 0
+     Left: 
+     Right: 
+   Right: Name14 -> 514825840, Balance -1
+    Left: Name23 -> 449617425, Balance 0
+     Left: 
+     Right: 
+    Right: 
+  Right: Name5 -> 605280572, Balance -1
+   Left: Name16 -> 588764002, Balance 0
+    Left: 
+    Right: 
+   Right: 
+ Right: Name18 -> 770909700, Balance -1
+  Left: Name1 -> 615236124, Balance 1
+   Left: 
+   Right: Name24 -> 695334297, Balance 0
+    Left: 
+    Right: 
+  Right: Name9 -> 776305894, Balance 0
+   Left: 
+   Right: 
+Right: Name8 -> 1398721121, Balance 1
+ Left: Name6 -> 1209526912, Balance 1
+  Left: Name22 -> 1108524190, Balance 0
+   Left: 
+   Right: 
+  Right: Name15 -> 1235731124, Balance 1
+   Left: 
+   Right: Name17 -> 1263887309, Balance 0
+    Left: 
+    Right: 
+ Right: Name2 -> 2017807180, Balance -2
+  Left: Name13 -> 1622971356, Balance 0
+   Left: Name21 -> 1421469273, Balance 0
+    Left: 
+    Right: 
+   Right: Name4 -> 1623863471, Balance 0
+    Left: 
+    Right: 
+  Right: Name0 -> 2032060776, Balance 0
+   Left: 
+   Right: 
+breadth of left tree: 5 right subtree: 5
+height of left subtree: 5 right subtree: 4
+
+Going to delete a node at depth (max depth 5): 3
+Found a node to delete with Name 'Name15' and Item 1235731124
+success! new root: 995603468
+
+Going to delete a node at depth (max depth 3): 1
+Found a node to delete with Name 'Name8' and Item 1398721121
+success! new root: 995603468
+
+Going to delete a node at depth (max depth 1): 0
+Found a node to delete with Name 'Name18' and Item 770909700
+success! new root: 995603468

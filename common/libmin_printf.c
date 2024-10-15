@@ -767,3 +767,17 @@ libmin_printf(char *fmt, ...)
   }
   return cnt;
 }
+
+int
+libmin_snprintf(char *s, size_t size, char *fmt, ...)
+{
+  va_list ap;
+
+  va_start(ap, fmt);
+  dopr(s, size, fmt, ap);
+  /* make sure the output string is terminated */
+  s[size-1] = '\0';
+  va_end(ap);
+  return libmin_strlen(s);
+}
+

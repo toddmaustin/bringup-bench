@@ -1,0 +1,8 @@
+vec(a) = (1)i + (2)j + (3)k
+vec(b) = (1)i + (1)j + (1)k
+|a| = 3.7417
+|b| = 1.7321
+Dot product: 6.000000
+Vector product vec(c) = (-1)i + (2)j + (-1)k
+The angle is 0.387597
+All tests passed!

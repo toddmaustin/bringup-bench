@@ -117,9 +117,9 @@ static int Proc_3 (struct record**);
 static int Proc_4 (void); /* without parameters */
 static int Proc_5 (void); /* without parameters */
 int PProc_7 (int, int, int*);
-int PProc_8 (int*, int(*)[50], int, int);
+int PProc_8 (Arr_1_Dim, Arr_2_Dim, int, int);
 Enumeration PFunc_1 (char, char);
-Boolean PFunc_2 (char*, char*);
+Boolean PFunc_2 (Str_30 Str_1_Par_Ref, Str_30 Str_2_Par_Ref);
 Boolean PFunc_3 (Enumeration);
 int PProc_6 (Enumeration, Enumeration*);
 
@@ -405,9 +405,9 @@ static int Proc_3 (struct record**);
 static int Proc_4 (void); /* without parameters */
 static int Proc_5 (void); /* without parameters */
 int PProc_7 (int, int, int*);
-int PProc_8 (int*, int(*)[50], int, int);
+int PProc_8 (Arr_1_Dim, Arr_2_Dim, int, int);
 Enumeration PFunc_1 (char, char);
-Boolean PFunc_2 (char*, char*);
+Boolean PFunc_2 (Str_30 Str_1_Par_Ref, Str_30 Str_2_Par_Ref);
 Boolean PFunc_3 (Enumeration);
 int PProc_6 (Enumeration, Enumeration*);
 

@@ -111,7 +111,7 @@ MFILE *minput = &input;
 
 /* limits */
 #define SBUFF 60 /**< String buffer */
-#define MAX 11
+#define MYMAX 11
 
 /* ---------------------------------------------------------------------- */
 /* globals */
@@ -124,12 +124,12 @@ static int verb = 0; /**< verbose level, global within the file */
 void help(void); /* print some help */
 void copyr(void); /* print version and copyright information */
 void frac_init(char exp[SBUFF]); /* global initialization function */
-void divtokens(char exp[SBUFF], int frac[MAX]); /* break the string in tokens */
-void avaliatokens(char *aux[SBUFF],  int frac[MAX], int i); /* break the string in tokens */
-void misto(int mist, int frac[MAX], int i); /* fraction to mixed number */
-float calcula(int frac[MAX], int r[MAX]); /* computes the fraction */
-void simplifica(int r[MAX]); /* simplifies the result */
-void print(char exp[SBUFF], int r[MAX], float dec, int frac[MAX]); /* print the results */
+void divtokens(char exp[SBUFF], int frac[MYMAX]); /* break the string in tokens */
+void avaliatokens(char *aux[SBUFF],  int frac[MYMAX], int i); /* break the string in tokens */
+void misto(int mist, int frac[MYMAX], int i); /* fraction to mixed number */
+float calcula(int frac[MYMAX], int r[MYMAX]); /* computes the fraction */
+void simplifica(int r[MYMAX]); /* simplifies the result */
+void print(char exp[SBUFF], int r[MYMAX], float dec, int frac[MYMAX]); /* print the results */
 
 /* main */
 /* ---------------------------------------------------------------------- */
@@ -170,8 +170,8 @@ int main(int argc, char *argv[])
 {
     int opt; /* return from getopt() */
     char exp[SBUFF]; /* expression */
-    int frac[MAX];
-    int r[MAX];
+    int frac[MYMAX];
+    int r[MYMAX];
     float dec;
     char rep[SBUFF];
     int repi = 1;
@@ -320,7 +320,7 @@ void frac_init(char exp[SBUFF])
 }
 
 /* ---------------------------------------------------------------------- */
-void divtokens(char exp[SBUFF],  int frac[MAX]) /* break the string in tokens */
+void divtokens(char exp[SBUFF],  int frac[MYMAX]) /* break the string in tokens */
 {
     char *token; /* token pointer */
     char exp2[SBUFF];
@@ -337,7 +337,7 @@ void divtokens(char exp[SBUFF],  int frac[MAX]) /* break the string in tokens */
         i++;
     }
 
-    frac[MAX - 2] = i; /* number of elements of the expression */
+    frac[MYMAX - 2] = i; /* number of elements of the expression */
 
     avaliatokens(aux, frac, i);
 
@@ -345,7 +345,7 @@ void divtokens(char exp[SBUFF],  int frac[MAX]) /* break the string in tokens */
 }
 
 /* ---------------------------------------------------------------------- */
-void avaliatokens(char *aux[SBUFF],  int frac[MAX], int i) /* analyzes the tokens, to check the fractions */
+void avaliatokens(char *aux[SBUFF],  int frac[MYMAX], int i) /* analyzes the tokens, to check the fractions */
 {
     int j, k = 0;
     char *token2;
@@ -362,22 +362,22 @@ void avaliatokens(char *aux[SBUFF],  int frac[MAX], int i) /* analyzes the token
     {
         if((libmin_strcmp(aux[j], "+") == 0))
         {
-            frac[MAX - 1] = 1;
+            frac[MYMAX - 1] = 1;
             j++;
         }
         if((libmin_strcmp(aux[j], "-") == 0))
         {
-            frac[MAX - 1] = 2;
+            frac[MYMAX - 1] = 2;
             j++;
         }
         if((libmin_strcmp(aux[j], "*") == 0))
         {
-            frac[MAX - 1] = 3;
+            frac[MYMAX - 1] = 3;
             j++;
         }
         if((libmin_strcmp(aux[j], "/") == 0))
         {
-            frac[MAX - 1] = 4;
+            frac[MYMAX - 1] = 4;
             j++;
         }
 
@@ -395,15 +395,15 @@ void avaliatokens(char *aux[SBUFF],  int frac[MAX], int i) /* analyzes the token
 }
 
 /* ---------------------------------------------------------------------- */
-void misto(int mist, int frac[MAX], int i) /* fraction to mixed number */
+void misto(int mist, int frac[MYMAX], int i) /* fraction to mixed number */
 {
     /* 2 fractions no mist */
     if(i == 3)
     {
-        frac[MAX - 2] = frac[0]; /* num 1 */
-        frac[MAX - 3] = frac[1]; /* den 1 */
-        frac[MAX - 4] = frac[2]; /* num 2 */
-        frac[MAX - 5] = frac[3]; /* den 2*/ 
+        frac[MYMAX - 2] = frac[0]; /* num 1 */
+        frac[MYMAX - 3] = frac[1]; /* den 1 */
+        frac[MYMAX - 4] = frac[2]; /* num 2 */
+        frac[MYMAX - 5] = frac[3]; /* den 2*/ 
         return;
     }
     /* 1 mist first fraction */
@@ -413,10 +413,10 @@ void misto(int mist, int frac[MAX], int i) /* fraction to mixed number */
         frac[1] = frac[2]; /* den */
         frac[2] = frac[3]; /* num */
         frac[3] = frac[4]; /* den */
-        frac[MAX - 2] = frac[0]; /* num 1 */
-        frac[MAX - 3] = frac[1]; /* den 1 */
-        frac[MAX - 4] = frac[2]; /* num 2 */
-        frac[MAX - 5] = frac[3]; /* den 2*/ 
+        frac[MYMAX - 2] = frac[0]; /* num 1 */
+        frac[MYMAX - 3] = frac[1]; /* den 1 */
+        frac[MYMAX - 4] = frac[2]; /* num 2 */
+        frac[MYMAX - 5] = frac[3]; /* den 2*/ 
 
         return;
     }
@@ -425,10 +425,10 @@ void misto(int mist, int frac[MAX], int i) /* fraction to mixed number */
     {
         frac[2] = frac[4] * frac[2] + frac[3];
         frac[3] = frac[4];
-        frac[MAX - 2] = frac[0]; /* num 1 */
-        frac[MAX - 3] = frac[1]; /* den 1 */
-        frac[MAX - 4] = frac[2]; /* num 2 */
-        frac[MAX - 5] = frac[3]; /* den 2*/ 
+        frac[MYMAX - 2] = frac[0]; /* num 1 */
+        frac[MYMAX - 3] = frac[1]; /* den 1 */
+        frac[MYMAX - 4] = frac[2]; /* num 2 */
+        frac[MYMAX - 5] = frac[3]; /* den 2*/ 
         return;
     }
     /* 2 mist */
@@ -438,22 +438,22 @@ void misto(int mist, int frac[MAX], int i) /* fraction to mixed number */
         frac[1] = frac[2]; /* den */
         frac[2] = frac[5] * frac[3] + frac[4]; /* num */
         frac[3] = frac[5]; /* den */
-        frac[MAX - 2] = frac[0]; /* num 1 */
-        frac[MAX - 3] = frac[1]; /* den 1 */
-        frac[MAX - 4] = frac[2]; /* num 2 */
-        frac[MAX - 5] = frac[3]; /* den 2*/ 
+        frac[MYMAX - 2] = frac[0]; /* num 1 */
+        frac[MYMAX - 3] = frac[1]; /* den 1 */
+        frac[MYMAX - 4] = frac[2]; /* num 2 */
+        frac[MYMAX - 5] = frac[3]; /* den 2*/ 
         return;
     }
     return;
 }
 
 /* ---------------------------------------------------------------------- */
-float calcula(int frac[MAX], int r[MAX]) /* computes the fraction */
+float calcula(int frac[MYMAX], int r[MYMAX]) /* computes the fraction */
 {
     float dec = 0, a, b;
 
     r[0] = frac[1] * frac[3]; /* mmc */
-    switch(frac[MAX - 1]) /* operation */
+    switch(frac[MYMAX - 1]) /* operation */
     {
         case 1: /* + */
             r[1] = (r[0] / frac[1]) * frac[0] + (r[0] / frac[3]) * frac[2];
@@ -490,7 +490,7 @@ float calcula(int frac[MAX], int r[MAX]) /* computes the fraction */
 }
 
 /* ---------------------------------------------------------------------- */
-void simplifica(int r[MAX]) /* simplifies the result */
+void simplifica(int r[MYMAX]) /* simplifies the result */
 {
     int i;
     int aux1, aux2;
@@ -498,7 +498,7 @@ void simplifica(int r[MAX]) /* simplifies the result */
     aux1 = r[1];
     aux2 = r[0];
 
-    for(i = 1; i < MAX + 2; i++)
+    for(i = 1; i < MYMAX + 2; i++)
     {
         if(aux1%i == 0 && aux2%i == 0) /* simplified */
         {
@@ -513,20 +513,20 @@ void simplifica(int r[MAX]) /* simplifies the result */
 }
 
 /* ---------------------------------------------------------------------- */
-void print(char exp[SBUFF], int r[MAX], float dec, int frac[MAX]) /* print the results */
+void print(char exp[SBUFF], int r[MYMAX], float dec, int frac[MYMAX]) /* print the results */
 {
     char op;
 
-    if(frac[MAX - 1] == 1)
+    if(frac[MYMAX - 1] == 1)
         op = '+';
-    if(frac[MAX - 1] == 2)
+    if(frac[MYMAX - 1] == 2)
         op = '-';
-    if(frac[MAX - 1] == 3)
+    if(frac[MYMAX - 1] == 3)
         op = '*';
-    if(frac[MAX - 1] == 4)
+    if(frac[MYMAX - 1] == 4)
         op = '/';
     
-    libmin_printf("\nEXPRESSION: %sFRACTION: %d/%d %c %d/%d\nINTERMEDIATE: %d/%d\nRESULT: %d/%d\nDECIMAL: %.3f\n", exp, frac[MAX - 2], frac[MAX - 3], op, frac[MAX - 4], frac[MAX - 5], r[1], r[0], r[3], r[4], dec);
+    libmin_printf("\nEXPRESSION: %sFRACTION: %d/%d %c %d/%d\nINTERMEDIATE: %d/%d\nRESULT: %d/%d\nDECIMAL: %.3f\n", exp, frac[MYMAX - 2], frac[MYMAX - 3], op, frac[MYMAX - 4], frac[MYMAX - 5], r[1], r[0], r[3], r[4], dec);
 
     return;
 }

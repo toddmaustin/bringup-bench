@@ -330,7 +330,7 @@ main(void)
 
 	/* Normalize M to lie between 0 and PI */
 	sign = M > 0 ? 1.0 : -1.0;
-	M = fabs(M)/(2*PI);
+	M = libmin_fabs(M)/(2*PI);
 	M = (M - libmin_floor(M))*2*PI*sign;
 	sign = 1.0;
 	if(M > PI){
@@ -339,7 +339,7 @@ main(void)
 	}
 	
 	/* Do selected calculation, and quit when accuracy is bettered. */
-	while(fabs(E_old - (E = method(E_old,e,M,0))) >= derror){
+	while(libmin_fabs(E_old - (E = method(E_old,e,M,0))) >= derror){
 		E_old = E;
 		libmin_printf("n = %d\tE = %f\n",n++,sign*E);
 	}
@@ -445,17 +445,17 @@ kepler(double *E, double M, double e, double my_derror, int m)
 
 	/* Normalize M to lie between 0 and PI */
 	sign = M > 0 ? 1.0 : -1.0;
-	M = fabs(M)/(2*PI);
+	M = libmin_fabs(M)/(2*PI);
 	M = (M - libmin_floor(M))*2*PI*sign;
 	sign = M > 0 ? 1.0 : -1.0;
-	M = fabs(M);
+	M = libmin_fabs(M);
 	if(M > PI){
 		M = 2*PI - M;
 		sign = -1.0;
 	}
 	
 	/* Do selected calculation, and quit when accuracy is bettered. */
-	while(fabs(E_old - (*E = method(E_old,e,M,0))) >= my_derror){
+	while(libmin_fabs(E_old - (*E = method(E_old,e,M,0))) >= my_derror){
 		E_old = *E;
 		count++;
 	}

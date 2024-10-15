@@ -341,6 +341,7 @@ main(void)
 
     towers_test();
 
+    libmin_success();
     return 0;
 }
 

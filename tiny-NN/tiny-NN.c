@@ -9,9 +9,9 @@
  */
 
 //general NN params
-#define NEURON_COUNT 200
-#define SAMPLE_COUNT 200
-#define MAX_ITERATIONS 3
+#define NEURON_COUNT 20
+#define SAMPLE_COUNT 20
+#define MAX_ITERATIONS 10
 
 #include "libmin.h"
 
@@ -207,6 +207,8 @@ main(void)
 {
   libmin_srand(42);
 	train(0.005, 0.01, 1.0, 0.4);
+
 	libmin_success();
+  return 0;
 }
 
