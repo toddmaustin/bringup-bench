@@ -1,9 +1,11 @@
 #include <riscv/mmio_plugin.h>
 #include <cstdio>
 
-#define SIM_CTRL_BASE 0x20000
-#define SIM_CTRL_OUT 0x0
-#define SIM_CTRL_CTRL 0x8
+#define SIM_CTRL_BASE   0x20000
+#define SIM_CTRL_OUT    0x00
+#define SIM_CTRL_CTRL   0x08
+#define SIM_CTRL_HIHASH 0x10
+#define SIM_CTRL_LOHASH 0x14
 
 struct simple_mmio_plugin
 {
@@ -40,10 +42,24 @@ struct simple_mmio_plugin
       fprintf(stdout, "%c", (char)*(uint32_t *)bytes);
       return true;
     }
-    if (addr == SIM_CTRL_CTRL && len == sizeof(uint32_t))
+    else if (addr == SIM_CTRL_CTRL && len == sizeof(uint32_t))
     {
       // terminate simulation
       exit((*(uint32_t *)bytes) - 1);
+    }
+    else if (addr == SIM_CTRL_HIHASH && len == sizeof(uint32_t))
+    {
+      // print the execution hash
+      uint32_t __hashval = *(uint32_t *)bytes;
+      fprintf(stderr, "** hashval = 0x%08x", __hashval);
+      return true;
+    }
+    else if (addr == SIM_CTRL_LOHASH && len == sizeof(uint32_t))
+    {
+      // print the execution hash
+      uint32_t __hashval = *(uint32_t *)bytes;
+      fprintf(stderr, "%08x\n", __hashval);
+      return true;
     }
     else
     {

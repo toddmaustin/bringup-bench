@@ -1,6 +1,6 @@
 define HELP_TEXT
 Please choose one of the following targets:
-  run-tests      - clean, build, and test all benchmarks for the specified TARGET mode (host,standalone,simple)
+  run-tests      - clean, build, and test all benchmarks for the specified TARGET mode (host,standalone,simple,spike)
   all-clean      - clean all benchmark directories for all TARGET modes
   spike-build    - build RISC-V Spike simulator extensions for bringup-bench
 
@@ -13,6 +13,7 @@ Note that benchmark builds must be parameterized with the build MODE, such as:
   TARGET=host       - build benchmarks to run on a Linux host
   TARGET=standalone - build benchmarks to run in standalone mode (a virtual bare-metal CPU)
   TARGET=simple     - build benchmarks to run on the RISC-V Simple_System simulation testing environment
+  TARGET=spike      - build benchmarks to run on the RISC-V Spike Instruction Set Simulator (ISS) with Simple_System devices
 
 Example benchmark builds:
   make TARGET=host clean build test
@@ -59,6 +60,30 @@ TARGET_EXE = $(PROG).sa
 TARGET_CLEAN =
 TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
+else ifeq ($(TARGET), hashalone-host)
+TARGET_CC = gcc
+#TARGET_CC = clang
+TARGET_AR = ar
+TARGET_CFLAGS = -DTARGET_HAHOST
+TARGET_LIBS =
+TARGET_SIM =
+TARGET_DIFF = diff
+TARGET_EXE = $(PROG).hahost
+TARGET_CLEAN =
+TARGET_BMARKS = audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort indirect-test k-means kadane kepler knapsack knights-tour life longdiv mandelbrot max-subseq mersenne minspan murmur-hash natlog nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_CONFIGURED = 1
+else ifeq ($(TARGET), hashalone-spike)
+TARGET_CC = riscv32-unknown-elf-gcc
+#TARGET_CC = riscv32-unknown-elf-clang
+TARGET_AR = riscv32-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_HASPIKE -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
+TARGET_LIBS = -lgcc
+TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x40000 --device=simple_mmio_plugin,0x20000,x
+TARGET_EXE = $(PROG).haspike
+TARGET_CONFIGURED = 1
+TARGET_DIFF = diff
+TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
+TARGET_BMARKS = audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort indirect-test k-means kadane kepler knapsack knights-tour life longdiv mandelbrot max-subseq mersenne minspan murmur-hash natlog nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
@@ -92,7 +117,7 @@ CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAG
 OBJS = $(LOCAL_OBJS) ../target/libtarg.o
 __LIBMIN_SRCS = libmin_abs.c libmin_acos.c libmin_asin.c libmin_atan.c libmin_atof.c \
   libmin_atoi.c libmin_atol.c libmin_ctype.c libmin_exp.c \
-  libmin_fabs.c libmin_fail.c libmin_floor.c libmin_getopt.c libmin_malloc.c libmin_mclose.c \
+  libmin_fabs.c libmin_fail.c libmin_floor.c libmin_fnv1a.c libmin_getopt.c libmin_malloc.c libmin_mclose.c \
   libmin_memcmp.c libmin_memcpy.c libmin_memmove.c libmin_memset.c libmin_meof.c libmin_mgetc.c \
   libmin_mgets.c libmin_mopen.c libmin_mread.c libmin_msize.c libmin_pow.c libmin_printf.c \
   libmin_putc.c libmin_puts.c libmin_qsort.c libmin_rand.c libmin_rempio2.c libmin_scalbn.c \
@@ -118,6 +143,10 @@ ifeq ($(TARGET), host)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), standalone)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), hashalone-host)
+	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), hashalone-spike)
+	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), simple)
 	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike)
@@ -127,7 +156,7 @@ else
 endif
 
 clean:
-	rm -f $(PROG).host $(PROG).sa $(PROG).elf *.o ../common/*.o ../target/*.o ../common/libmin.a *.d ../common/*.d core mem.out *.log FOO $(LOCAL_CLEAN) $(TARGET_CLEAN)
+	rm -f $(PROG).host $(PROG).sa $(PROG).elf $(PROG).hahost $(PROG).haspike *.o ../common/*.o ../target/*.o ../common/libmin.a *.d ../common/*.d core mem.out *.log FOO $(LOCAL_CLEAN) $(TARGET_CLEAN)
 
 
 #
@@ -152,7 +181,7 @@ endif
 
 clean-all all-clean:
 	@for _BMARK in $(BMARKS) ; do \
-	  for _TARGET in host standalone simple spike ; do \
+	  for _TARGET in host standalone hashalone-host simple spike hashalone-host hashalone-spike ; do \
 	    cd $$_BMARK ; \
 	    echo "--------------------------------" ; \
 	    echo "Cleaning "$$_BMARK" in TARGET="$$_TARGET ; \
@@ -164,3 +193,4 @@ clean-all all-clean:
 
 spike-build:
 	$(MAKE) -C target clean build
+

@@ -364,4 +364,22 @@ int __rem_pio2(double x, double *y);
 #define MIN(X, Y) (((X) < (Y)) ? (X) : (Y))
 #define MAX(X, Y) (((X) > (Y)) ? (X) : (Y))
 
+/* cryptography and crypto-related functions */
+
+/*
+ * 32 bit FNV-1 and FNV-1a non-zero initial basis
+ * NOTE: The FNV-1a initial basis is the same value as FNV-1 by definition.
+ */
+#define FNV32A_INIT ((uint32_t)0x811c9dc5)
+
+uint32_t libmin_fnv32a(void *buf, size_t len, uint32_t hashval);
+
+/*
+ * 64 bit FNV-1 non-zero initial basis
+ * NOTE: The FNV-1a initial basis is the same value as FNV-1 by definition.
+ */
+#define FNV64a_INIT ((uint64_t)0xcbf29ce484222325ULL)
+
+uint64_t libmin_fnv64a(void *buf, size_t len, uint64_t hashval);
+
 #endif /* LIBMIN_H */

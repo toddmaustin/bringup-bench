@@ -10,13 +10,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #define MAX_SPIN  10000     /* make this larger for a real hardware platform */
-#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
+#elif defined(TARGET_HAHOST)
+/* hashalone-host */
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_SPIN  10000     /* make this larger for a real hardware platform */
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_HASPIKE)
 #include <stdlib.h>
 
 /* simple system MMAP'ed registers */
-#define SIMPLE_CTRL_BASE 0x20000
-#define SIMPLE_CTRL_OUT 0x0
-#define SIMPLE_CTRL_CTRL 0x8
+#define SIMPLE_CTRL_BASE   0x20000
+#define SIMPLE_CTRL_OUT    0x00
+#define SIMPLE_CTRL_CTRL   0x08
+#define SIMPLE_CTRL_HIHASH 0x10
+#define SIMPLE_CTRL_LOHASH 0x14
 
 /* MMAP'ed register accessors */
 #define SIMPLE_DEV_WRITE(addr, val) (*((volatile uint32_t *)(addr)) = val)
@@ -91,6 +98,13 @@ simple_timer_handler(void)
   while(1);
 }
 
+extern inline void
+simple_output_hash(uint64_t __hashval)
+{
+  SIMPLE_DEV_WRITE(SIMPLE_CTRL_BASE + SIMPLE_CTRL_HIHASH, (uint32_t)(__hashval >> 32));
+  SIMPLE_DEV_WRITE(SIMPLE_CTRL_BASE + SIMPLE_CTRL_LOHASH, (uint32_t)__hashval);
+}
+
 #else /* undefined target */
 #error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
@@ -100,6 +114,10 @@ simple_timer_handler(void)
 static uint8_t __outbuf[MAX_OUTBUF];
 static uint32_t __outbuf_ptr = 0;
 #endif /* TARGET_SA */
+
+#if defined(TARGET_HAHOST) || defined(TARGET_HASPIKE)
+uint64_t __hashval = FNV64a_INIT;
+#endif /* TARGET_HAHOST */
 
 /* benchmark completed successfully */
 void
@@ -121,6 +139,16 @@ SPIN_SUCCESS_ADDR:
 
   /* exit if we ever get here */
   exit(0);
+#elif defined(TARGET_HAHOST)
+  /* print the output hash value */
+  fprintf(stderr, "** hashval = 0x%016lx\n", __hashval);
+
+  /* exit if we ever get here */
+  exit(0);
+#elif defined(TARGET_HASPIKE)
+  /* print the output hash value */
+  simple_output_hash(__hashval);
+  simple_halt();
 #elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   // libmin_printf("EXIT: success\n");
   simple_halt();
@@ -144,7 +172,10 @@ SPIN_FAIL_ADDR:
     goto SPIN_FAIL_ADDR;
   /* exit if we ever get here */
   exit(code);
-#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
+#elif defined(TARGET_HAHOST)
+  /* exit if we ever get here */
+  exit(code);
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_HASPIKE)
   // libmin_printf("EXIT: fail code = %d\n", code);
   simple_halt();
 #else
@@ -163,6 +194,12 @@ libtarg_putc(char c)
   if (__outbuf_ptr >= MAX_OUTBUF)
     libtarg_fail(1);
   __outbuf[__outbuf_ptr++] = c;
+#elif defined(TARGET_HAHOST)
+  fputc(c, stdout);
+  __hashval = libmin_fnv64a(&c, 1, __hashval);
+#elif defined(TARGET_HASPIKE)
+  simple_putchar(c);
+  __hashval = libmin_fnv64a(&c, 1, __hashval);
 #elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   simple_putchar(c);
 #else
@@ -176,7 +213,13 @@ static uint8_t __heap[MAX_HEAP];
 static uint32_t __heap_ptr = 0;
 #endif /* TARGET_SA */
 
-#if defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
+#ifdef TARGET_HAHOST
+#define MAX_HEAP    (8*1024*1024)
+static uint8_t __heap[MAX_HEAP];
+static uint32_t __heap_ptr = 0;
+#endif /* TARGET_HAHOST */
+
+#if defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_HASPIKE)
 #define MAX_HEAP    (32*1024)
 static uint8_t __heap[MAX_HEAP];
 static uint32_t __heap_ptr = 0;
@@ -191,7 +234,7 @@ libtarg_sbrk(size_t inc)
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif /* __clang__ */
   return sbrk(inc);
-#elif defined(TARGET_SA) || defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
+#elif defined(TARGET_SA) || defined(TARGET_HAHOST) || defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_HASPIKE)
   uint8_t *ptr = &__heap[__heap_ptr];
   if (inc == 0)
     return ptr;

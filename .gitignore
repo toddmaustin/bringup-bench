@@ -3,6 +3,9 @@ FOO
 *.a
 *.d
 *.host
+*.hahost
+*.spike
+*.haspike
 *.sa
 *.elf
 *.swp
