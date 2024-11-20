@@ -18,11 +18,15 @@ This command will first "clean" the benchmark directory and then "build" the app
 
 - **Linux host target - TARGET=host** - This target builds the benchmarks to run as a Linux application.
 
-- **Standalone target - TARGET=sa** - This target builds the benchmarks to run as a memory-only standalone application. For this target, all benchmark output is spooled to a pre-defined memory buffer, and the libmin\_success() and libmin\_fail() intefaces result in the application spinning at a specific code address. This mode is designed for bringing up CPUs and accelerators that do not yet have any OS or device I/O support. See common/libtarg.c for the internal intefaces used to spool program output to internal buffers. This particular target is useful in bringing up CPUs when they still have no I/O support, simply spool benchmark output to DRAM, and dump the DRAM after the benchmark completes.
+- **Standalone target - TARGET=standalone** - This target builds the benchmarks to run as a memory-only standalone application. For this target, all benchmark output is spooled to a pre-defined memory buffer, and the libmin\_success() and libmin\_fail() intefaces result in the application spinning at a specific code address. This mode is designed for bringing up CPUs and accelerators that do not yet have any OS or device I/O support. See common/libtarg.c for the internal intefaces used to spool program output to internal buffers. This particular target is useful in bringing up CPUs when they still have no I/O support, simply spool benchmark output to DRAM, and dump the DRAM after the benchmark completes.
 
 - **Simple_System target - TARGET=simple** - This target build the benchmarks to run in the RISC-V Simple_System simulation environment. Simple_system allows hardware developers to do SystemVerilog development on Verilator, with fast SystemVerilog simulation using the Simple_System target. The Simple_System target supports a character output device, plus a simple memory system. By default, this is an integer computation only mode, so any FP in the benchmarks will be emulated with GCC's soft-float support. To learn more about the RISC-V Simple_System, go here: https://github.com/lowRISC/ibex/blob/master/examples/simple_system/README.md. The current version of the Simple_System target was tested with: 1) Ibex "small" core, 2) Simple_System default devices and memory configuration.
 
 - **RISC-V Spike target = TARGET=spike** - This target is identical to the "simple" target, as it build RISC-V binaries to be run on the Spike instruction set simulator (ISS). Spike is configured to support the Simple_system RISC-V I/O devices. This target is useful as a "golden" model to compare against execution traces occurring on a (perhaps buggy) RTL design target.
+
+- **HashAlone Host target - TARGET=hashalone-host** - This target builds the benchmarks to run on x86/Linux with a hashing output device. Instead of producing output, hash-alone binaries simply send the program output to a hash function. When the program completes it prints the final value of the hash function, which is cryptographically unique for every possible output of the program.
+
+- **HashAlone Spike target - TARGET=hashalone-spike** - This target builds the benchmarks to run on bare-metal RISC-V with a hashing output device. Instead of producing output, hash-alone binaries simply send the program output to a hash function. When the program completes it prints the final value of the hash function, which is cryptographically unique for every possible output of the program. Use this target to enhance your "golden model" to support reference hash-alone signatures for the bringup-bench benchmarks.
 
 Each benchmark support three standard Makefile targets: build, test, and clean
 
@@ -249,6 +253,10 @@ char *libmin_mgets(char *s, size_t size, MFILE *mfile);
 /* read a character from the in-memory file */
 int libmin_mgetc(MFILE *mfile);
 ```
+
+## Hash-Alone execution
+
+Hash-alone execution targets (e.g., hashalone-host, hashalone-spike) allow pure bare-metal benchmark execution. As such, benchmarks configured for the hash-alone targets can execution completely and verify their results with NO output or input devices. To run the benchmark, simply load its binary and jump to the start address specified in the ELF binary. When the libmin_success() interface is called, simply spin to terminate the program. At completion, the memory variable "__hashval" contains a hash signature of the output of the program as it run, since in this target mode all libtarg_putc() output goes to a FNV1a hash function. The final hash value will indicate the full output of the program. To verify the hash function, use one of the reference hash-alone targets (e.g., hashalone-host, hashalone-spike). For RISC-V targets, to debug a hash-alone output hash signature mismatch, simply use the hashalone-spike target as your golden model -- this target will run the RISC-V binaries deterministically and with the same addresses each time, so it is possible to perform a cycle-by-cycle comparisons against your design-under-test.
 
 ## Porting the Bringup-Bench to other targets
 
