@@ -1,0 +1,165 @@
+audio-codec:
+** hashval = 0x442baf347d064faf
+
+avl-tree:
+** hashval = 0xaf5967f98cf6ab19
+
+banner:
+** hashval = 0xcf8a36c467edc2a0
+
+blake2b:
+** hashval = 0x283708e353f5dc80
+
+bloom-filter:
+** hashval = 0x5165e141d0307892
+
+boyer-moore-search:
+** hashval = 0xbde864d3801a6b8b
+
+bubble-sort:
+** hashval = 0x5ea572f4121bd9cc
+
+cipher:
+** hashval = 0xeabaf874fccdb0fd
+
+dhrystone:
+** hashval = 0xeffa437915d11d54
+
+distinctness:
+** hashval = 0xd7a89f6fb8a81717
+
+fft-int:
+** hashval = 0xbfd072db711ba297
+
+flood-fill:
+** hashval = 0x014d9cfe1200c0cc
+
+frac-calc:
+** hashval = 0x7f3b55b2536de4f8
+
+fuzzy-match:
+** hashval = 0x98d4af85e3358eb0
+
+fy-shuffle:
+** hashval = 0x3b573bcda5cfd3d3
+
+gcd-list:
+** hashval = 0x6cb86b1964f47797
+
+grad-descent:
+** hashval = 0xa59b8ed1af843869
+
+graph-tests:
+** hashval = 0xd2a0f1583e71af83
+
+hanoi:
+** hashval = 0xbf29cd4b21c54d70
+
+heapsort:
+** hashval = 0xbb6bae2d27943d47
+
+indirect-test:
+** hashval = 0x22549cf707c98176
+
+k-means:
+** hashval = 0x09c9ce4c7f3bc422
+
+kadane:
+** hashval = 0x92056d268178933a
+
+kepler:
+** hashval = 0xd43333d58ef3120c
+
+knapsack:
+** hashval = 0x5dd2a0b27b91d7eb
+
+knights-tour:
+** hashval = 0x61e7406a49b913b1
+
+life:
+** hashval = 0x5a829809f18e6653
+
+longdiv:
+** hashval = 0xc9fd8d9e4e9f2572
+
+mandelbrot:
+** hashval = 0x3d6852d727345453
+
+max-subseq
+** hashval = 0xe088b1dd54b7bcc0
+
+mersenne:
+** hashval = 0xc738cfd9354fb437
+
+minspan:
+** hashval = 0x773537af4500f004
+
+murmur-hash:
+** hashval = 0xc20a3cd730b0cdc5
+
+natlog:
+** hashval = 0x0ff5d340a0feed68
+
+nr-solver:
+** hashval = 0x31fd0ffa30f31ccc
+
+parrondo:
+** hashval = 0x00f8e05d235d0f8b
+
+pascal:
+** hashval = 0x3a322b80c789fad5
+
+primal-test:
+** hashval = 0xab072f0dec720a08
+
+priority-queue:
+** hashval = 0x77fc89804205d47c
+
+quaternions:
+** hashval = 0xa17c7ff62ac7915b
+
+qsort-demo:
+** hashval = 0x45dc4675845fe469
+
+rabinkarp-search:
+** hashval = 0x3cb8fedc1a370f28
+
+regex-parser:
+** hashval = 0xbbbe233ad81bbfc2
+
+rle-compress:
+** hashval = 0x9e39d8dff9ec41c5
+
+shortest-path:
+** hashval = 0x504e238f7963f425
+
+sieve:
+** hashval = 0xa169d7b71e1ce513
+
+simple-grep:
+** hashval = 0x99f3ac55f7a79969
+
+skeleton:
+** hashval = 0xe6192e8293a7ae22
+
+spirograph:
+** hashval = 0xccf5ed2a02623a5f
+
+strange:
+** hashval = 0x5be3aba211782484
+
+tiny-NN:
+** hashval = 0xcbe7d68d516b7c75
+
+topo-sort: in TARGET=hashalone-spike
+** hashval = 0x72fc437169b2381f
+
+totient:
+** hashval = 0x08cd05806a11d49a
+
+vectors-3d:
+** hashval = 0x62034ff0a1c0d2b8
+
+weekday:
+** hashval = 0x6035958a1aa5b883
+
