@@ -1,3 +1,6 @@
+Version 1.5
+  - added support for hash-alone execution, which allows devices with no explicit I/O devices to be tested
+
 Version 1.4
   - added RISC-V Spike instruction set simulator (ISS) support, which is 100% compatible with the "Simple_System" RTL target
   - 12 new benchmarks added, from AI, compression, audio processing, data processing, etc.
