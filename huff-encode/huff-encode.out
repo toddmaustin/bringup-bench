@@ -1,0 +1,33 @@
+Huffman Codes:
+' ': 111
+'a': 1001
+'c': 10001
+'d': 00110
+'e': 1011
+'f': 1101
+'g': 101010
+'h': 0001
+'i': 1100
+'l': 10000
+'m': 0100
+'n': 011
+'o': 0101
+'p': 101011
+'r': 10100
+'s': 0000
+'t': 00111
+'u': 00100
+'x': 00101
+
+Encoded string:
+0011100011100000011111000000111100101111110110010110010100101011100001011111110101011010011100010010011011101010010010111111011011100010101001101100011101010
+
+Compression Metrics:
+Original size: 312 bits
+Encoded size: 157 bits
+Compression ratio: 50.32%
+
+Decoded string:
+this is an example for huffman encoding
+
+Decompression verified: decoded string matches the original input.

@@ -1,0 +1,12 @@
+Value 0xC968C21C: naive=13, kernighan=13, builtin=13, table=13, parallel=13
+Value 0x4B4C1DF8: naive=16, kernighan=16, builtin=16, table=16, parallel=16
+Value 0x30AFD93C: naive=17, kernighan=17, builtin=17, table=17, parallel=17
+Value 0xEA80FCCC: naive=16, kernighan=16, builtin=16, table=16, parallel=16
+Value 0xCA617CE6: naive=17, kernighan=17, builtin=17, table=17, parallel=17
+
+Total bit count over 100 numbers:
+Naive         : 1616
+Kernighan     : 1616
+Built-in      : 1616
+Table Lookup  : 1616
+Parallel      : 1616

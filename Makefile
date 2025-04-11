@@ -31,7 +31,7 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo quine rabinkarp-search regex-parser rho-factor rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spelt2num spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+BMARKS = ackermann anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo quine rabinkarp-search regex-parser rho-factor rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spelt2num spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 
 OPT_CFLAGS = -O0 -g
 #OPT_CFLAGS = -O3 -g
@@ -70,7 +70,7 @@ TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).hahost
 TARGET_CLEAN =
-TARGET_BMARKS = audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), hashalone-spike)
 TARGET_CC = riscv32-unknown-elf-gcc
@@ -83,7 +83,7 @@ TARGET_EXE = $(PROG).haspike
 TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
@@ -94,7 +94,7 @@ TARGET_SIM = ../target/simple_sim.sh ../../../ibex/build/lowrisc_ibex_ibex_simpl
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 TARGET_CONFIGURED = 1
 else ifeq ($(TARGET), spike)
 TARGET_CC = riscv32-unknown-elf-gcc
@@ -106,7 +106,7 @@ TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = audio-codec avl-tree banner blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 TARGET_CONFIGURED = 1
 else
 # default is an unconfigured
