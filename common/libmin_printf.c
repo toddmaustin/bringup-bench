@@ -713,7 +713,7 @@ fmtfp (char *buffer, size_t *currlen, size_t maxlen,
     dopr_outch (buffer, currlen, maxlen, iconvert[--iplace]);
 
 #ifdef DEBUG_SNPRINTF
-  printf("fmtfp: fplace=%d zpadlen=%d\n", fplace, zpadlen);
+  printf("fmtfp: fplace=%d zpadlen=%d padlen=%d\n", fplace, zpadlen, padlen);
 #endif
 
   /*
@@ -723,13 +723,13 @@ fmtfp (char *buffer, size_t *currlen, size_t maxlen,
   if (max > 0) {
     dopr_outch (buffer, currlen, maxlen, '.');
 
+    while (zpadlen > 0) {
+      dopr_outch (buffer, currlen, maxlen, '0');
+      --zpadlen;
+    }
+
     while (fplace > 0) 
       dopr_outch (buffer, currlen, maxlen, fconvert[--fplace]);
-  }
-
-  while (zpadlen > 0) {
-    dopr_outch (buffer, currlen, maxlen, '0');
-    --zpadlen;
   }
 
   while (padlen < 0) {

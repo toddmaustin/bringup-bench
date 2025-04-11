@@ -1,0 +1,13 @@
+RSA Key Pair Example (Hexadecimal Output):
+
+p: 0xf4243
+q: 0xf4261
+n (modulus): 0xe8d6ca6163
+phi(n): 0xe8d6abdcc0
+
+Public exponent (e): 0x10001
+Private exponent (d): 0xe4ef1e3081
+
+Original message: 0xdeadbeef
+Encrypted message: 0x8433c60bb
+Decrypted message: 0xdeadbeef

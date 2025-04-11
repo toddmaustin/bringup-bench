@@ -281,7 +281,7 @@ void printEPS(observation pts[], size_t len, cluster cent[], int k)
         " 1 setgray stroke grestore 0 setgray stroke }def\n");
     for (int i = 0; i < k; i++)
     {
-        libmin_printf("%g %g %g setrgbcolor\n", *(colors + 3 * i),
+        libmin_printf("%f %f %f setrgbcolor\n", *(colors + 3 * i),
                *(colors + 3 * i + 1), *(colors + 3 * i + 2));
         for (j = 0; j < len; j++)
         {
@@ -292,7 +292,7 @@ void printEPS(observation pts[], size_t len, cluster cent[], int k)
             libmin_printf("%.3f %.3f c\n", (pts[j].x - cx) * scale + W / 2,
                    (pts[j].y - cy) * scale + H / 2);
         }
-        libmin_printf("\n0 setgray %g %g s\n", (cent[i].x - cx) * scale + W / 2,
+        libmin_printf("\n0 setgray %f %f s\n", (cent[i].x - cx) * scale + W / 2,
                (cent[i].y - cy) * scale + H / 2);
     }
     libmin_printf("\n%%%%EOF\n");
