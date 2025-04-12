@@ -1,14 +1,14 @@
 
 LOCAL_CFLAGS=
 LOCAL_LIBS=
-LOCAL_OBJS=fft-int.o
+LOCAL_OBJS=packet-filter.o
 
-PROG=fft-int
+PROG=packet-filter
 
 include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO fft-int.$(TARGET_REFEXT)
+	$(TARGET_DIFF) FOO packet-filter.$(TARGET_REFEXT)
 	rm -f FOO
 

@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) hello.c > FOO 
-	$(TARGET_DIFF) FOO c-interp.out
+	$(TARGET_DIFF) FOO c-interp.$(TARGET_REFEXT)
 	rm -f FOO
 

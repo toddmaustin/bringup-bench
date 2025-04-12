@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO fuzzy-match.out
+	$(TARGET_DIFF) FOO fuzzy-match.$(TARGET_REFEXT)
 	rm -f FOO
 

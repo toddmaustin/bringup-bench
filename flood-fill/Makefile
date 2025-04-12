@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO flood-fill.out
+	$(TARGET_DIFF) FOO flood-fill.$(TARGET_REFEXT)
 	rm -f FOO
 
