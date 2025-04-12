@@ -48,6 +48,7 @@ TARGET_EXE = $(PROG).host
 TARGET_CLEAN =
 TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
 else ifeq ($(TARGET), standalone)
 TARGET_CC = gcc
 #TARGET_CC = clang
@@ -60,6 +61,7 @@ TARGET_EXE = $(PROG).sa
 TARGET_CLEAN =
 TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
 else ifeq ($(TARGET), hashalone-host)
 TARGET_CC = gcc
 #TARGET_CC = clang
@@ -70,8 +72,9 @@ TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).hahost
 TARGET_CLEAN =
-TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_BMARKS = anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 TARGET_CONFIGURED = 1
+TARGET_REFEXT = hash
 else ifeq ($(TARGET), hashalone-spike)
 TARGET_CC = riscv32-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
@@ -84,6 +87,7 @@ TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_REFEXT = hash
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
@@ -96,6 +100,7 @@ TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
 else ifeq ($(TARGET), spike)
 TARGET_CC = riscv32-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
@@ -108,6 +113,7 @@ TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
 else
 # default is an unconfigured
 TARGET_CONFIGURED = 0

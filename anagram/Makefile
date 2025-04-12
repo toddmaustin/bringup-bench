@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) words > FOO 
-	$(TARGET_DIFF) FOO anagram.out
+	$(TARGET_DIFF) FOO anagram.$(TARGET_REFEXT)
 	rm -f FOO
 

@@ -141,7 +141,7 @@ SPIN_SUCCESS_ADDR:
   exit(0);
 #elif defined(TARGET_HAHOST)
   /* print the output hash value */
-  fprintf(stderr, "** hashval = 0x%016lx\n", __hashval);
+  fprintf(stdout, "** hashval = 0x%016lx\n", __hashval);
 
   /* exit if we ever get here */
   exit(0);
@@ -195,10 +195,10 @@ libtarg_putc(char c)
     libtarg_fail(1);
   __outbuf[__outbuf_ptr++] = c;
 #elif defined(TARGET_HAHOST)
-  fputc(c, stdout);
+  // fputc(c, stdout);
   __hashval = libmin_fnv64a(&c, 1, __hashval);
 #elif defined(TARGET_HASPIKE)
-  simple_putchar(c);
+  // simple_putchar(c);
   __hashval = libmin_fnv64a(&c, 1, __hashval);
 #elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   simple_putchar(c);

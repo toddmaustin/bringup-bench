@@ -144,6 +144,7 @@ int main(void) {
     
     // Clean up
     libmin_free(numbers);
+    libmin_success();
     return 0;
 }
 
