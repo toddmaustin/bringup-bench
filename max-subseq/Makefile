@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO max-subseq.out
+	$(TARGET_DIFF) FOO max-subseq.$(TARGET_REFEXT)
 	rm -f FOO
 

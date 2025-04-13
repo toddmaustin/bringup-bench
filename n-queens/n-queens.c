@@ -46,6 +46,8 @@ main(void)
   libmin_printf("Total solutions for %d-Queens: %d\n", BOARD_SIZE, solution_count);
 
   libmin_free(queens);
+
+  libmin_success();
   return 0;
 }
 

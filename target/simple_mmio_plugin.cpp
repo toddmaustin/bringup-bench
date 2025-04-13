@@ -51,14 +51,14 @@ struct simple_mmio_plugin
     {
       // print the execution hash
       uint32_t __hashval = *(uint32_t *)bytes;
-      fprintf(stderr, "** hashval = 0x%08x", __hashval);
+      fprintf(stdout, "** hashval = 0x%08x", __hashval);
       return true;
     }
     else if (addr == SIM_CTRL_LOHASH && len == sizeof(uint32_t))
     {
       // print the execution hash
       uint32_t __hashval = *(uint32_t *)bytes;
-      fprintf(stderr, "%08x\n", __hashval);
+      fprintf(stdout, "%08x\n", __hashval);
       return true;
     }
     else

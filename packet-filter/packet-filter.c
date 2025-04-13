@@ -107,6 +107,7 @@ int main() {
         }
     }
     
+    libmin_success();
     return 0;
 }
 

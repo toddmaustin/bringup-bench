@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO lz-compress.out
+	$(TARGET_DIFF) FOO lz-compress.$(TARGET_REFEXT)
 	rm -f FOO
 

@@ -4,7 +4,9 @@
 #define NUM_STEPS 1000  // Number of simulation steps
 #define DT 0.01         // Time step (seconds)
 #define G 6.67430e-11   // Gravitational constant (m^3 kg^-1 s^-2)
+#ifndef EPS
 #define EPS 1e-9        // Softening factor to avoid singularities
+#endif
 
 typedef struct {
     double mass;
@@ -71,6 +73,7 @@ int main(void) {
                bodies[i].vel[0], bodies[i].vel[1], bodies[i].vel[2]);
     }
     
+    libmin_success();
     return 0;
 }
 

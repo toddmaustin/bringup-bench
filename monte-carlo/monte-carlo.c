@@ -28,5 +28,6 @@ main(void)
   // Output result
   libmin_printf("Estimated Pi = %.8f\n", pi_estimate);
 
+  libmin_success();
   return 0;
 }

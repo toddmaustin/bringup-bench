@@ -1,17 +1,17 @@
-#include <stdio.h>
+#include "libmin.h"
 
 #define N 5  // Matrix size
 // #define N 3  // Matrix size
 
 void print_matrix(const char* name, double mat[N][N]) {
-    printf("%s =\n", name);
+    libmin_printf("%s =\n", name);
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
-            printf("%8.4f ", mat[i][j]);
+            libmin_printf("%8.4f ", mat[i][j]);
         }
-        printf("\n");
+        libmin_printf("\n");
     }
-    printf("\n");
+    libmin_printf("\n");
 }
 
 void lu_decomposition(double A[N][N], double L[N][N], double U[N][N]) {
@@ -63,6 +63,7 @@ int main() {
     print_matrix("L", L);
     print_matrix("U", U);
 
+    libmin_success();
     return 0;
 }
 
