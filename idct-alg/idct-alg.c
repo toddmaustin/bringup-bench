@@ -51,5 +51,6 @@ int main() {
     idct_2d(input, output);
     print_matrix(output, "IDCT Output");
 
+    libmin_success();
     return 0;
 }

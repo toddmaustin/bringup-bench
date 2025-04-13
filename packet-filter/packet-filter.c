@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
+#include "libmin.h"
 
 // Define protocol value for TCP
 #define TCP_PROTOCOL 6
@@ -27,29 +25,29 @@ typedef struct {
 Packet generate_packet() {
     Packet pkt;
     
-    if (rand() % 20 == 0) {
+    if (libmin_rand() % 20 == 0) {
         // Force matching criteria: destination IP in 192.168.x.x and TCP protocol.
         pkt.dest_ip = ((unsigned int)FIXED_IP_FIRST << 24) |
                       ((unsigned int)FIXED_IP_SECOND << 16) |
-                      (((unsigned int)rand() % 256) << 8) |
-                      ((unsigned int)rand() % 256);
+                      (((unsigned int)libmin_rand() % 256) << 8) |
+                      ((unsigned int)libmin_rand() % 256);
         pkt.protocol = TCP_PROTOCOL;
     } else {
         // Generate a random destination IP and a random protocol.
-        pkt.dest_ip = (unsigned int)rand();
-        pkt.protocol = (unsigned char)(rand() % 256);
+        pkt.dest_ip = (unsigned int)libmin_rand();
+        pkt.protocol = (unsigned char)(libmin_rand() % 256);
     }
     
     // Generate a random source IP.
-    pkt.src_ip = (unsigned int)rand();
+    pkt.src_ip = (unsigned int)libmin_rand();
     
     // Generate random source and destination ports.
-    pkt.src_port = (unsigned short)(rand() % 65536);
-    pkt.dest_port = (unsigned short)(rand() % 65536);
+    pkt.src_port = (unsigned short)(libmin_rand() % 65536);
+    pkt.dest_port = (unsigned short)(libmin_rand() % 65536);
     
     // Fill the payload with 63 random uppercase characters and null-terminate.
     for (int i = 0; i < 63; i++) {
-        pkt.payload[i] = 'A' + (rand() % 26);
+        pkt.payload[i] = 'A' + (libmin_rand() % 26);
     }
     pkt.payload[63] = '\0';
     
@@ -58,9 +56,9 @@ Packet generate_packet() {
 
 // Check if the packet matches the filter criteria:
 // The packet should be using TCP and have a destination IP in the range 192.168.0.0/16.
-bool check_packet_filter(Packet pkt) {
+int check_packet_filter(Packet pkt) {
     if (pkt.protocol != TCP_PROTOCOL) {
-        return false;
+        return FALSE;
     }
     // Extract the first two octets of the destination IP.
     unsigned int first_octet = (pkt.dest_ip >> 24) & 0xFF;
@@ -70,7 +68,7 @@ bool check_packet_filter(Packet pkt) {
 
 // Helper function to print an IP address in dotted notation.
 void print_ip(unsigned int ip) {
-    printf("%u.%u.%u.%u", 
+    libmin_printf("%u.%u.%u.%u", 
            (ip >> 24) & 0xFF, 
            (ip >> 16) & 0xFF, 
            (ip >> 8) & 0xFF, 
@@ -79,21 +77,21 @@ void print_ip(unsigned int ip) {
 
 // Print the details of a packet.
 void print_packet(Packet pkt) {
-    printf("Packet Details:\n");
-    printf("  Source IP: ");
+    libmin_printf("Packet Details:\n");
+    libmin_printf("  Source IP: ");
     print_ip(pkt.src_ip);
-    printf("\n  Destination IP: ");
+    libmin_printf("\n  Destination IP: ");
     print_ip(pkt.dest_ip);
-    printf("\n  Source Port: %u\n", pkt.src_port);
-    printf("  Destination Port: %u\n", pkt.dest_port);
-    printf("  Protocol: %u\n", pkt.protocol);
-    printf("  Payload: %s\n", pkt.payload);
-    printf("------------------------------\n");
+    libmin_printf("\n  Source Port: %u\n", pkt.src_port);
+    libmin_printf("  Destination Port: %u\n", pkt.dest_port);
+    libmin_printf("  Protocol: %u\n", pkt.protocol);
+    libmin_printf("  Payload: %s\n", pkt.payload);
+    libmin_printf("------------------------------\n");
 }
 
 int main() {
     // Seed the random number generator.
-    srand(42);
+    libmin_srand(42);
     
     int packetCounter = 0;
     
@@ -104,7 +102,7 @@ int main() {
         
         // Use the updated filter: check for TCP and IP range.
         if (check_packet_filter(pkt)) {
-            printf("Matched Packet #%d:\n", packetCounter);
+            libmin_printf("Matched Packet #%d:\n", packetCounter);
             print_packet(pkt);
         }
     }

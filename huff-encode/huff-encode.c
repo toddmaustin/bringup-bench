@@ -238,7 +238,8 @@ int main() {
     libmin_free(frequencies);
     
     // Note: In a complete implementation you should also free the Huffman tree nodes.
-    
+
+    libmin_success();    
     return 0;
 }
 
