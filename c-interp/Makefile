@@ -8,7 +8,7 @@ PROG=c-interp
 include ../Makefile
 
 test: $(TARGET_EXE)
-	-$(TARGET_SIM) ./$(TARGET_EXE) hello.c > FOO 
+	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
 	$(TARGET_DIFF) FOO c-interp.$(TARGET_REFEXT)
 	rm -f FOO
 

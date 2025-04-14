@@ -8,7 +8,7 @@ PROG=anagram
 include ../Makefile
 
 test: $(TARGET_EXE)
-	-$(TARGET_SIM) ./$(TARGET_EXE) words > FOO 
+	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
 	$(TARGET_DIFF) FOO anagram.$(TARGET_REFEXT)
 	rm -f FOO
 

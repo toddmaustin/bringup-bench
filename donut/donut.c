@@ -4,7 +4,7 @@
 #define memset libmin_memset
 #define putchar libmin_putc
 #define printf libmin_printf
-#define xx unsigned x=0; x < 64; x++
+#define xx unsigned x=0; x < 4; x++
 #define K int k
 #define niam int main
 #define tixe libmin_success()
@@ -28,7 +28,7 @@ in(B),t=c*h*g-f*        e;int x=40+30*D*
  ".,-~:;=!*#$@"[N>0?N:0];}}/*#****!!-*/
   printf("\x1b[H");for(k=0;1761>k;k++)
    {putchar(k%80?b[k]:10);}A+=0.04;B+=
-     0.02;}tixe;}/***####****!!=;:~
+     0.02;}tixe;return 0;}/****!!=;:~
        ~::==!!!**********!!!==::-
          .,~~;;;========;;;:~-.
              ..,--------,*/

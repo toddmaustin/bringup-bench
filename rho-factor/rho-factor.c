@@ -1,6 +1,6 @@
 #include "libmin.h"
 
-typedef unsigned long long int positive_number;
+typedef unsigned long int positive_number;
 
 static positive_number multiplication_modulo(positive_number a, positive_number b, const positive_number mod) {
     positive_number res = 0, tmp;
@@ -76,20 +76,20 @@ int main(void)
     positive_number *factors = libmin_calloc(64, sizeof(positive_number)), n = 0, mask = -1;
     /* TMA: unsigned sr = (size_t)factors; sr = -sr / 561; libmin_printf("srand at %u :\n\n", sr); */ libmin_srand(/* TMA: sr */42);
     for (int wrapper = 4, count = 0, j; wrapper < 64; ++wrapper)
-        for (int n_bits = wrapper; n_bits <= 64; ++n_bits) {
+        for (int64_t n_bits = wrapper; n_bits <= 64; ++n_bits) {
             // generate a random number of ~ n_bits bits.
             for (size_t k = 0; k < sizeof(positive_number); ((char *) &n)[k++] = libmin_rand());
             n &= mask >> (8 * sizeof(positive_number) - n_bits); n += !(n & 1);
-            libmin_printf("%5d. (%2d bits) %22llu = ", ++count, n_bits, n);
+            libmin_printf("%5d. (%2d bits) %22lu = ", ++count, n_bits, n);
             // fill the "factors" array with the prime factors.
             factor(n, factors);
             // iterate over the factors (zero terminated array).
             for (j = 0; factors[j + 1]; ++j) {
-                libmin_printf("%llu * ", factors[j]);
+                libmin_printf("%lu * ", factors[j]);
                 libmin_assert(n % factors[j] == 0);
                 libmin_assert(is_prime(factors[j], 36));
             }
-            libmin_printf("%llu\n", factors[j]);
+            libmin_printf("%lu\n", factors[j]);
         }
 
     // release memory.

@@ -612,12 +612,6 @@ char achPhrase[255];
 int 
 main(int cpchArgc, char **ppchArgv)
 {
-    if (cpchArgc != 2 && cpchArgc != 3)
-        Fatal("Usage: anagram dictionary [length]\n", 0);
-
-    if (cpchArgc == 3)
-	    cchMinLength = libmin_atoi(ppchArgv[2]);
-
     ReadDict(ppchArgv[1]);
 
     while (GetPhrase(&achPhrase[0]) != NULL) {

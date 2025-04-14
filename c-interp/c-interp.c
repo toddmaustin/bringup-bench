@@ -1283,15 +1283,20 @@ long eval() {
 }
 
 
-int main(int argc, char **argv)
+int main(int _argc, char **_argv)
 {
 
     long i;
     long *tmp;
 
+    int argc = 2;
+    char *myargv[2] = { "c-interp", "hello.c" };
+    char **argv = myargv;
+
     argc--;
     argv++;
 
+#if 0
     // parse arguments
     if (argc > 0 && **argv == '-' && (*argv)[1] == 's') {
         assembly = 1;
@@ -1307,6 +1312,7 @@ int main(int argc, char **argv)
         libmin_printf("usage: xc [-s] [-d] file ...\n");
         return -1;
     }
+#endif
 
     libmin_mopen(mhello, "r");
 
@@ -1389,7 +1395,7 @@ int main(int argc, char **argv)
     sp = (long *)((long)stack + poolsize);
     *--sp = EXIT; // call exit if main returns
     *--sp = PUSH; tmp = sp;
-    *--sp = argc;
+    *--sp = 1;
     *--sp = (long)argv;
     *--sp = (long)tmp;
 

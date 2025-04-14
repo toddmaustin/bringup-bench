@@ -46,7 +46,6 @@ TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).host
 TARGET_CLEAN =
-TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), standalone)
@@ -59,7 +58,6 @@ TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).sa
 TARGET_CLEAN =
-TARGET_BMARKS = $(BMARKS)
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), hashalone-host)
@@ -86,7 +84,7 @@ TARGET_EXE = $(PROG).haspike
 TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = 
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
@@ -111,7 +109,7 @@ TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = 
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else
@@ -119,7 +117,7 @@ else
 TARGET_CONFIGURED = 0
 endif
 
-TARGET_BMARKS = $(filter-out $(BMARK_EXCLUDES), $(BMARKS))
+TARGET_BMARKS = $(filter-out $(TARGET_EXCLUDES), $(BMARKS))
 
 CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAGS)
 OBJS = $(LOCAL_OBJS) ../target/libtarg.o
