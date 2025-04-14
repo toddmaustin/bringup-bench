@@ -31,7 +31,7 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo quine rabinkarp-search regex-parser rho-factor rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spelt2num spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+BMARKS = ackermann anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver packet-filter parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo quine rabinkarp-search regex-parser rho-factor rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spelt2num spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 
 OPT_CFLAGS = -O0 -g
 #OPT_CFLAGS = -O3 -g
@@ -72,7 +72,7 @@ TARGET_SIM =
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).hahost
 TARGET_CLEAN =
-TARGET_BMARKS = anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_EXCLUDES = 
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), hashalone-spike)
@@ -81,12 +81,12 @@ TARGET_CC = riscv32-unknown-elf-gcc
 TARGET_AR = riscv32-unknown-elf-ar
 TARGET_CFLAGS = -DTARGET_HASPIKE -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x40000 --device=simple_mmio_plugin,0x20000,x
+TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x820000 --device=simple_mmio_plugin,0x20000,x
 TARGET_EXE = $(PROG).haspike
 TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_EXCLUDES = 
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv32-unknown-elf-gcc
@@ -98,7 +98,7 @@ TARGET_SIM = ../target/simple_sim.sh ../../../ibex/build/lowrisc_ibex_ibex_simpl
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_EXCLUDES = 
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike)
@@ -107,17 +107,19 @@ TARGET_CC = riscv32-unknown-elf-gcc
 TARGET_AR = riscv32-unknown-elf-ar
 TARGET_CFLAGS = -DTARGET_SPIKE -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x40000 --device=simple_mmio_plugin,0x20000,x
+TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x820000 --device=simple_mmio_plugin,0x20000,x
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_BMARKS = audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort cipher dhrystone distinctness fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver parrondo pascal primal-test priority-queue quaternions qsort-demo rabinkarp-search regex-parser rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spirograph strange tiny-NN topo-sort totient vectors-3d weekday
+TARGET_EXCLUDES = 
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else
 # default is an unconfigured
 TARGET_CONFIGURED = 0
 endif
+
+TARGET_BMARKS = $(filter-out $(BMARK_EXCLUDES), $(BMARKS))
 
 CFLAGS = -Wall $(OPT_CFLAGS) -Wno-strict-aliasing $(TARGET_CFLAGS) $(LOCAL_CFLAGS)
 OBJS = $(LOCAL_OBJS) ../target/libtarg.o
@@ -152,11 +154,11 @@ else ifeq ($(TARGET), standalone)
 else ifeq ($(TARGET), hashalone-host)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), hashalone-spike)
-	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
+	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), simple)
 	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike)
-	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
+	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else
 	$(error MODE is not defined (add: TARGET={host|sa}).)
 endif

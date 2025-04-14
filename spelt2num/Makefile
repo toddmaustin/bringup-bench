@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO spelt2num.out
+	$(TARGET_DIFF) FOO spelt2num.$(TARGET_REFEXT)
 	rm -f FOO
 

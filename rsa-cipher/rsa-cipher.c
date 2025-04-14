@@ -128,5 +128,7 @@ int main() {
     print_hex_int128(decrypted);
     
     libmin_printf("\n");
+
+    libmin_success();
     return 0;
 }

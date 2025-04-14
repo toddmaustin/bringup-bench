@@ -9,6 +9,6 @@ include ../Makefile
 
 test: $(TARGET_EXE)
 	-$(TARGET_SIM) ./$(TARGET_EXE) > FOO 
-	$(TARGET_DIFF) FOO rho-factor.out
+	$(TARGET_DIFF) FOO rho-factor.$(TARGET_REFEXT)
 	rm -f FOO
 
