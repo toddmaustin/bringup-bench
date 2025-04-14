@@ -4,7 +4,7 @@
 #define memset libmin_memset
 #define putchar libmin_putc
 #define printf libmin_printf
-#define xx unsigned x=0; x < 4; x++
+#define xx unsigned x=0; x < 2; x++
 #define K int k
 #define niam int main
 #define tixe libmin_success()

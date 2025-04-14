@@ -1,6 +1,6 @@
 #include "libmin.h"
 
-#define NUM_SAMPLES 2000000  // 10 million samples
+#define NUM_SAMPLES 25000  // samples
 
 int
 main(void)

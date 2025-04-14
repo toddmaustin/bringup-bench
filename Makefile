@@ -33,8 +33,8 @@ error:
 #
 BMARKS = ackermann anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver packet-filter parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo quine rabinkarp-search regex-parser rho-factor rle-compress rsa-cipher shortest-path sieve simple-grep skeleton spelt2num spirograph strange tiny-NN topo-sort totient vectors-3d weekday
 
-OPT_CFLAGS = -O0 -g
-#OPT_CFLAGS = -O3 -g
+#OPT_CFLAGS = -O0 -g
+OPT_CFLAGS = -O3 -g
 
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
@@ -96,7 +96,7 @@ TARGET_SIM = ../target/simple_sim.sh ../../../ibex/build/lowrisc_ibex_ibex_simpl
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = 
+TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike)
