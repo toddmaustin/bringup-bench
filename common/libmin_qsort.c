@@ -1,208 +1,79 @@
 #include "libmin.h"
 #include "libtarg.h"
 
-/* sort functions */
-
-#define ntz(x) a_ctz_l((x))
-
-static inline int
-a_ctz_l(unsigned long x)
-{
-	static const char debruijn32[32] = {
-		0, 1, 23, 2, 29, 24, 19, 3, 30, 27, 25, 11, 20, 8, 4, 13,
-		31, 22, 28, 18, 26, 10, 7, 12, 21, 17, 9, 6, 16, 5, 15, 14
-	};
-	return debruijn32[(x&-x)*0x076be629 >> 27];
+/*
+ * swap - Exchange the contents of two elements.
+ * This version allocates a temporary buffer using malloc()/free() to avoid
+ * reliance on C99 variable-length arrays.
+ */
+static void swap(void *a, void *b, size_t size) {
+    void *tmp = libmin_malloc(size);
+    if (!tmp) {
+        /* Allocation failed; exit or handle as appropriate. */
+        libmin_fail(EXIT_FAILURE);
+    }
+    libmin_memcpy(tmp, a, size);
+    libmin_memcpy(a, b, size);
+    libmin_memcpy(b, tmp, size);
+    libmin_free(tmp);
 }
 
-static inline int
-pntz(size_t p[2])
-{
-	int r = ntz(p[0] - 1);
-	if(r != 0 || (r = 8*sizeof(size_t) + ntz(p[1])) != 8*sizeof(size_t)) {
-		return r;
-	}
-	return 0;
+/*
+ * qsort_internal - Recursive quicksort implementation using the Hoare partition scheme.
+ * @base: The base address of the array (cast to char* for pointer arithmetic).
+ * @low:  The index of the first element in the current partition.
+ * @high: The index of the last element in the current partition.
+ * @size: Size in bytes of each element.
+ * @compar: The comparison function.
+ *
+ * This function partitions the sub-array [low, high] around a pivot (chosen as the
+ * element at index low), then recursively sorts the resulting partitions.
+ */
+static void qsort_internal(char *base, size_t low, size_t high, size_t size,
+                           int (*compar)(const void *, const void *)) {
+    if (low >= high)
+        return;
+
+    /* Choose pivot as the first element in the partition and copy it */
+    char *pivot = libmin_malloc(size);
+    if (!pivot)
+        libmin_fail(EXIT_FAILURE);
+    libmin_memcpy(pivot, base + low * size, size);
+
+    size_t i = low;
+    size_t j = high + 1;
+
+    /* Hoare partition scheme */
+    while (1) {
+        do {
+            i++;
+        } while (i <= high && compar(base + i * size, pivot) < 0);
+
+        do {
+            j--;
+        } while (compar(base + j * size, pivot) > 0);
+
+        if (i >= j)
+            break;
+
+        swap(base + i * size, base + j * size, size);
+    }
+
+    swap(base + low * size, base + j * size, size);
+    libmin_free(pivot);
+
+    if (j > 0)
+        qsort_internal(base, low, j - 1, size, compar);
+    qsort_internal(base, j + 1, high, size, compar);
 }
 
-static void
-cycle(size_t width, unsigned char* ar[], int n)
-{
-	unsigned char tmp[256];
-	size_t l;
-	int i;
-
-	if(n < 2) {
-		return;
-	}
-
-	ar[n] = tmp;
-	while(width) {
-		l = sizeof(tmp) < width ? sizeof(tmp) : width;
-		libmin_memcpy(ar[n], ar[0], l);
-		for(i = 0; i < n; i++) {
-			libmin_memcpy(ar[i], ar[i + 1], l);
-			ar[i] += l;
-		}
-		width -= l;
-	}
+/*
+ * qsort - Public function to sort an array.
+ */
+void libmin_qsort(void *base, size_t nmemb, size_t size,
+           int (*compar)(const void *, const void *)) {
+    if (nmemb < 2)
+        return;
+    qsort_internal((char *)base, 0, nmemb - 1, size, compar);
 }
 
-/* shl() and shr() need n > 0 */
-static inline void
-shl(size_t p[2], int n)
-{
-	if(n >= 8 * sizeof(size_t)) {
-		n -= 8 * sizeof(size_t);
-		p[1] = p[0];
-		p[0] = 0;
-	}
-	p[1] <<= n;
-	p[1] |= p[0] >> (sizeof(size_t) * 8 - n);
-	p[0] <<= n;
-}
-
-static inline void
-shr(size_t p[2], int n)
-{
-	if(n >= 8 * sizeof(size_t)) {
-		n -= 8 * sizeof(size_t);
-		p[0] = p[1];
-		p[1] = 0;
-	}
-	p[0] >>= n;
-	p[0] |= p[1] << (sizeof(size_t) * 8 - n);
-	p[1] >>= n;
-}
-
-static void
-sift(unsigned char *head, size_t width, cmpfun cmp, int pshift, size_t lp[])
-{
-	unsigned char *rt, *lf;
-	unsigned char *ar[14 * sizeof(size_t) + 1];
-	int i = 1;
-
-	ar[0] = head;
-	while(pshift > 1) {
-		rt = head - width;
-		lf = head - width - lp[pshift - 2];
-
-		if((*cmp)(ar[0], lf) >= 0 && (*cmp)(ar[0], rt) >= 0) {
-			break;
-		}
-		if((*cmp)(lf, rt) >= 0) {
-			ar[i++] = lf;
-			head = lf;
-			pshift -= 1;
-		} else {
-			ar[i++] = rt;
-			head = rt;
-			pshift -= 2;
-		}
-	}
-	cycle(width, ar, i);
-}
-
-static void
-trinkle(unsigned char *head, size_t width, cmpfun cmp, size_t pp[2], int pshift, int trusty, size_t lp[])
-{
-	unsigned char *stepson,
-	              *rt, *lf;
-	size_t p[2];
-	unsigned char *ar[14 * sizeof(size_t) + 1];
-	int i = 1;
-	int trail;
-
-	p[0] = pp[0];
-	p[1] = pp[1];
-
-	ar[0] = head;
-	while(p[0] != 1 || p[1] != 0) {
-		stepson = head - lp[pshift];
-		if((*cmp)(stepson, ar[0]) <= 0) {
-			break;
-		}
-		if(!trusty && pshift > 1) {
-			rt = head - width;
-			lf = head - width - lp[pshift - 2];
-			if((*cmp)(rt, stepson) >= 0 || (*cmp)(lf, stepson) >= 0) {
-				break;
-			}
-		}
-
-		ar[i++] = stepson;
-		head = stepson;
-		trail = pntz(p);
-		shr(p, trail);
-		pshift += trail;
-		trusty = 0;
-	}
-	if(!trusty) {
-		cycle(width, ar, i);
-		sift(head, width, cmp, pshift, lp);
-	}
-}
-
-void
-libmin_qsort(void *base, size_t nel, size_t width, cmpfun cmp)
-{
-	size_t lp[12*sizeof(size_t)];
-	size_t i, size = width * nel;
-	unsigned char *head, *high;
-	size_t p[2] = {1, 0};
-	int pshift = 1;
-	int trail;
-
-	if (!size) return;
-
-	head = base;
-	high = head + size - width;
-
-	/* Precompute Leonardo numbers, scaled by element width */
-	for(lp[0]=lp[1]=width, i=2; (lp[i]=lp[i-2]+lp[i-1]+width) < size; i++);
-
-	while(head < high) {
-		if((p[0] & 3) == 3) {
-			sift(head, width, cmp, pshift, lp);
-			shr(p, 2);
-			pshift += 2;
-		} else {
-			if(lp[pshift - 1] >= high - head) {
-				trinkle(head, width, cmp, p, pshift, 0, lp);
-			} else {
-				sift(head, width, cmp, pshift, lp);
-			}
-			
-			if(pshift == 1) {
-				shl(p, 1);
-				pshift = 0;
-			} else {
-				shl(p, pshift - 1);
-				pshift = 1;
-			}
-		}
-		
-		p[0] |= 1;
-		head += width;
-	}
-
-	trinkle(head, width, cmp, p, pshift, 0, lp);
-
-	while(pshift != 1 || p[0] != 1 || p[1] != 0) {
-		if(pshift <= 1) {
-			trail = pntz(p);
-			shr(p, trail);
-			pshift += trail;
-		} else {
-			shl(p, 2);
-			pshift -= 2;
-			p[0] ^= 7;
-			shr(p, 1);
-			trinkle(head - lp[pshift] - width, width, cmp, p, pshift + 1, 1, lp);
-			shl(p, 1);
-			p[0] |= 1;
-			trinkle(head - width, width, cmp, p, pshift, 1, lp);
-		}
-		head -= width;
-	}
-}

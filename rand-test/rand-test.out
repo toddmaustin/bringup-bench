@@ -1,0 +1,28 @@
+Running tests for Bad (bad_rand()) random generator:
+Monobit Test:
+  Total bits processed: 320000
+  Total ones count: 130038
+  Ones ratio: 0.406369 (expected ~0.5)
+
+Chi-Square Test (uniformity of top 8 bits):
+  Chi-square statistic: 2542837.376000 (degrees of freedom = 255)
+
+Serial Correlation Test:
+  Serial correlation coefficient: 0.755151 (expected near 0)
+
+-----------------------------------------------
+
+Running tests for Good (good_rand()) random generator:
+Monobit Test:
+  Total bits processed: 320000
+  Total ones count: 160157
+  Ones ratio: 0.500491 (expected ~0.5)
+
+Chi-Square Test (uniformity of top 8 bits):
+  Chi-square statistic: 253.926400 (degrees of freedom = 255)
+
+Serial Correlation Test:
+  Serial correlation coefficient: -0.009443 (expected near 0)
+
+-----------------------------------------------
+

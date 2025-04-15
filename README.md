@@ -65,6 +65,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **banner** - Prints out a fancy vertical banner.
 
+- **bit-kernels** - Bit-twiddling kernels galore.
+
 - **blake2b** - Reference implementation and test of BLAKE2b, a cryptographic hash function based on Daniel J. Bernstein's ChaCha stream cipher.
 
 - **bloom-filter** - A Bloom filter implementation with test code that measures accuracy and false-positive rates.
@@ -78,6 +80,10 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 - **c-interp** - A C language interpreter that interprets the test program "hello.c". This benchmark uses code-based read-only file access.
 
 - **cipher** - A TEA cipher implementation the encrypts and decrypts some fixed test data.
+
+- **connect4-minimax** - A MINIMAX implementation of the classic Connect-4 game.
+
+- **convex-hull** - Computes the surface of a convex hull.
 
 - **dhrystone** - An old-school Dhrystone benchmark.
 
@@ -105,6 +111,12 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **heapsort** - Performs a heap sort on a randomly generated data set
 
+- **heat-calc** - Performs heat flow analysis of a metal pipe.
+
+- **huff-encode** - Performs string compression and decompression using a Huffman encoding technique.
+
+- **idct-alg** - Computes the integer DCT over a collection of pixels.
+
 - **indirect-test** - A few specialized tests to validate indirect jumps, switch tables, and function returns.
 
 - **kadane** - Implementation of Kadane's algorithm, which finds find the maximum sum of a contiguous subarray.
@@ -121,9 +133,13 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **longdiv** - Computes a long division using the pencil-on-paper method.
 
+- **lu-decomp** - Performs LU decomposition of an input matrix.
+
 - **lz-compress** - A compression/decompress tool based on the LZ compression algorithm.
 
 - **mandelbrot** - Calculate and print using ASCII graphics a Mendelbrot fractal.
+
+- **matmult** - Performs a variety of matrix multiplications, checking its results.
 
 - **max-subseq** - Computes the longest subsequence common (LSC) to all sequences in a set of sequences using the dynamic programming method.
 
@@ -131,9 +147,19 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **minspan** - Finds the minimal spanning tree of a graph (via Kruscal's algorithm over the graph's adjacency matrix).
 
+- **monte-carlo** - Uses a Monte Carlo simulation to find an approximation of PI.
+
+- **murmur-hash** - Computes the MURMUR hash of its input value.
+
 - **natlog** - Compute the value of natural log e, using an iterative method.
 
+- **nbody-sim** - Performs an N-body simulation to high detail.
+
+- **n-queens** - Solves the N-queens problem, of various sizes.
+
 - **nr-solver** - Computes a square-root value using a Newton-Raphson solver.
+
+- **packet-filter** - Performs complex packet filtering on a randomly generated steam of network packets.
 
 - **parrondo** - A game theory based solver that simulates Parrondo's paradox.
 
@@ -143,15 +169,31 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **primal-test** - Performs the Miller-Rabin stochastic primarility test to extremely high certainty.
 
+- **priority-queue** - Implements and tests a priority queue data structure.
+
+- **qsort-demo** - Performs a sorting operation using the library QSORT capability.
+
+- **qsort-test** - Tests the library's QSORT implementation, using a range of self-validating tests.
+
+- **quaternions** - Computes a geometry problem using quaternions.
+
 - **quine** - A C program that prints itself.
 
 - **rabinkarp-search** - Implements the very efficient Rabin-Karp data-oblivious string search algorithm. This search algorithm is O(N) in the length of the string searched.
+
+- **rand-test** - Performs a set of randomness tests on a good and bad random number generator.
+
+- ** ransac** - Performs RANSAC (RANdom SAmple Consensus) robustly estimate the parameters of a mathematical model from a randomly generated dataset.
 
 - **regex-parser** - A regular-expression parser running a battery of tests.
 
 - **rho-factor** - A Pollard's Rho integer factorization algorithm.
 
 - **rle-compress** - A run-length-encoding (RLE) compressor, with multiple tests.
+
+- **rsa-cipher** - Implements RSA encryption and decryption using reduced-strength 128-bit keys.
+
+- **sat-solver** - Perform SATisfiability analysis on a complex logic circuit.
 
 - **shortest-path** - Solves the all-pairs shortest path problem using the Floyd-Warshall algorithm.
 
@@ -166,6 +208,10 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 - **spirograph** - A spirograph simulation that produces a sequence of resulting data points.
 
 - **strange** - A strange C program that acts strangely in an expected manner.
+
+- **sudoku-solver** - Solves a fairly challenging Sudoku board.
+
+- **tetris-sim** - Plays tetris until the board fills.
 
 - **tiny-NN** - A deep neural net (DNN) implementation, with training and inference tests.
 

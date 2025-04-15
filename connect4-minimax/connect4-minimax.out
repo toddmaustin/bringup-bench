@@ -1,0 +1,201 @@
+Connect Four: Minimax AI Self-Play
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+0 1 2 3 4 5 6 
+
+Move 1: Player 1 drops in column 3 (score=6)
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . X . . . 
+0 1 2 3 4 5 6 
+
+Move 2: Player 2 drops in column 2 (score=1)
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . O X . . . 
+0 1 2 3 4 5 6 
+
+Move 3: Player 1 drops in column 2 (score=10)
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . X . . . . 
+. . O X . . . 
+0 1 2 3 4 5 6 
+
+Move 4: Player 2 drops in column 3 (score=5)
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . X O . . . 
+. . O X . . . 
+0 1 2 3 4 5 6 
+
+Move 5: Player 1 drops in column 3 (score=14)
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . X . . . 
+. . X O . . . 
+. . O X . . . 
+0 1 2 3 4 5 6 
+
+Move 6: Player 2 drops in column 6 (score=10)
+
+. . . . . . . 
+. . . . . . . 
+. . . . . . . 
+. . . X . . . 
+. . X O . . . 
+. . O X . . O 
+0 1 2 3 4 5 6 
+
+Move 7: Player 1 drops in column 3 (score=25)
+
+. . . . . . . 
+. . . . . . . 
+. . . X . . . 
+. . . X . . . 
+. . X O . . . 
+. . O X . . O 
+0 1 2 3 4 5 6 
+
+Move 8: Player 2 drops in column 3 (score=8)
+
+. . . . . . . 
+. . . O . . . 
+. . . X . . . 
+. . . X . . . 
+. . X O . . . 
+. . O X . . O 
+0 1 2 3 4 5 6 
+
+Move 9: Player 1 drops in column 5 (score=29)
+
+. . . . . . . 
+. . . O . . . 
+. . . X . . . 
+. . . X . . . 
+. . X O . . . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 10: Player 2 drops in column 5 (score=11)
+
+. . . . . . . 
+. . . O . . . 
+. . . X . . . 
+. . . X . . . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 11: Player 1 drops in column 2 (score=30)
+
+. . . . . . . 
+. . . O . . . 
+. . . X . . . 
+. . X X . . . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 12: Player 2 drops in column 5 (score=10)
+
+. . . . . . . 
+. . . O . . . 
+. . . X . . . 
+. . X X . O . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 13: Player 1 drops in column 2 (score=37)
+
+. . . . . . . 
+. . . O . . . 
+. . X X . . . 
+. . X X . O . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 14: Player 2 drops in column 2 (score=11)
+
+. . . . . . . 
+. . O O . . . 
+. . X X . . . 
+. . X X . O . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 15: Player 1 drops in column 5 (score=36)
+
+. . . . . . . 
+. . O O . . . 
+. . X X . X . 
+. . X X . O . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 16: Player 2 drops in column 5 (score=12)
+
+. . . . . . . 
+. . O O . O . 
+. . X X . X . 
+. . X X . O . 
+. . X O . O . 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 17: Player 1 drops in column 6 (score=38)
+
+. . . . . . . 
+. . O O . O . 
+. . X X . X . 
+. . X X . O . 
+. . X O . O X 
+. . O X . X O 
+0 1 2 3 4 5 6 
+
+Move 18: Player 2 drops in column 4 (score=12)
+
+. . . . . . . 
+. . O O . O . 
+. . X X . X . 
+. . X X . O . 
+. . X O . O X 
+. . O X O X O 
+0 1 2 3 4 5 6 
+
+Move 19: Player 1 drops in column 4 (score=100000)
+
+. . . . . . . 
+. . O O . O . 
+. . X X . X . 
+. . X X . O . 
+. . X O X O X 
+. . O X O X O 
+0 1 2 3 4 5 6 
+
+Player 1 wins!

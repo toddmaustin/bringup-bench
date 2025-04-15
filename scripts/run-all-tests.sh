@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 make TARGET=host all-clean
 make TARGET=host run-tests
 

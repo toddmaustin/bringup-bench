@@ -77,5 +77,6 @@ int main() {
         
         libtarg_success();
     }
+    return 0;
 }
 
