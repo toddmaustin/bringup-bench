@@ -1,0 +1,4 @@
+AES Cipher results:
+  plaintext:  This is a test!!
+  ciphertext: f8 6e 9e 4e 8d 38 05 e9 72 9f f1 55 e5 17 bd 65 
+  decrypted:  This is a test!!
