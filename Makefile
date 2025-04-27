@@ -112,6 +112,17 @@ TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
+else ifeq ($(TARGET), qemu-riscv64)
+TARGET_CC = riscv64-unknown-linux-gnu-gcc
+TARGET_AR = riscv64-unknown-linux-gnu-ar
+TARGET_CFLAGS = -DTARGET_HOST -march=rv64gc -mabi=lp64d -static
+TARGET_LIBS =
+TARGET_SIM = qemu-riscv64 -cpu rv64,zba=true,zbb=true,zbc=true,zbs=true,v=true,zvfh=true,vlen=256
+TARGET_DIFF = diff
+TARGET_EXE = $(PROG)
+TARGET_CLEAN =
+TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
 else
 # default is an unconfigured
 TARGET_CONFIGURED = 0
@@ -146,6 +157,8 @@ build: $(TARGET_EXE)
 
 $(TARGET_EXE): $(OBJS) $(LIBS)
 ifeq ($(TARGET), host)
+	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), qemu-riscv64)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), standalone)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
