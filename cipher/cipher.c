@@ -53,11 +53,11 @@ main(void)
     libmin_fail(2);
   
   libmin_printf("TEA Cipher results:\n");
-  libmin_printf("  plaintext:  0x%08lx 0x%08lx\n",
+  libmin_printf("  plaintext:  0x%08x 0x%08x\n",
 	       plaintext[0], plaintext[1]);
-  libmin_printf("  ciphertext: 0x%08lx 0x%08lx\n",
+  libmin_printf("  ciphertext: 0x%08x 0x%08x\n",
 	       ciphertext[0], ciphertext[1]);
-  libmin_printf("  newplain:   0x%08lx 0x%08lx\n",
+  libmin_printf("  newplain:   0x%08x 0x%08x\n",
 	       newplain[0], newplain[1]);
 
   libmin_success();
