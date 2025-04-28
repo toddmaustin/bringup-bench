@@ -57,6 +57,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **ackermann** - Calculates the Ackermann function for a variety of input values.
 
+- **aex** - An AES implementation the encrypts and decrypts fixed test data.
+
 - **anagram** - Computes anagrams for the phrases in "input.txt" using the diction in the "words". This benchmark uses code-based read-only file access for multiple files.
 
 - **audio-codec** - Implements the A-Law compression algorithm for 16-bit PCM audio streams.
