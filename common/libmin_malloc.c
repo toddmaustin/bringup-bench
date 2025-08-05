@@ -1,6 +1,26 @@
 #include "libmin.h"
 #include "libtarg.h"
 
+/* Determine alignment bit mask, if alignment is configured */
+#ifdef LIBMIN_MALLOC_ALIGN_BYTES
+
+#if LIBMIN_MALLOC_ALIGN_BYTES == 1
+#define LIBMIN_MALLOC_ALIGN_MASK 0x0
+#elif LIBMIN_MALLOC_ALIGN_BYTES == 2
+#define LIBMIN_MALLOC_ALIGN_MASK 0x1
+#elif LIBMIN_MALLOC_ALIGN_BYTES == 4
+#define LIBMIN_MALLOC_ALIGN_MASK 0x3
+#elif LIBMIN_MALLOC_ALIGN_BYTES == 8
+#define LIBMIN_MALLOC_ALIGN_MASK 0x7
+#else
+#error Invalid `LIBMIN_MALLOC_ALIGN_BYTES` value.
+#endif
+
+/* Note: Larger alignments are possible, but will required a larger
+   MEMALIGN array/larger memhdr size */
+
+#endif /* LIBMIN_MALLOC_ALIGN_BYTES */
+
 /* malloc/free functions */
 
 typedef char MEMALIGN[16];
@@ -35,6 +55,18 @@ void *
 libmin_malloc(size_t size) {
 	void *block;
 	memhdr_t *header;
+
+#if defined(LIBMIN_MALLOC_ALIGN_MASK)
+    /* Check that memhdr_t is of a size that preserves alignment */
+    libmin_assert((sizeof(memhdr_t) & LIBMIN_MALLOC_ALIGN_MASK) == 0);
+
+    /* Increase size to be a multiple of alignment to ensure future allocations
+     * are also aligned. */
+    if ((size & LIBMIN_MALLOC_ALIGN_MASK) != 0) {
+        size &= ~(LIBMIN_MALLOC_ALIGN_MASK);
+        size += LIBMIN_MALLOC_ALIGN_MASK + 1;
+    }
+#endif /* LIBMIN_MALLOC_ALIGN_MASK */
 
 	if (!size) {
 		return NULL;

@@ -8,9 +8,10 @@
 
 /* Build parameters:
 
-   #define LIBMIN_SILENT		- disable all console messages
-   #define LIBMIN_HOST		- build to run on Unix host
-   #define LIBMIN_TARGET		- build to run on ARM target model
+   #define LIBMIN_SILENT              - disable all console messages
+   #define LIBMIN_HOST                - build to run on Unix host
+   #define LIBMIN_TARGET              - build to run on ARM target model
+   #define LIBMIN_MALLOC_ALIGN_BYTES  - minimum allignment of malloc'd regions (optional)
 
 */
 
