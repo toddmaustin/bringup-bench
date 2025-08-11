@@ -102,7 +102,11 @@ int main() {
     
     printFormula();
 
-    if (solveSAT(1)) {
+    libtarg_start_perf();
+    int result =  solveSAT(1);
+    libtarg_stop_perf();
+
+    if (result) {
         libmin_printf("SAT solution found:\n");
         printAssignment();
         libtarg_success();

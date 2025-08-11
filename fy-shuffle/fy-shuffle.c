@@ -51,6 +51,7 @@ main(void)
   /* initialize random seed: */
   libmin_srand(42);
 
+  libtarg_start_perf();
   for (int k = 0; k < 8; k++)
   {
     print("A (before): ", a, SZ_A);
@@ -61,6 +62,7 @@ main(void)
     fy_shuffle(b, SZ_B);
     print("B (after):  ", b, SZ_B);
   }
+  libtarg_stop_perf();
   
   libmin_success();
   return 0;

@@ -56,7 +56,9 @@ main(void)
   n = libmin_strlen(S2);
 
   libmin_printf("S1 : %s (%d) \nS2 : %s  (%d)\n", S1, m, S2, n);
+  libtarg_start_perf();
   lcsAlgo();
+  libtarg_stop_perf();
   libmin_printf("\n");
 
   libmin_success();

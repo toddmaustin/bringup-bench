@@ -176,6 +176,8 @@ int main(int argc, char *argv[])
     char rep[SBUFF];
     int repi = 1;
 
+    libtarg_start_perf();
+
     /* IFDEBUG("Starting optarg loop..."); */
 
     /* getopt() configured options:
@@ -216,6 +218,7 @@ int main(int argc, char *argv[])
         repi = libmin_atoi(rep);
     }while(repi == 1);
 
+    libtarg_stop_perf();
     libmin_success();
     return 0;
 }

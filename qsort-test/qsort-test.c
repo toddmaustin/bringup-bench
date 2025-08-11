@@ -62,13 +62,8 @@ int main(void) {
         30, 31, 32, 33, 34, 35, 36, 37, 38, 39
     };
     size_t n1 = sizeof(test1) / sizeof(test1[0]);
+    libtarg_start_perf();
     libmin_qsort(test1, n1, sizeof(int), int_compare);
-    libmin_printf("Test 1: Sorted Random Integer Array (40 elements):\n");
-    print_array(test1, n1);
-    if (is_sorted(test1, n1))
-        libmin_printf("Test 1 passed: array sorted correctly.\n");
-    else
-        libmin_printf("Test 1 failed: array not sorted correctly.\n");
 
     /* ---------------------------
      * Test 2: Integer array with few duplicates (40 elements).
@@ -83,12 +78,6 @@ int main(void) {
     };
     size_t n2 = sizeof(test2) / sizeof(test2[0]);
     libmin_qsort(test2, n2, sizeof(int), int_compare);
-    libmin_printf("\nTest 2: Sorted Integer Array with Few Duplicates (40 elements):\n");
-    print_array(test2, n2);
-    if (is_sorted(test2, n2))
-        libmin_printf("Test 2 passed: duplicate elements sorted correctly.\n");
-    else
-        libmin_printf("Test 2 failed: duplicate elements not sorted correctly.\n");
 
     /* ---------------------------
      * Test 3: Already sorted integer array (40 elements).
@@ -100,12 +89,6 @@ int main(void) {
         test3[i] = i;
     }
     libmin_qsort(test3, 40, sizeof(int), int_compare);
-    libmin_printf("\nTest 3: Already Sorted Integer Array (40 elements):\n");
-    print_array(test3, 40);
-    if (is_sorted(test3, 40))
-        libmin_printf("Test 3 passed: array remains sorted.\n");
-    else
-        libmin_printf("Test 3 failed: already sorted array not sorted correctly.\n");
 
     /* ---------------------------
      * Test 4: Reverse sorted integer array (40 elements).
@@ -117,12 +100,6 @@ int main(void) {
         test4[i] = 39 - i;
     }
     libmin_qsort(test4, 40, sizeof(int), int_compare);
-    libmin_printf("\nTest 4: Sorted Reverse Order Integer Array (40 elements):\n");
-    print_array(test4, 40);
-    if (is_sorted(test4, 40))
-        libmin_printf("Test 4 passed: reverse sorted array sorted correctly.\n");
-    else
-        libmin_printf("Test 4 failed: reverse sorted array not sorted correctly.\n");
 
     /* ---------------------------
      * Test 5: String array (32 elements).
@@ -137,6 +114,36 @@ int main(void) {
     };
     size_t n_str = sizeof(test_strings) / sizeof(test_strings[0]);
     libmin_qsort(test_strings, n_str, sizeof(char *), string_compare);
+    libtarg_stop_perf();
+
+    libmin_printf("Test 1: Sorted Random Integer Array (40 elements):\n");
+    print_array(test1, n1);
+    if (is_sorted(test1, n1))
+        libmin_printf("Test 1 passed: array sorted correctly.\n");
+    else
+        libmin_printf("Test 1 failed: array not sorted correctly.\n");
+
+    libmin_printf("\nTest 2: Sorted Integer Array with Few Duplicates (40 elements):\n");
+    print_array(test2, n2);
+    if (is_sorted(test2, n2))
+        libmin_printf("Test 2 passed: duplicate elements sorted correctly.\n");
+    else
+        libmin_printf("Test 2 failed: duplicate elements not sorted correctly.\n");
+
+    libmin_printf("\nTest 3: Already Sorted Integer Array (40 elements):\n");
+    print_array(test3, 40);
+    if (is_sorted(test3, 40))
+        libmin_printf("Test 3 passed: array remains sorted.\n");
+    else
+        libmin_printf("Test 3 failed: already sorted array not sorted correctly.\n");
+
+    libmin_printf("\nTest 4: Sorted Reverse Order Integer Array (40 elements):\n");
+    print_array(test4, 40);
+    if (is_sorted(test4, 40))
+        libmin_printf("Test 4 passed: reverse sorted array sorted correctly.\n");
+    else
+        libmin_printf("Test 4 failed: reverse sorted array not sorted correctly.\n");
+
     libmin_printf("\nTest 5: Sorted String Array (32 elements):\n");
     print_string_array(test_strings, n_str);
     if (is_sorted_string_array(test_strings, n_str))

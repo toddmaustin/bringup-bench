@@ -110,6 +110,7 @@ int main()
     printPQ(&pq);
 
     libmin_srand(42);
+    libtarg_start_perf();
     pq = newNode(4, 1);
     for (int i=0; i < 250; i++)
     {
@@ -117,6 +118,7 @@ int main()
       int val = libmin_rand() % 250;
       push(&pq, prio, val);
     }
+    libtarg_stop_perf();
     printPQ(&pq);
 
     libmin_success();

@@ -59,7 +59,10 @@ solveKT(void)
 
     /* Start from 0,0 and explore all tours using
        solveKTUtil() */
-    if (solveKTUtil(0, 0, 1, sol, xMove, yMove) == 0) {
+    libtarg_start_perf();
+    int result = solveKTUtil(0, 0, 1, sol, xMove, yMove);
+    libtarg_stop_perf();
+    if (result == 0) {
         libmin_printf("Solution does not exist");
         return 0;
     }

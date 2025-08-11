@@ -22,6 +22,7 @@ SIEVE(long m, long p)
   register long count,size;
   long j;
 
+  libtarg_start_perf();
   size  = m - 1;
 
   N_Prime   = 0L;
@@ -54,6 +55,8 @@ SIEVE(long m, long p)
 						
   N_Prime = j ;
   L_Prime = prime;
+
+  libtarg_stop_perf();
 
   if (p != 0L)
     libmin_printf("  %9ld   %8ld     %8ld\n",m,N_Prime,L_Prime);

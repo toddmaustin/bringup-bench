@@ -31,6 +31,7 @@ main(void)
   libmin_printf("** Mandelbrot ASCII image\n");
   libmin_printf("** xres: %d, yres: %d\n", hxres, hyres);
 
+  libtarg_start_perf();
   for (hy=1; hy <= hyres; hy++)
     {
       for (hx=1; hx <= hxres; hx++)
@@ -54,6 +55,7 @@ main(void)
 	}
       libmin_printf("\n");
     }
+  libtarg_stop_perf();
 
   libmin_success();
   return 0;

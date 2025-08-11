@@ -633,6 +633,7 @@ int main()
     size_t nfailed = 0;
     size_t i;
 
+    libtarg_start_perf();
     for (i = 0; i < ntests; ++i)
     {
         pattern = test_vector[i][1];
@@ -668,6 +669,7 @@ int main()
             }
         }
     }
+    libtarg_stop_perf();
 
     // printf("\n");
     libmin_printf("%lu/%lu tests succeeded.\n", ntests - nfailed, ntests);

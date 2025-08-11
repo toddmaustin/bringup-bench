@@ -48,7 +48,10 @@ int main() {
 
     double output[N][N] = {0};
 
+    libtarg_start_perf();
     idct_2d(input, output);
+    libtarg_stop_perf();
+
     print_matrix(output, "IDCT Output");
 
     libmin_success();

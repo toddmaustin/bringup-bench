@@ -209,7 +209,9 @@ main()
 	}
 	initializeData(graph);	
 	displayGraph(graph);
+  libtarg_start_perf();
   minSpanTree(graph,path);
+  libtarg_stop_perf();
 
 	// displayPath(source,destination,path);
 	// displayGraph1(graph, path);

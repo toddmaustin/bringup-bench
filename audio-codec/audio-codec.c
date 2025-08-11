@@ -145,17 +145,20 @@ void decode(int16_t *out, uint8_t *in, size_t len)
  */
 static void test(int16_t *pcm, uint8_t *coded, int16_t *decoded, size_t len)
 {
+
+    libtarg_start_perf();
     /* run encode */
     encode(coded, pcm, len);
+
+    /* run decode */
+    decode(decoded, coded, len);
+    libtarg_stop_perf();
 
     /* check encode result */
     for (size_t i = 0; i < len; i++)
     {
         libmin_assert(coded[i] == r_coded[i]);
     }
-
-    /* run decode */
-    decode(decoded, coded, len);
 
     /* check decode result */
     for (size_t i = 0; i < len; i++)

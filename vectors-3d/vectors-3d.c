@@ -306,30 +306,36 @@ static void test()
 {
     vec_3d a = {1., 2., 3.};
     vec_3d b = {1., 1., 1.};
-    double d;
+    double d1, d2, dot_result, alpha;
+    vec_3d c;
 
+    // Perform all computations
+    libtarg_start_perf();
+    d1 = vector_norm(&a);
+    d2 = vector_norm(&b);
+    dot_result = dot_prod(&a, &b);
+    c = vector_prod(&a, &b);
+    alpha = get_angle(&a, &b);
+    libtarg_stop_perf();
+
+    // Print results and verify
     libmin_printf("%s", print_vector(&a, "a"));
     libmin_printf("%s", print_vector(&b, "b"));
 
-    d = vector_norm(&a);
-    libmin_printf("|a| = %.4lf\n", d);
-    libmin_assert(libmin_fabs(d - 3.742) < 0.01);
-    d = vector_norm(&b);
-    libmin_printf("|b| = %.4lf\n", d);
-    libmin_assert(libmin_fabs(d - 1.732) < 0.01);
+    libmin_printf("|a| = %.4lf\n", d1);
+    libmin_assert(libmin_fabs(d1 - 3.742) < 0.01);
+    libmin_printf("|b| = %.4lf\n", d2);
+    libmin_assert(libmin_fabs(d2 - 1.732) < 0.01);
 
-    d = dot_prod(&a, &b);
-    libmin_printf("Dot product: %lf\n", d);
-    libmin_assert(libmin_fabs(d - 6.0) < 0.01);
+    libmin_printf("Dot product: %lf\n", dot_result);
+    libmin_assert(libmin_fabs(dot_result - 6.0) < 0.01);
 
-    vec_3d c = vector_prod(&a, &b);
     libmin_printf("Vector product ");
     libmin_printf("%s", print_vector(&c, "c"));
     libmin_assert(libmin_fabs(c.x - (-1.0)) < 0.01);
     libmin_assert(libmin_fabs(c.y - (2.0)) < 0.01);
     libmin_assert(libmin_fabs(c.z - (-1.0)) < 0.01);
 
-    double alpha = get_angle(&a, &b);
     libmin_printf("The angle is %lf\n", alpha);
     libmin_assert(libmin_fabs(alpha - 0.387597) < 0.01);
 

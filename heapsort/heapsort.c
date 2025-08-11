@@ -16,6 +16,8 @@ HSORT(int64_t m, int64_t p)
   int64_t  msize, iran, ia, ic, im, ih, ir;
   int64_t  count, ca;
 
+  libtarg_start_perf();
+
   msize = m * bplong;
   size  = m - 1;
 
@@ -80,6 +82,8 @@ HSORT(int64_t m, int64_t p)
     }
  Done:
   count = count + ca;
+
+  libtarg_stop_perf();
 
   /* Scale runtime per iteration */
   ir = count;

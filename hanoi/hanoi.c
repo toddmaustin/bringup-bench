@@ -34,6 +34,7 @@ main(void)
 
   disk = 0;
 
+  libtarg_start_perf();
   while (1)
     {
       disk++;
@@ -50,6 +51,7 @@ main(void)
 
       if (disk == 10) break;
     }
+  libtarg_stop_perf();
 
   libmin_success();
   return 0;

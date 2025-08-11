@@ -339,10 +339,12 @@ main(void)
 	}
 	
 	/* Do selected calculation, and quit when accuracy is bettered. */
+	libtarg_start_perf();
 	while(libmin_fabs(E_old - (E = method(E_old,e,M,0))) >= derror){
 		E_old = E;
 		libmin_printf("n = %d\tE = %f\n",n++,sign*E);
 	}
+	libtarg_stop_perf();
 
   libmin_success();
 	return 0;

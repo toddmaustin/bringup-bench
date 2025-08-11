@@ -44,6 +44,7 @@ main(void)
 
   init();
   int running = TRUE;
+  libtarg_start_perf();
   while (running) {
     draw();
     //sleep(500);
@@ -52,6 +53,7 @@ main(void)
     if (iters == 80)
       running = FALSE;
   }
+  libtarg_stop_perf();
 
   libmin_success();
   return 0;

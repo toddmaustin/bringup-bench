@@ -12,8 +12,10 @@ main(void)
   y = 1.0 + 1.0/steps;
   x = 1.0;
 
+  libtarg_start_perf();
   for(; steps > 0; steps--)
     x *= y;
+  libtarg_stop_perf();
 
   libmin_printf("natlog: e=%f\n", x);
 

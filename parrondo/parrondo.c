@@ -209,6 +209,8 @@ main(void)
 	for(i=0;i<3;i++)site_visits[i] = 0L;  /* initialize counters */
 	i=0;
 	libmin_printf("Simulating %d trials ...\n",trials);
+	
+	libtarg_start_perf();
 	while(i<trials){   /* Loop over trials */
 
 		/* reseed */
@@ -239,6 +241,7 @@ main(void)
 		n = 0L;
 		
 	}
+	libtarg_stop_perf();
 
 	n_bar = n_tot/((double)i);
 

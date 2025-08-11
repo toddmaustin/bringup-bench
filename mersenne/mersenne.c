@@ -135,6 +135,7 @@ main(void)
   int i, j;
     
   sgenrand(4357);
+  libtarg_start_perf();
   for (i=0,j=0; i<steps; i++)
     {
       if ((i % 100) == 0)
@@ -144,6 +145,7 @@ main(void)
 	    libmin_printf("\n");
 	}
     }
+  libtarg_stop_perf();
   libmin_printf("\n");
 
   libmin_success();

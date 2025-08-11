@@ -57,7 +57,9 @@ int main() {
     double L[N][N] = {0};
     double U[N][N] = {0};
 
+    libtarg_start_perf();
     lu_decomposition(A, L, U);
+    libtarg_stop_perf();
 
     print_matrix("A", A);
     print_matrix("L", L);

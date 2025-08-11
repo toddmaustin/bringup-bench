@@ -160,10 +160,12 @@ sort_structs_example(void)
 int
 main(void)
 {
+    libtarg_start_perf();
     /* run all example functions */
     sort_integers_example();
     sort_cstrings_example();
     sort_structs_example();
+    libtarg_stop_perf();
 
     libmin_success();
     return 0;

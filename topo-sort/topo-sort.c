@@ -93,7 +93,9 @@ void topologicalSort(struct Graph* graph)
     for (int i = 0; i < graph->V; ++i) { 
         visited[i] = FALSE; 
     } 
-  
+
+    libtarg_start_perf();
+
     // Call the recursive helper function to store 
     // Topological Sort starting from all vertices one by 
     // one 
@@ -102,7 +104,9 @@ void topologicalSort(struct Graph* graph)
             topologicalSortUtil(graph, i, visited, &stack); 
         } 
     } 
-  
+
+    libtarg_stop_perf();
+
     // Print contents of stack 
     while (stack != NULL) { 
         libmin_printf("%d ", stack->data); 

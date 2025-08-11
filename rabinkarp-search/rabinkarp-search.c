@@ -109,7 +109,9 @@ main(void)
     ret[i] = FALSE; 
 
   // Run search
+  libtarg_start_perf();
   search(txt, n, pat, m, ret);
+  libtarg_stop_perf();
 
   // print results
   for(int i=0; i<n; i++)

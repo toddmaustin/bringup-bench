@@ -48,10 +48,12 @@ void (*pbar)(int (*pfoo)(int x)) = &bar;
 int
 main(void)
 {
+  libtarg_start_perf();
   int (*pfoo)(int) = &foo;
   (*pbar)(pfoo);
   (*pbar)(pfoo);
   (*pbar)(pfoo);
+  libtarg_stop_perf();
   libmin_printf("aglobal = %d\n", aglobal);
 
   libmin_success();

@@ -107,7 +107,9 @@ main(void)
 
  
   // Print the solution
+  libtarg_start_perf();
   floydWarshall(graph);
+  libtarg_stop_perf();
  
   // Print the shortest distance matrix
   printSolution(dist);

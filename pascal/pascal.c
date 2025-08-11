@@ -127,6 +127,7 @@ int main(void)
 
 	/* build the triangle */
 	
+	libtarg_start_perf();
 	triangle[0][0] = 1;
 	for(i=1;i<nrows;i++){
 		triangle[i][0] = 1;
@@ -143,6 +144,8 @@ int main(void)
 
 	/* make sure this value is even */
 	if(max_width % 2) max_width++;
+
+    libtarg_stop_perf();
 
 	/* Since each number is printed in a field max_width+2 wide
 	   and there are nrows numbers in the longest (bottom) row

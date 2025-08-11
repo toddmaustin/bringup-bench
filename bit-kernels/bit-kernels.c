@@ -106,6 +106,7 @@ int main(void) {
     unsigned long long total_parallel = 0;
     
     // Process each number.
+    libtarg_start_perf();
     for (size_t i = 0; i < NUM_ELEMENTS; i++) {
         uint32_t val = numbers[i];
         unsigned int naive   = count_bits_naive(val);
@@ -133,6 +134,7 @@ int main(void) {
                    val, naive, kernighan, builtin, table, parallel);
         }
     }
+    libtarg_stop_perf();
     
     // Print overall totals for comparison.
     libmin_printf("\nTotal bit count over %d numbers:\n", NUM_ELEMENTS);

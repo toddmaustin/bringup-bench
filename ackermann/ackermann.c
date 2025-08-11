@@ -150,20 +150,28 @@ ack(unsigned x, unsigned y)
 int
 main(void)
 {
-	unsigned y,k; 
-
+  unsigned y, k;
+  unsigned result[AMAX + 1][AMAX + 1]; //[x][y]
   max_depth = 0;
-	for(k=0;k<=AMAX;k++)
-  {
-		libmin_printf("\nx+y=%d:\n\n",k);
-		for(y=0;y<=k;y++)
-    {
-		  depth = 0;  /* stack guard */
-			libmin_printf("A(%d,%d) = %d\n",k-y,y,ack(k-y,y));
-      if (depth > max_depth)
-        max_depth = depth;   
-		}
-	}
+
+  // Calculate:
+  libtarg_start_perf();
+  for (k = 0; k <= AMAX; k++) {
+    for (y = 0; y <= k; y++) {
+      depth = 0; /* stack guard */
+      result[k - y][y] = ack(k - y, y);
+      if (depth > max_depth) max_depth = depth;
+    }
+  }
+  libtarg_stop_perf();
+
+  // Print:
+  for (k = 0; k <= AMAX; k++) {
+    libmin_printf("\nx+y=%d:\n\n", k);
+    for (y = 0; y <= k; y++) {
+      libmin_printf("A(%d,%d) = %d\n", k - y, y, result[k - y][y]);
+    }
+  }
   libmin_printf("Max recursive depth = %u\n", max_depth);
 
   libmin_success();
