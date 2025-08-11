@@ -36,7 +36,7 @@ simple_putchar(char c)
   return c;
 }
 
-extern inline void
+NORETURN extern inline void
 simple_halt(void)
 {
   SIMPLE_DEV_WRITE(SIMPLE_CTRL_BASE + SIMPLE_CTRL_CTRL, 1);
@@ -158,7 +158,7 @@ SPIN_SUCCESS_ADDR:
 }
 
 /* benchmark completed with error CODE */
-void
+NORETURN void
 libtarg_fail(int code)
 {
 #ifdef TARGET_HOST

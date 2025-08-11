@@ -113,6 +113,21 @@ typedef uint64_t              uintptr_t;
 #define FLT_MAX        3.4028234663852886e+38
 #define FLT_MIN        1.1754943508222875e-38
 
+/* no-return attribute */
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+    /* C11 standard */
+    #include <stdnoreturn.h>
+    #define NORETURN noreturn
+#elif defined(__GNUC__) || defined(__clang__)
+    /* GCC or Clang */
+    #define NORETURN __attribute__((noreturn))
+#elif defined(_MSC_VER)
+    /* Microsoft Visual C++ */
+    #define NORETURN __declspec(noreturn)
+#else
+    /* Fallback for unsupported compilers */
+    #define NORETURN
+#endif
 
 /* floating point */
 typedef float                 float_t;
@@ -122,7 +137,7 @@ typedef double                double_t;
 void libtarg_success(void);
 
 /* benchmark completed with error CODE */
-void libtarg_fail(int code);
+NORETURN void libtarg_fail(int code);
 
 /* output a single character, to whereever the target wants to send it... */
 void libtarg_putc(char c);
