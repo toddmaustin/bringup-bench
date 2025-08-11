@@ -249,3 +249,12 @@ libtarg_sbrk(size_t inc)
 #endif
 }
 
+#ifdef LIBTARG_PERF_HOOKS
+void libtarg_start_perf() {
+/* optional hook for starting perfomance monitoring/instrumentation */
+}
+
+void libtarg_stop_perf() {
+/* optional hook for starting perfomance monitoring/instrumentation */
+}
+#endif /* LIBTARG_PERF_HOOKS */

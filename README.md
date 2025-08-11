@@ -260,6 +260,21 @@ void *libtarg_sbrk(size_t inc);
 ```
 Once these four interfaces are implemented, all of the Bringup-Bench benchmarks can be built and run. To facilitate testing, the "TARGET=host" target defines the four required system interfaces by passing them on to the Linux OS. In addition, the repo also provides a standalone target "TARGET=sa" which only requires that the target support provbable memory.
 
+Optionally, the following two system calls can be implemented and enabled by defining `LIBTARG_PERF_HOOKS`:
+
+```c
+/* start perf-monitoring */
+void libtarg_start_perf();
+
+/* stop perf-monitoring */
+void libtarg_stop_perf();
+```
+
+These hooks, if enabled, are called at the beginning and end of each benchmark, and can be used for platform specific instrumentation and performance monitoring.
+
+For benchmarks where computation is self-contained, only the core computation is placed in between the markers. For all other benchmarks, the complete benchmark code is placed between the markers.
+
+
 ## Using the code-based read-only file system
 
 Using the code-based read-only file system, it is possible for a benchmark to access a read-only file that is incorporated into its code. To convert an input file to a read-only code-based file, use the following command (shown for the benchmark "anagram"):

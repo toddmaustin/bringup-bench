@@ -130,4 +130,17 @@ void libtarg_putc(char c);
 /* get some memory */
 void *libtarg_sbrk(size_t inc);
 
+#ifdef LIBTARG_PERF_HOOKS
+/* start perf-monitoring */
+void libtarg_start_perf();
+
+/* stop perf-monitoring */
+void libtarg_stop_perf();
+#else
+
+#define libtarg_start_perf()
+#define libtarg_stop_perf()
+
+#endif /* LIBTARG_PERF_HOOKS */
+
 #endif /* LIBTARG_H */
