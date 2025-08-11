@@ -1,5 +1,5 @@
 
-LOCAL_CFLAGS=
+LOCAL_CFLAGS=-Wno-maybe-uninitialized
 LOCAL_LIBS=
 LOCAL_OBJS=spelt2num.o
 
