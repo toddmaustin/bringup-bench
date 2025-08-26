@@ -119,10 +119,10 @@ typedef float                 float_t;
 typedef double                double_t;
 
 /* benchmark completed successfully */
-void libtarg_success(void);
+__attribute__((noreturn)) void libtarg_success(void);
 
 /* benchmark completed with error CODE */
-void libtarg_fail(int code);
+__attribute__((noreturn)) void libtarg_fail(int code);
 
 /* output a single character, to whereever the target wants to send it... */
 void libtarg_putc(char c);

@@ -120,7 +120,7 @@ uint64_t __hashval = FNV64a_INIT;
 #endif /* TARGET_HAHOST */
 
 /* benchmark completed successfully */
-void
+__attribute__((noreturn)) void
 libtarg_success(void)
 {
 #if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
@@ -158,7 +158,7 @@ SPIN_SUCCESS_ADDR:
 }
 
 /* benchmark completed with error CODE */
-void
+__attribute__((noreturn)) void
 libtarg_fail(int code)
 {
 #if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
