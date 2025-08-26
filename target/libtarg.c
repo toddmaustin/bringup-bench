@@ -1,7 +1,7 @@
 #include "libtarg.h"
 #include "libmin.h"
 
-#if defined(TARGET_HOST)
+#if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -123,7 +123,7 @@ uint64_t __hashval = FNV64a_INIT;
 void
 libtarg_success(void)
 {
-#if defined(TARGET_HOST)
+#if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
   exit(0);
 #elif defined(TARGET_SA)
   uint64_t spincnt = 0;
@@ -161,7 +161,7 @@ SPIN_SUCCESS_ADDR:
 void
 libtarg_fail(int code)
 {
-#ifdef TARGET_HOST
+#if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
   exit(code);
 #elif defined(TARGET_SA)
   uint64_t spincnt = 0;
@@ -187,7 +187,7 @@ SPIN_FAIL_ADDR:
 void
 libtarg_putc(char c)
 {
-#if defined(TARGET_HOST)
+#if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
   fputc(c, stdout);
 #elif defined(TARGET_SA)
   /* add to outbuf pool */
@@ -229,7 +229,7 @@ static uint32_t __heap_ptr = 0;
 void *
 libtarg_sbrk(size_t inc)
 {
-#if defined(TARGET_HOST)
+#if defined(TARGET_HOST) || defined(TARGET_SPIKE_PK)
 #if __clang__
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
 #endif /* __clang__ */

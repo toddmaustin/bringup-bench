@@ -1,8 +1,13 @@
 #include "libmin.h"
+#undef sin
 #define sin libmin_sin
+#undef cos
 #define cos libmin_cos
+#undef memset
 #define memset libmin_memset
+#undef putchar
 #define putchar libmin_putc
+#undef printf
 #define printf libmin_printf
 #define xx unsigned x=0; x < 2; x++
 #define K int k
@@ -11,8 +16,8 @@
 
 
 
-             K;double sin()
-         ,cos();niam(){float A=
+             K;double sin(double)
+         ,cos(double);niam(){float A=
        0,B=0,i,j,z[1760];char b[
      1760];printf("\x1b[2J");for(xx
   ){memset(b,32,1760);memset(z,0,7040)

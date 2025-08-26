@@ -14,7 +14,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
-#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_HASPIKE)
+#elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_SPIKE_PK) || defined(TARGET_HASPIKE)
 #include <stdarg.h>
 #include <stdint.h>
 #include <stddef.h>
