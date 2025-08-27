@@ -1,3 +1,8 @@
+Version 1.7
+  - AES benchmark added, now for a total of 85 benchmarks
+  - Added TARGET=spike-pk to support running benchmarks on RISC-V Spike Proxy Kernel
+  - Processed a lot of pull requests from the BRINGUP-BENCH community, thank you!
+
 Version 1.6
   - 20 new benchmarks added, now for a total of 85 benchmarks!
   - TARGETs can now exclude benchmarks from their tests by adding them to TARGET_EXCLUDES in the Makefile
