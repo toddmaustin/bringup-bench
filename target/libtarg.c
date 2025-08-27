@@ -36,7 +36,7 @@ simple_putchar(char c)
   return c;
 }
 
-extern inline void
+__attribute__((noreturn)) extern inline void
 simple_halt(void)
 {
   SIMPLE_DEV_WRITE(SIMPLE_CTRL_BASE + SIMPLE_CTRL_CTRL, 1);
