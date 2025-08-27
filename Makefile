@@ -32,7 +32,7 @@ error:
 #
 # END of user-modifiable variables
 #
-BMARKS = ackermann anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher connect4-minimax convex-hull dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort heat-calc huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot matmult max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver packet-filter parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo qsort-test quine rabinkarp-search rand-test ransac regex-parser rho-factor rle-compress rsa-cipher sat-solver shortest-path sieve simple-grep skeleton spelt2num spirograph strange sudoku-solver tetris-sim tiny-NN topo-sort totient uniquify vectors-3d weekday
+BMARKS = ackermann aes anagram audio-codec avl-tree banner bit-kernels blake2b bloom-filter boyer-moore-search bubble-sort c-interp checkers cipher connect4-minimax convex-hull dhrystone distinctness donut fft-int flood-fill frac-calc fuzzy-match fy-shuffle gcd-list grad-descent graph-tests hanoi heapsort heat-calc huff-encode idct-alg indirect-test k-means kadane kepler knapsack knights-tour life longdiv lu-decomp lz-compress mandelbrot matmult max-subseq mersenne minspan monte-carlo murmur-hash n-queens natlog nbody-sim nr-solver packet-filter parrondo pascal pi-calc primal-test priority-queue quaternions qsort-demo qsort-test quine rabinkarp-search rand-test ransac regex-parser rho-factor rle-compress rsa-cipher sat-solver shortest-path sieve simple-grep skeleton spelt2num spirograph strange sudoku-solver tetris-sim tiny-NN topo-sort totient uniquify vectors-3d weekday
 
 #OPT_CFLAGS = -O0 -g
 OPT_CFLAGS = -O3 -g
@@ -117,7 +117,7 @@ else ifeq ($(TARGET), spike-pk)
 TARGET_CC = riscv64-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
 TARGET_AR = riscv32-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE_PK -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
+TARGET_CFLAGS = -DTARGET_SPIKE_PK -DLIBMIN_MALLOC_ALIGN_BYTES=8 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
 TARGET_SIM = spike pk
 TARGET_DIFF = diff
