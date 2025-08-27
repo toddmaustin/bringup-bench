@@ -60,8 +60,21 @@ int main(void) {
     }
     libmin_printf("\n");
 
+    libtarg_start_perf();
     /* Sort the list using qsort from qsort.h/qsort.c */
     libmin_qsort(strings, n, sizeof(char *), string_compare);
+
+    /* Count unique strings */
+    size_t unique_count = 0;
+    if (n > 0) {
+        unique_count = 1;
+        for (size_t i = 1; i < n; i++) {
+            if (libmin_strcmp(strings[i], strings[i - 1]) != 0) {
+                unique_count++;
+            }
+        }
+    }
+    libtarg_stop_perf();
 
     libmin_printf("Sorted Strings:\n");
     for (size_t i = 0; i < n; i++) {
@@ -76,11 +89,9 @@ int main(void) {
     libmin_printf("Unique Strings:\n");
     if (n > 0) {
         libmin_printf("%s\n", strings[0]);
-        size_t unique_count = 1;
         for (size_t i = 1; i < n; i++) {
             if (libmin_strcmp(strings[i], strings[i - 1]) != 0) {
                 libmin_printf("%s\n", strings[i]);
-                unique_count++;
             }
         }
         libmin_printf("\nTotal Unique Strings: %u\n", unique_count);

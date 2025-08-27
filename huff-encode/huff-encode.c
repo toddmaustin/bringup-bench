@@ -169,6 +169,7 @@ int main() {
     // Example input string to compress
     char input[] = "this is an example for huffman encoding";
     
+    libtarg_start_perf();
     // Count frequency of each character in input
     int freq[256] = {0};
     for (int i = 0; input[i]; i++) {
@@ -201,6 +202,15 @@ int main() {
     char arr[MAX_TREE_HT];
     generateCodes(root, arr, 0, codes);
     
+    // Encode input string
+    char encoded[1024] = {0};
+    encodeString(input, codes, encoded);
+
+    // Decode the encoded string
+    char decoded[1024] = {0};
+    decodeString(root, encoded, decoded);
+    libtarg_stop_perf();
+
     // Print generated Huffman codes
     libmin_printf("Huffman Codes:\n");
     for (int i = 0; i < 256; i++) {
@@ -209,9 +219,6 @@ int main() {
         }
     }
     
-    // Encode input string
-    char encoded[1024] = {0};
-    encodeString(input, codes, encoded);
     libmin_printf("\nEncoded string:\n%s\n", encoded);
     
     // Report compression metrics:
@@ -222,9 +229,6 @@ int main() {
     libmin_printf("Encoded size: %d bits\n", encodedBits);
     libmin_printf("Compression ratio: %.2f%%\n", (double)encodedBits / inputBits * 100);
     
-    // Decode the encoded string
-    char decoded[1024] = {0};
-    decodeString(root, encoded, decoded);
     libmin_printf("\nDecoded string:\n%s\n", decoded);
     
     // Check that the decompressed string matches the original input

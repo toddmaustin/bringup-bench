@@ -415,6 +415,8 @@ main(void)
     imag[i] = 0;
   }
 
+  libtarg_start_perf();
+
   fix_fft(real, imag, M, 0);
 
   for (i=0; i<N; i++)
@@ -424,6 +426,8 @@ main(void)
 
   for (i=0; i<N; i++)
     libmin_printf("%d: %d, %d\n", i, real[i], imag[i]);
+
+  libtarg_stop_perf();
 
   libmin_success();;
   return 0;

@@ -332,7 +332,7 @@ towers_test(void)
 int
 main(void)
 {
-
+    libtarg_start_perf();
     bfs_test();
 
     link_list();
@@ -340,6 +340,7 @@ main(void)
     DFS_test();
 
     towers_test();
+    libtarg_stop_perf();
 
     libmin_success();
     return 0;

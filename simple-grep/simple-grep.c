@@ -26,13 +26,25 @@ main(void)
     return 2;
   }
 
+  libtarg_start_perf();
   while (libmin_mgets(lineBuffer, BUFFER_LENGTH, fp))
   {
     // libmin_printf("%s\n", lineBuffer);
     if (libmin_strstr(lineBuffer, av[2]))
     {
-      libmin_printf("%s", lineBuffer);
       ++count;
+    }
+  }
+  libtarg_stop_perf();
+
+  // Reopen and print matching lines
+  libmin_mclose(fp);
+  libmin_mopen(&speech, "r");
+  while (libmin_mgets(lineBuffer, BUFFER_LENGTH, fp))
+  {
+    if (libmin_strstr(lineBuffer, av[2]))
+    {
+      libmin_printf("%s", lineBuffer);
     }
   }
   libmin_mclose(fp);

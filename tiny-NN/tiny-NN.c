@@ -132,6 +132,8 @@ int train(NETWORK_DATA_TYPE eta, NETWORK_DATA_TYPE error_threshold, NETWORK_DATA
 	//train the network
 	unsigned int iteration_count = 0;
 
+	libtarg_start_perf();
+
 	while(total_error > error_threshold && iteration_count < MAX_ITERATIONS)
 	{
 		total_error = 0;//hmmm....
@@ -198,6 +200,8 @@ int train(NETWORK_DATA_TYPE eta, NETWORK_DATA_TYPE error_threshold, NETWORK_DATA
 		libmin_printf("iteration %d Total error %f\n",iteration_count,total_error);
 		#endif
 	}
+
+	libtarg_stop_perf();
 
 	return EXIT_SUCCESS;
 }

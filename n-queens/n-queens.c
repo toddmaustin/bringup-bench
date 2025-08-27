@@ -41,7 +41,9 @@ main(void)
 {
   int *queens = (int *)libmin_malloc(BOARD_SIZE * sizeof(int));
 
+  libtarg_start_perf();
   solve(queens, 0);
+  libtarg_stop_perf();
 
   libmin_printf("Total solutions for %d-Queens: %d\n", BOARD_SIZE, solution_count);
 

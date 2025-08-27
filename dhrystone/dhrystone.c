@@ -173,6 +173,7 @@ main(void)
   /* Start timer */
   /***************/
 
+  libtarg_start_perf();
   for (Run_Index = 1; Run_Index <= Pnumber_of_runs; ++Run_Index)
   {
 
@@ -218,6 +219,7 @@ main(void)
       /* Int_1_Loc == 5 */
 
   } /* loop "for Run_Index" */
+  libtarg_stop_perf();
 
   /**************/
   /* Stop timer */

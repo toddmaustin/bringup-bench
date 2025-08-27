@@ -45,7 +45,9 @@ main(void)
   libmin_printf(" }\n");
 
   uint32_t gcd_of_n;
+  libtarg_start_perf();
   gcd_of_n = gcd(a, n);
+  libtarg_stop_perf();
   libmin_printf("GCD of list: %u\n", gcd_of_n);
 
   libmin_free(a);

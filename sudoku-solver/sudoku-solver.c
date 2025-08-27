@@ -90,7 +90,11 @@ int main() {
     libmin_printf("Initial Sudoku Puzzle:\n");
     printBoard();
 
-    if (solveSudoku()) {
+    libtarg_start_perf();
+    int solved = solveSudoku();
+    libtarg_stop_perf();
+
+    if (solved) {
         libmin_printf("\nSolved Sudoku Puzzle:\n");
         printBoard();
         libtarg_success();

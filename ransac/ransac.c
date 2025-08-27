@@ -90,7 +90,9 @@ int main(void) {
     int best_inlier_count = 0;
 
     // Run RANSAC to estimate the line parameters.
+    libtarg_start_perf();
     ransac_line_fitting(points, NUM_POINTS, &best_m, &best_b, &best_inlier_count);
+    libtarg_stop_perf();
 
     // Display the results.
     libmin_printf("RANSAC estimated line: y = %f * x + %f\n", best_m, best_b);

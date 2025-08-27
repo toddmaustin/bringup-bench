@@ -23,6 +23,7 @@ int main(void) {
     };
 
     // Time integration loop using Euler integration
+    libtarg_start_perf();
     for (int step = 0; step < NUM_STEPS; step++) {
         // Array to store computed accelerations for each particle
         double acc[N_BODIES][3] = { {0.0} };
@@ -62,6 +63,7 @@ int main(void) {
             bodies[i].pos[2] += bodies[i].vel[2] * DT;
         }
     }
+    libtarg_stop_perf();
 
     // Print final positions and velocities after the simulation
     libmin_printf("Final state after %d steps:\n", NUM_STEPS);

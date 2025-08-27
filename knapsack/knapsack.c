@@ -64,8 +64,9 @@ main(void)
   int w = W;
   int K[N+1][W+1];
 
-
+  libtarg_start_perf();
   knapSack(wt, val, K);
+  libtarg_stop_perf();
 
 	libmin_printf("Max value: %d\n", K[n][W]);
 	

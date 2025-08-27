@@ -76,14 +76,19 @@ double testdata[] = {
 int
 main(void)
 {
-  double root;
-  int converged;
+  double root[NTESTDATA];
+  int converged[NTESTDATA];
 
+  libtarg_start_perf();
   for (unsigned int i=0; i < NTESTDATA; i++)
   {
     sqrt_value = testdata[i];
-    root = rn_solver(&converged, 0.00001, 20, f, df);
-    libmin_printf("sqrt(%lf) == %lf (converged:%c)\n", sqrt_value, root, converged ? 't' : 'f');
+    root[i] = rn_solver(converged+i, 0.00001, 20, f, df);
+  }
+  libtarg_stop_perf();
+
+  for (unsigned int i=0; i < NTESTDATA; i++) {
+    libmin_printf("sqrt(%lf) == %lf (converged:%c)\n", testdata[i], root[i], converged[i] ? 't' : 'f');
   }
 
   libmin_success();

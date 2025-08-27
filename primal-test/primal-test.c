@@ -143,6 +143,7 @@ main(void)
   libmin_srand(42);
 
   // locate primes in a stream of random numbers
+  libtarg_start_perf();
   {
     uint32_t val = 3;
     for (int i=0; i < 200; i++)
@@ -159,6 +160,7 @@ main(void)
       val = libmin_rand();
     } 
   }
+  libtarg_stop_perf();
 
   // print out the primes that were found
   libmin_printf("Primality tests found %d primes...\n", q_head);

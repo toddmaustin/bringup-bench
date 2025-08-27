@@ -22,6 +22,7 @@ int main() {
         }
     }
 
+    libtarg_start_perf();
     // --- First Multiplication: Loop order (i, j, k) ---
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
@@ -39,6 +40,7 @@ int main() {
             }
         }
     }
+    libtarg_stop_perf();
 
     // --- Verification: Compare C and refC ---
     int error = 0;

@@ -329,7 +329,9 @@ static void test()
         observations[i].y = radius * libmin_sin(ang);
     }
     int k = 5;  // No of clusters
+    libtarg_start_perf();
     cluster* clusters = kMeans(observations, size, k);
+    libtarg_stop_perf();
     printEPS(observations, size, clusters, k);
     // Free the accquired memory
     libmin_free(observations);

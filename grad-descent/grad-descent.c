@@ -80,7 +80,10 @@ main(void)
 	double weight = 0;
 	double bias = 0;
 
+	libtarg_start_perf();
 	gradientDescent(&weight, &bias);
+	libtarg_stop_perf();
+
 	libmin_printf("The function is: %.4lfx + %.4lf\n", weight, bias);
 
   libmin_success();

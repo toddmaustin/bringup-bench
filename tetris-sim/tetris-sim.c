@@ -304,6 +304,7 @@ int main(void) {
     int move_count = 0;
     int total_lines_cleared = 0;
 
+    libtarg_start_perf();
     while (1) {
         const Piece *piece = random_piece();
         const Orientation *best_ori;
@@ -327,6 +328,7 @@ int main(void) {
     }
     libmin_printf("Game over after %d moves, total lines cleared: %d\n", move_count, total_lines_cleared);
     print_board(board);
+    libtarg_stop_perf();
 
     libmin_success();
     return 0;

@@ -252,10 +252,12 @@ quaternion quaternion_multiply(const quaternion *in_quat1,
 static void test()
 {
     quaternion quat = {{0.7071}, {{0.7071, 0.0, 0.0}}};
+    libtarg_start_perf();
     euler eul = euler_from_quat(&quat);
-    libmin_printf("Euler: %.4lf, %.4lf, %.4lf\n", eul.pitch, eul.roll, eul.yaw);
-
     quaternion test_quat = quat_from_euler(&eul);
+    libtarg_stop_perf();
+
+    libmin_printf("Euler: %.4lf, %.4lf, %.4lf\n", eul.pitch, eul.roll, eul.yaw);
     libmin_printf("Quaternion: %.4lf %+.4lf %+.4lf %+.4lf\n", test_quat.w,
            test_quat.dual.x, test_quat.dual.y, test_quat.dual.z);
 

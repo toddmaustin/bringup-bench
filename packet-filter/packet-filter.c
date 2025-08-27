@@ -95,6 +95,7 @@ int main() {
     
     int packetCounter = 0;
     
+    libtarg_start_perf();
     // Simulate packet processing.
     while (packetCounter < PACKET_COUNT) {
         Packet pkt = generate_packet();
@@ -106,6 +107,7 @@ int main() {
             print_packet(pkt);
         }
     }
+    libtarg_stop_perf();
     
     libmin_success();
     return 0;

@@ -68,7 +68,9 @@ main(void)
  
   libmin_printf("Array size= %d\n", n);
 
+  libtarg_start_perf();
   max_sum = kadane(arr, n, &ends_at);
+  libtarg_stop_perf();
 
   libmin_printf("The maximum sum of a contiguous subarray is %d (ending at index %d)\n", max_sum, ends_at);
 

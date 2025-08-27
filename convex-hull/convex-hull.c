@@ -82,6 +82,7 @@ int main() {
     points[minIdx] = temp;
     p0 = points[0];  // Set the global pivot.
 
+    libtarg_start_perf();
     // Sort the remaining points according to the polar angle relative to p0.
     sortPoints(points, NUM_POINTS);
 
@@ -99,6 +100,7 @@ int main() {
         }
         hull[hullSize++] = points[i];  // Push the current point.
     }
+    libtarg_stop_perf();
 
     // Print the convex hull result.
     libmin_printf("Convex Hull Points (in order):\n");

@@ -172,7 +172,11 @@ main(void)
 		return 1;
 	}
 
-	libmin_printf("phi(%d) = %d\n",n,phi(n));
+	libtarg_start_perf();
+	int result = phi(n);
+	libtarg_stop_perf();
+
+	libmin_printf("phi(%d) = %d\n",n,result);
 
   libmin_success();
 	return 0;

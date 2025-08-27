@@ -73,7 +73,9 @@ void test(void)
     double *x = (double *)libmin_malloc(N * sizeof(double));
     double *y = (double *)libmin_malloc(N * sizeof(double));
 
+    libtarg_start_perf();
     spirograph(x, y, l, k, N, rot);
+    libtarg_stop_perf();
 
     for (size_t i = 0; i < N; i++)
     {

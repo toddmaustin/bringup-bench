@@ -49,6 +49,8 @@ int main(int argc, char** argv)
     topsize = 25;
     tick = topsize / 20;
     
+    libtarg_start_perf();
+
     libmin_srand(42);
     libmin_printf("Start  -->  Finished\n");
     for(i = 0; i < topsize; i++) {
@@ -155,6 +157,8 @@ int main(int argc, char** argv)
     }
     
     MakeEmpty(tree);
+
+    libtarg_stop_perf();
 
     libmin_success();
     return 0;

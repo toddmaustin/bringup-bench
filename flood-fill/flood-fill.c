@@ -147,7 +147,9 @@ main()
   libmin_printf("\nBEFORE flooding `%c' @ (%d,%d):\n", replacement, x, y); printMatrix(mat);
 
   // replace the target color with a replacement color using DFS
+  libtarg_start_perf();
   floodfill(mat, x, y, replacement);
+  libtarg_stop_perf();
 
   // print the colors after replacement
   libmin_printf("\nAFTER:\n"); printMatrix(mat);

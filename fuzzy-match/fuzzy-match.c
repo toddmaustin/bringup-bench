@@ -309,6 +309,7 @@ const char *entries[] = {
 int
 main(void)
 {
+  libtarg_start_perf();
   {
 	  const char *pattern = "core";
     libmin_printf("Matches for `%s':\n", pattern);
@@ -347,6 +348,7 @@ main(void)
 	  }
     libmin_printf("\n");
   }
+  libtarg_stop_perf();
 
   libmin_success();	
   return 0;

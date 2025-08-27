@@ -247,6 +247,8 @@ main(void)
 
 	/* Do sanity checks on args */
 
+	libtarg_start_perf();
+
 	for(i=0; i<libmin_strlen(argv[1]); i++)
 		if(!isdigit(argv[1][i])){
 			libmin_printf("%s\n%s\n","longdiv: syntax error",
@@ -385,6 +387,7 @@ main(void)
 	  step++;
 
 	}  /* repeat with new dividend */
+	libtarg_stop_perf();
 
 	/* Add any necessary trailing zeros to quotient */
 	j = libmin_strlen(quotient);

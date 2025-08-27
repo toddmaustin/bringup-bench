@@ -33,13 +33,17 @@ main(void)
 	for(i = 0; i < NUM_ITEMS; i++)
 	{
 		filter_contents[i] = libmin_rand();
-		bfilter_add(bFilter, &filter_contents[i]);
-
 		// Fill our test array with a 50/50 mix of numbers that have been entered into the filter, and random numbers
 		if(libmin_rand() & 1)
 			test_array[i] = filter_contents[i];
 		else
 			test_array[i] = libmin_rand();
+	}
+
+	libtarg_start_perf();
+	for(i = 0; i < NUM_ITEMS; i++)
+	{
+		bfilter_add(bFilter, &filter_contents[i]);
 	}
 
 	for(i = 0; i < NUM_ITEMS; i++)
@@ -56,6 +60,7 @@ main(void)
 		else if(!array_present && filter_present)  false_positives++;
 		else if(array_present && !filter_present)  false_negatives++;
 	}
+	libtarg_stop_perf();
 
 	libmin_printf("True positives: %i\n"
 		"True negatives: %i\n"

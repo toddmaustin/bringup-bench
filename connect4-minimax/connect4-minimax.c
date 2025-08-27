@@ -319,7 +319,9 @@ void play_game() {
 int main(void) {
     libmin_srand(42);
     libmin_printf("Connect Four: Minimax AI Self-Play\n");
+    libtarg_start_perf();
     play_game();
+    libtarg_stop_perf();
 
     libmin_success();
     return 0;

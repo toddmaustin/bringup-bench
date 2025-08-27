@@ -86,26 +86,24 @@ murmurhash (const char *key, uint32_t len, uint32_t seed)
 int
 main(void)
 {
-    uint32_t seed = 0;
+  uint32_t seed = 0;
 
-    {
-      const char *key = "kinkajou"; // 0xb6d99cf8
-      uint32_t hash = murmurhash(key, (uint32_t)libmin_strlen(key), seed);
-      libmin_printf("murmurhash(\"%s\") = 0x%x\n", key, hash);
-    }
+  libtarg_start_perf();
+  const char *key_1 = "kinkajou"; // 0xb6d99cf8
+  uint32_t hash_1 = murmurhash(key_1, (uint32_t)libmin_strlen(key_1), seed);
 
-    {
-      const char *key = "The bringup-bench benchmark MURMUR made this.";
-      uint32_t hash = murmurhash(key, (uint32_t)libmin_strlen(key), seed);
-      libmin_printf("murmurhash(\"%s\") = 0x%x\n", key, hash);
-    }
+  const char *key_2 = "The bringup-bench benchmark MURMUR made this.";
+  uint32_t hash_2 = murmurhash(key_2, (uint32_t)libmin_strlen(key_2), seed);
 
-    {
-      const char *key = "It has to start somewhere, it has to start sometime, what better place than here? What better time than now?";
-      uint32_t hash = murmurhash(key, (uint32_t)libmin_strlen(key), seed);
-      libmin_printf("murmurhash(\"%s\") = 0x%x\n", key, hash);
-    }
+  const char *key_3 = "It has to start somewhere, it has to start sometime, what better place than "
+                      "here? What better time than now?";
+  uint32_t hash_3 = murmurhash(key_3, (uint32_t)libmin_strlen(key_3), seed);
+  libtarg_stop_perf();
 
-    libmin_success();
-    return 0;
+  libmin_printf("murmurhash(\"%s\") = 0x%x\n", key_1, hash_1);
+  libmin_printf("murmurhash(\"%s\") = 0x%x\n", key_2, hash_2);
+  libmin_printf("murmurhash(\"%s\") = 0x%x\n", key_3, hash_3);
+
+  libmin_success();
+  return 0;
 }

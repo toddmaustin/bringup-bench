@@ -424,7 +424,7 @@ static void assert_bytes(const uint8_t *expected, const uint8_t *actual,
  */
 static void test()
 {
-    uint8_t *digest = NULL;
+    libtarg_start_perf();
 
     /* "abc" example straight out of RFC-7693 */
     uint8_t abc[3] = {'a', 'b', 'c'};
@@ -436,10 +436,7 @@ static void test()
         0x45, 0x33, 0xCC, 0x95, 0x18, 0xD3, 0x8A, 0xA8, 0xDB, 0xF1, 0x92,
         0x5A, 0xB9, 0x23, 0x86, 0xED, 0xD4, 0x00, 0x99, 0x23};
 
-    digest = blake2b(abc, 3, NULL, 0, 64);
-    assert_bytes(abc_answer, digest, 64);
-
-    libmin_free(digest);
+    uint8_t *abc_digest= blake2b(abc, 3, NULL, 0, 64);
 
     uint8_t key[64] = {
         0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -456,10 +453,7 @@ static void test()
         0x05, 0xf4, 0x2d, 0x2f, 0xf4, 0x23, 0x34, 0x99, 0x39, 0x16, 0x53,
         0xdf, 0x7a, 0xef, 0xcb, 0xc1, 0x3f, 0xc5, 0x15, 0x68};
 
-    digest = blake2b(NULL, 0, key, 64, 64);
-    assert_bytes(key_answer, digest, 64);
-
-    libmin_free(digest);
+    uint8_t *key_digest= blake2b(NULL, 0, key, 64, 64);
 
     uint8_t zero[1] = {0};
     uint8_t zero_key[64] = {
@@ -477,10 +471,7 @@ static void test()
         0x4e, 0xf9, 0xb0, 0xf3, 0x4c, 0x70, 0x03, 0xfa, 0xc0, 0x9a, 0x5e,
         0xf1, 0x53, 0x2e, 0x69, 0x43, 0x02, 0x34, 0xce, 0xbd};
 
-    digest = blake2b(zero, 1, zero_key, 64, 64);
-    assert_bytes(zero_answer, digest, 64);
-
-    libmin_free(digest);
+    uint8_t *zero_digest= blake2b(zero, 1, zero_key, 64, 64);
 
     uint8_t filled[64] = {
         0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,
@@ -504,10 +495,18 @@ static void test()
         0x68, 0xa6, 0xe5, 0x09, 0xe1, 0x19, 0xff, 0x07, 0x78, 0x7b, 0x3e,
         0xf4, 0x83, 0xe1, 0xdc, 0xdc, 0xcf, 0x6e, 0x30, 0x22};
 
-    digest = blake2b(filled, 64, filled_key, 64, 64);
-    assert_bytes(filled_answer, digest, 64);
+    uint8_t *filled_digest= blake2b(filled, 64, filled_key, 64, 64);
 
-    libmin_free(digest);
+    libtarg_stop_perf();
+
+    assert_bytes(abc_answer, abc_digest, 64);
+    libmin_free(abc_digest);
+    assert_bytes(key_answer, key_digest, 64);
+    libmin_free(key_digest);
+    assert_bytes(zero_answer, zero_digest, 64);
+    libmin_free(zero_digest);
+    assert_bytes(filled_answer, filled_digest, 64);
+    libmin_free(filled_digest);
 
     libmin_printf("INFO: All tests have successfully passed!\n");
 }

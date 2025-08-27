@@ -120,11 +120,13 @@ int main(void) {
     // Seed the system's RNG for good_rand().
     libmin_srand(42);
 
+    libtarg_start_perf();
     // First test: Use the deliberately weak generator (bad_rand).
     run_tests("Bad (bad_rand())", bad_rand);
 
     // Second test: Use the system's standard rand() via good_rand.
     run_tests("Good (good_rand())", good_rand);
+    libtarg_stop_perf();
 
     libmin_success();
     return 0;

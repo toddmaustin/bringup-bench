@@ -169,8 +169,10 @@ main(void)
   int dup1, dup2;
   int res1, res2;
 
+  libtarg_start_perf();
   res1 = isDistinct(elements1, &dup1);
   res2 = isDistinct(elements2, &dup2);
+  libtarg_stop_perf();
 
   if (res1)
     libmin_printf("The elements of `elements1' are distinct\n");

@@ -21,6 +21,7 @@ int main() {
             u[i] = 0.0;
     }
 
+    libtarg_start_perf();
     // Main time-stepping loop: simulate STEPS time steps.
     for (step = 0; step < STEPS; step++) {
         // Update interior points using the explicit finite difference scheme:
@@ -39,20 +40,22 @@ int main() {
         }
     }
 
+    // Compute a simple checksum (sum of all temperatures) for validation.
+    double checksum = 0.0;
+    for (i = 0; i < N; i++) {
+        checksum += u[i];
+    }
+    libtarg_stop_perf();
+
     // Output the final temperature distribution.
     libmin_printf("Final temperature distribution along the rod:\n");
     for (i = 0; i < N; i++) {
         libmin_printf("u[%d] = %.2f\n", i, u[i]);
     }
 
-    // Compute a simple checksum (sum of all temperatures) for validation.
-    double checksum = 0.0;
-    for (i = 0; i < N; i++) {
-        checksum += u[i];
-    }
     libmin_printf("Checksum: %.2f\n", checksum);
 
-    libtarg_success();
+    libmin_success();
     return 0;
 }
 

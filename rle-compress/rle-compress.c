@@ -65,24 +65,35 @@ char* run_length_encode(char* str) {
  * @returns void
  */
 static void test() {
-    char *in, *out;
-    in = "aaaaaaabbbaaccccdefaadr";
-    out = run_length_encode(in);
-    libmin_assert(!libmin_strcmp(out, "7a3b2a4c1d1e1f2a1d1r"));
-    libmin_printf("in: %s -> out: %s\n", in, out);
-    libmin_free(out);
- 
-    in = "lidjhvipdurevbeirbgipeahapoeuhwaipefupwieofb";
-    out = run_length_encode(in);
-    libmin_assert(!libmin_strcmp(out, "1l1i1d1j1h1v1i1p1d1u1r1e1v1b1e1i1r1b1g1i1p1e1a1h1a1p1o1e1u1h1w1a1i1p1e1f1u1p1w1i1e1o1f1b"));
-    libmin_printf("in: %s -> out: %s\n", in, out);
-    libmin_free(out);
+    char *in_1, *out_1;
+    char *in_2, *out_2;
+    char *in_3, *out_3;
 
-    in = "htuuuurwuquququuuaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaahghghrw";
-    out = run_length_encode(in);
-    libmin_assert(!libmin_strcmp(out, "1h1t4u1r1w1u1q1u1q1u1q3u76a1h1g1h1g1h1r1w"));
-    libmin_printf("in: %s -> out: %s\n", in, out);
-    libmin_free(out);
+    libtarg_start_perf();
+    in_1 = "aaaaaaabbbaaccccdefaadr";
+    out_1 = run_length_encode(in_1);
+
+    in_2 = "lidjhvipdurevbeirbgipeahapoeuhwaipefupwieofb";
+    out_2 = run_length_encode(in_2);
+
+    in_3 = "htuuuurwuquququuuaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+           "aaaahghghrw";
+    out_3 = run_length_encode(in_3);
+    libtarg_stop_perf();
+
+    libmin_assert(!libmin_strcmp(out_1, "7a3b2a4c1d1e1f2a1d1r"));
+    libmin_printf("in: %s -> out: %s\n", in_1, out_1);
+    libmin_free(out_1);
+
+    libmin_assert(!libmin_strcmp(
+      out_2,
+      "1l1i1d1j1h1v1i1p1d1u1r1e1v1b1e1i1r1b1g1i1p1e1a1h1a1p1o1e1u1h1w1a1i1p1e1f1u1p1w1i1e1o1f1b"));
+    libmin_printf("in: %s -> out: %s\n", in_2, out_2);
+    libmin_free(out_2);
+
+    libmin_assert(!libmin_strcmp(out_3, "1h1t4u1r1w1u1q1u1q1u1q3u76a1h1g1h1g1h1r1w"));
+    libmin_printf("in: %s -> out: %s\n", in_3, out_3);
+    libmin_free(out_3);
 }
 
 /**
