@@ -14,6 +14,9 @@ make TARGET=simple run-tests
 make TARGET=spike all-clean
 make TARGET=spike run-tests
 
+make TARGET=spike-pk all-clean
+make TARGET=spike-pk run-tests
+
 make TARGET=hashalone-host all-clean
 make TARGET=hashalone-host run-tests
 

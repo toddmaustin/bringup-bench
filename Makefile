@@ -123,7 +123,7 @@ TARGET_SIM = spike pk
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = 
-TARGET_EXCLUDES = cipher # anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES =
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else
