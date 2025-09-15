@@ -60,6 +60,12 @@ reset_handler:
 _start:
   .global _start
 
+  /* enable FP */
+  li   t0, 0x00006000       # mask for FS field (bits 13:12)
+  csrr t1, mstatus
+  or   t1, t1, t0           # set FS = 11 (Dirty)
+  csrw mstatus, t1
+
   /* clear BSS */
   la x26, _bss_start
   la x27, _bss_end

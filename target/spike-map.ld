@@ -40,13 +40,13 @@ SECTIONS
 		_vectors_start = .;
         KEEP(*(.vectors))
 		_vectors_end = .;
-    } > ram
+    } > ram :text
 
     .text : {
         . = ALIGN(4);
         *(.text)
         *(.text.*)
-    }  > ram
+    }  > ram :text
 
     .rodata : {
         . = ALIGN(4);
@@ -55,7 +55,7 @@ SECTIONS
         *(.srodata.*)
         *(.rodata);
         *(.rodata.*)
-    } > ram
+    } > ram :text
 
     .data : {
         . = ALIGN(4);
@@ -64,7 +64,7 @@ SECTIONS
         *(.sdata.*)
         *(.data);
         *(.data.*)
-    } > ram
+    } > ram :data
 
     .bss :
     {
@@ -77,7 +77,7 @@ SECTIONS
         *(.bss.*)
         *(COMMON)
         _bss_end = .;
-    } > ram
+    } > ram :data
 
     /* ensure there is enough room for stack */
     .stack (NOLOAD): {
@@ -86,5 +86,11 @@ SECTIONS
         . = ALIGN(4);
         stack = . ;
         _stack = . ;
-    } > stack
+    } > stack :data
 }
+
+PHDRS {
+  text PT_LOAD FLAGS(5); /* R + X */
+  data PT_LOAD FLAGS(6); /* R + W */
+}
+

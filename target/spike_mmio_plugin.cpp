@@ -1,15 +1,16 @@
-// simple_mmio_plugin.cc
+// simple_mmio_device.cc
 #include "devices.h"   // abstract_device_t, reg_t, etc.
 #include "dts.h"       // for DTS generation helpers (string assembly)
 #include <sstream>
 #include <cstdio>
 #include <cstdlib>
 #include <cstdint>
+#include <vector>
 #include <string>
 
 // ---- Device implementation -----------------------------------------------
 
-class simple_mmio_plugin_t : public abstract_device_t {
+class simple_mmio_dev_t : public abstract_device_t {
 public:
   // same offsets as your original plugin
   static constexpr reg_t OFF_OUT    = 0x00;
@@ -67,15 +68,15 @@ static inline void parse_args(const std::vector<std::string>& sargs,
   };
 
   base = 0x0000000000020000ULL; // default was SIM_CTRL_BASE in the old code
-  size = simple_mmio_plugin_t::REGION_SIZE;
+  size = simple_mmio_dev_t::REGION_SIZE;
 
   if (!sargs.empty()) {
     base = (reg_t)parse_u(sargs[0]);
   }
   if (sargs.size() >= 2) {
     size = (reg_t)parse_u(sargs[1]);
-    if (size < simple_mmio_plugin_t::REGION_SIZE)
-      size = simple_mmio_plugin_t::REGION_SIZE; // never smaller than our register file
+    if (size < simple_mmio_dev_t::REGION_SIZE)
+      size = simple_mmio_dev_t::REGION_SIZE; // never smaller than our register file
   }
 }
 
@@ -95,17 +96,17 @@ static std::string simple_mmio_generate_dts(const sim_t* /*sim*/,
   return s.str();
 }
 
-static simple_mmio_plugin_t*
+static simple_mmio_dev_t*
 simple_mmio_parse_from_fdt(const void* /*fdt*/, const sim_t* /*sim*/,
                            reg_t* base_out, const std::vector<std::string>& sargs)
 {
   reg_t base = 0, size = 0;
   parse_args(sargs, base, size);
-  *base_out = base;
+  *base = base;
   // No per-instance state required; if you need, add ctor params here
-  return new simple_mmio_plugin_t();
+  return new simple_mmio_dev_t();
 }
 
 // Register the device so --device=simple_mmio,... works
-REGISTER_DEVICE(simple_mmio_plugin, simple_mmio_parse_from_fdt, simple_mmio_generate_dts)
+REGISTER_DEVICE(simple_mmio, simple_mmio_parse_from_fdt, simple_mmio_generate_dts)
 

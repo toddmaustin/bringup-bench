@@ -13,8 +13,8 @@ Note that benchmark builds must be parameterized with the build MODE, such as:
   TARGET=host       - build benchmarks to run on a Linux host
   TARGET=standalone - build benchmarks to run in standalone mode (a virtual bare-metal CPU)
   TARGET=simple     - build benchmarks to run on the RISC-V Simple_System simulation testing environment
-  TARGET=spike      - build benchmarks to run on the RISC-V 32-bit Spike Instruction Set Simulator (ISS) with Simple_System devices
-  TARGET=spike-pk   - build benchmarks to run on the RISC-V 64-bit Spike Instruction Set Simulator (ISS) with proxy kernel (pk)
+  TARGET=spike[64/32]    - build benchmarks to run on the RISC-V 32-bit Spike Instruction Set Simulator (ISS) with Simple_System devices
+  TARGET=spike[64/32]-pk - build benchmarks to run on the RISC-V 64-bit Spike Instruction Set Simulator (ISS) with proxy kernel (pk)
 
 Example benchmark builds:
   make TARGET=host clean build test
@@ -100,26 +100,40 @@ TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
-else ifeq ($(TARGET), spike)
+else ifeq ($(TARGET), spike32)
 TARGET_CC = riscv32-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
 TARGET_AR = riscv32-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
+TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x820000 --device=simple_mmio_plugin,0x20000,x
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/simple_mmio_plugin.so -m0x100000:0x820000 --device=simple_mmio_plugin,0x20000
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
-else ifeq ($(TARGET), spike-pk)
+else ifeq ($(TARGET), spike64)
+TARGET_CC = riscv64-unknown-elf-gcc
+#TARGET_CC = riscv64-unknown-elf-clang
+TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc -mabi=lp64d -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
+TARGET_LIBS = -lgcc
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc --extlib=../target/simple_mmio_plugin.so -m0x100000:0x820000 --device=simple_mmio_plugin,0x20000
+TARGET_DIFF = diff
+TARGET_EXE = $(PROG).elf
+TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
+else ifeq ($(TARGET), spike64-pk)
+else ifeq ($(TARGET), spike64-pk)
 TARGET_CC = riscv64-unknown-elf-gcc
 #TARGET_CC = riscv32-unknown-elf-clang
 TARGET_AR = riscv32-unknown-elf-ar
 TARGET_CFLAGS = -DTARGET_SPIKE_PK -DLIBMIN_MALLOC_ALIGN_BYTES=8 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = spike pk
+TARGET_SIM = ../../riscv-isa-sim/build/spike pk
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = 
@@ -169,9 +183,13 @@ else ifeq ($(TARGET), hashalone-spike)
 	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), simple)
 	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
-else ifeq ($(TARGET), spike)
+else ifeq ($(TARGET), spike32)
 	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
-else ifeq ($(TARGET), spike-pk)
+else ifeq ($(TARGET), spike64)
+	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), spike32-pk)
+	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), spike64-pk)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else
 	$(error MODE is not defined (add: TARGET={host|sa}).)
