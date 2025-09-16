@@ -75,10 +75,10 @@ TARGET_EXCLUDES =
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), hashalone-spike32)
-TARGET_CC = riscv32-unknown-elf-gcc
-#TARGET_CC = riscv32-unknown-elf-clang
-TARGET_AR = riscv32-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_HASPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
+TARGET_CC = riscv64-unknown-elf-gcc
+#TARGET_CC = riscv64-unknown-elf-clang
+TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_HASPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_EXE = $(PROG).haspike
@@ -101,10 +101,10 @@ TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), simple)
-TARGET_CC = riscv32-unknown-elf-gcc
-#TARGET_CC = riscv32-unknown-elf-clang
-TARGET_AR = riscv32-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany
+TARGET_CC = riscv64-unknown-elf-gcc
+#TARGET_CC = riscv64-unknown-elf-clang
+TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../target/simple_sim.sh ../../../Snowflake-IoT/ibex/build/lowrisc_ibex_ibex_simple_system_0/sim-verilator/Vibex_simple_system
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
@@ -114,10 +114,10 @@ TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc 
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32)
-TARGET_CC = riscv32-unknown-elf-gcc
-#TARGET_CC = riscv32-unknown-elf-clang
-TARGET_AR = riscv32-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imc -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
+TARGET_CC = riscv64-unknown-elf-gcc
+#TARGET_CC = riscv64-unknown-elf-clang
+TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
@@ -141,11 +141,11 @@ TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32-pk)
 TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv32-unknown-elf-clang
-TARGET_AR = riscv32-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE_PK -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imc -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
+#TARGET_CC = riscv64-unknown-elf-clang
+TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CFLAGS = -DTARGET_SPIKE_PK -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC pk
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC pk32
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = 
@@ -155,7 +155,7 @@ TARGET_REFEXT = out
 else ifeq ($(TARGET), spike64-pk)
 TARGET_CC = riscv64-unknown-elf-gcc
 #TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv32-unknown-elf-ar
+TARGET_AR = riscv64-unknown-elf-ar
 TARGET_CFLAGS = -DTARGET_SPIKE_PK -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc -mabi=lp64d -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc pk
