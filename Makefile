@@ -98,7 +98,7 @@ TARGET_EXE = $(PROG).haspike
 TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rsa-cipher spelt2num
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), simple)
 TARGET_CC = riscv64-unknown-elf-gcc
@@ -136,7 +136,7 @@ TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc --extlib=../target/spi
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32-pk)
