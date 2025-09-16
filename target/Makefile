@@ -3,10 +3,10 @@ SPIKE_DIR = ../../riscv-isa-sim/riscv/
 
 CFLAGS = -Wall -Werror -g -I $(SPIKE_DIR)
 
-build: simple_mmio_plugin.so
+build: spike_mmio_plugin.so
 
-simple_mmio_plugin.so: simple_mmio_plugin.cpp
-	$(CXX) -shared -o simple_mmio_plugin.so $(CFLAGS) -fPIC simple_mmio_plugin.cpp
+spike_mmio_plugin.so: spike_mmio_plugin.cpp
+	$(CXX) -shared -o spike_mmio_plugin.so $(CFLAGS) -fPIC spike_mmio_plugin.cpp
 
 clean:
-	-rm -f *.o simple_mmio_plugin.so
+	-rm -f *.o spike_mmio_plugin.so
