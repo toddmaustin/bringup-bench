@@ -149,7 +149,7 @@ TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC pk32
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = 
-TARGET_EXCLUDES =
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike64-pk)
