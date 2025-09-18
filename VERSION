@@ -4,7 +4,7 @@ Version 1.8
     the new driver now works on the most recent version of the RISC-V Spike simulator
   - Added support for target-dependent performance measurement, implemented for target "host" and demonstrated on benchmark "bubblesort",
     to use these interfaces enable TARGET_PERFHOOKS and use the interfaces libtarg_start_perf() and void libtarg_stop_perf() in target/libtarg.h
-  - Added more FP-intensive benchmarks (ccmac, congrad, transcend, verlat)
+  - Added more FP-intensive benchmarks (ccmac, congrad, transcend, verlat), the suite now has 90 benchmarks in total!
 
 Version 1.7
   - AES benchmark added, now for a total of 86 benchmarks
