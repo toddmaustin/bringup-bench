@@ -79,6 +79,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **bubble-sort** - Performs a bubble sort on a randomly generated internal list of integers.
 
+- **ccmac** - Complex CMAC (FP64): Performs a complex multiply-accumulate dot product, exercising 4 multiplies and 4 adds per element to stress FP throughput.
+
 - **checkers** - Checkers game based on minimax search.
 
 - **c-interp** - A C language interpreter that interprets the test program "hello.c". This benchmark uses code-based read-only file access.
@@ -86,6 +88,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 - **cipher** - A TEA cipher implementation the encrypts and decrypts some fixed test data.
 
 - **connect4-minimax** - A MINIMAX implementation of the classic Connect-4 game.
+
+- **congrad** - Iteratively solves Ax=b for SPD matrices with a loop dominated by sparse matrix–vector multiplies (SpMV), AXPY and dot products.
 
 - **convex-hull** - Computes the surface of a convex hull.
 
@@ -187,7 +191,7 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **rand-test** - Performs a set of randomness tests on a good and bad random number generator.
 
-- ** ransac** - Performs RANSAC (RANdom SAmple Consensus) robustly estimate the parameters of a mathematical model from a randomly generated dataset.
+- **ransac** - Performs RANSAC (RANdom SAmple Consensus) robustly estimate the parameters of a mathematical model from a randomly generated dataset.
 
 - **regex-parser** - A regular-expression parser running a battery of tests.
 
@@ -223,7 +227,11 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **totient** - Calculates the Euler totient function phi.
 
+- **transcend** - Evaluates exp, sin, cos, and a mixed sequence over large arrays for fixed iterations to stress transcendental while emitting a checksum.
+
 - **vectors-3d** - A 3D vector library running a battery of tests.
+
+- **verlet** - Updates positions/velocities with the velocity-Verlet scheme over many steps, mixing FMAs and sqrt/divide for inverse-square forces to emulate physics-style FP workloads.
 
 - **weekday** - Given a year, month, and day, deterime the day of the week for the specified date.
 
