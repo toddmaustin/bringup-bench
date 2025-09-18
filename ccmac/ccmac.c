@@ -70,6 +70,7 @@ main(void)
          DEGREE, (unsigned)N_ITER, n, stride, ops, checksum);
 
   libmin_free(c); libmin_free((void*)x); libmin_free((void*)y);
-  return 0;
+
+  libmin_success();
 }
 
