@@ -1,0 +1,1 @@
+horner64 degree=16 N_ITER=100 n=64 stride=1 ops=204800.000000 checksum=-64.585553

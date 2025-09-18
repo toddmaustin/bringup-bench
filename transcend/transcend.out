@@ -1,0 +1,4 @@
+transcendentals fn=exp prec=fp64 N_ITER=10 n=64 stride=1 ops=640.000000 checksum=80462.520741
+transcendentals fn=sin prec=fp64 N_ITER=10 n=64 stride=1 ops=640.000000 checksum=-5.846723
+transcendentals fn=cos prec=fp64 N_ITER=10 n=64 stride=1 ops=640.000000 checksum=-5.842909
+transcendentals fn=mix prec=fp64 N_ITER=10 n=64 stride=1 ops=640.000000 checksum=133.214824
