@@ -250,3 +250,43 @@ libtarg_sbrk(size_t inc)
 #endif
 }
 
+#ifdef TARGET_PERFHOOKS
+#include <time.h>
+
+#if defined(TARGET_HOST)
+static long long __start_time = 0;
+
+long long
+__now_us(void)
+{
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  return ts.tv_sec * 1000000LL + ts.tv_nsec / 1000LL;
+}
+#endif /* TARGET_HOST */
+
+void
+libtarg_start_perf(void)
+{
+  /* optional hook for starting perfomance monitoring/instrumentation */
+
+#if defined(TARGET_HOST)
+  __start_time = __now_us();
+#else
+#error Build requested TARGET_PERFHOOKS, but TARGET does not define libtarg_start_perf() and libtarg_stop_perf().
+#endif
+}
+
+void
+libtarg_stop_perf(void)
+{
+  /* optional hook for starting perfomance monitoring/instrumentation */
+#if defined(TARGET_HOST)
+  uint64_t runtime = __now_us() - __start_time; 
+  fprintf(stderr, "PERF: program ran for %lu us.\n", runtime);
+#else
+#error Build requested TARGET_PERFHOOKS, but TARGET does not define libtarg_start_perf() and libtarg_stop_perf().
+#endif
+}
+#endif /* TARGET_PERFHOOKS */
+

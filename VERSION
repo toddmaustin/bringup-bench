@@ -1,3 +1,11 @@
+Version 1.8
+  - Added TARGET={spike32,spike64,spike32-pk,spike64-pk} to support running benchmarks on a wide range of Spike configurations
+  - Ported the Spike simulator bare-metal device driver (spike_mmio_plugin.so) to utilize Spike's new Device Factory framework,
+    the new driver now works on the most recent version of the RISC-V Spike simulator
+  - Added support for target-dependent performance measurement, implemented for target "host" and demonstrated on benchmark "bubblesort",
+    to use these interfaces enable TARGET_PERFHOOKS and use the interfaces libtarg_start_perf() and void libtarg_stop_perf() in target/libtarg.h
+  - Added more FP-intensive benchmarks (congrad, verlat)
+
 Version 1.7
   - AES benchmark added, now for a total of 86 benchmarks
   - Added TARGET=spike-pk to support running benchmarks on RISC-V Spike Proxy Kernel

@@ -51,7 +51,14 @@ main(void)
     data[i] = libmin_rand();
   print_data(data, DATASET_SIZE);
 
-  bubblesort(data, DATASET_SIZE);
+  {
+    // performance monitoring
+    libtarg_start_perf();
+
+    bubblesort(data, DATASET_SIZE);
+
+    libtarg_stop_perf();
+  }
   print_data(data, DATASET_SIZE);
 
   // check the array
