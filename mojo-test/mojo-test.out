@@ -1,0 +1,6 @@
+[info] starting read-only syscall self-test on /etc/hosts
+All tests PASSED (10 checks)
+** Running CSR[privreg] tests...
+Initial mprivregcfg = 0x0
+After enable, mprivregcfg = 0x1
+After disable, mprivregcfg = 0x0
