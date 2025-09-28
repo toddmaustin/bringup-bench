@@ -19,7 +19,7 @@ write_mprivregcfg(uint64_t value)
 }
 
 // Predefined memory values
-volatile uint64_t x = 15;
+volatile uint64_t x = 35;
 volatile uint64_t max = 25;
 
 int
@@ -53,6 +53,12 @@ int
     "ld        /*p1*/t4, (%1)\n\t"   // p1 = max
 
     // Condition: (max < x)?
+    // "slt       /*p2*/t5, x1, x2\n\t" // Mojo-V test: no secret inputs
+    // "jalr         ra, 64(t4)\n\t"
+    // "sw        t0, (t3)\n\t"
+    // "bne       t3, t0, .+12\n\t"
+    // "bne       t0, t3, .+12\n\t"
+    // "slt       t0, /*p1*/t4, /*p0*/t3\n\t" // Mojo-V test: should have secret dest
     "slt       /*p2*/t5, /*p1*/t4, /*p0*/t3\n\t" // p2 = (p1 < p0) ? 1 : 0
 
     // Build data-oblivious conditional result
