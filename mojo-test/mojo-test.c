@@ -1,5 +1,9 @@
 #include "libmin.h"
 
+// Mojo-V asm instruction definitions (using the format-friendly .insn directive in GNU AS
+#define LDE(rd,base,ofs) ".insn i 0xb, 0x0, " #rd ", " #base ", " #ofs "\n\t"
+#define SDE(src,base,ofs) ".insn s 0xb, 0x1, " #src ", " #ofs "(" #base ")\n\t"
+
 // Define your custom CSR number
 #define CSR_MPRIVREGCFG 0x0a0
 
@@ -19,8 +23,8 @@ write_mprivregcfg(uint64_t value)
 }
 
 // Predefined memory values
-volatile uint64_t x = 35;
-volatile uint64_t max = 25;
+uint64_t x = 35;
+uint64_t max = 25;
 
 int
  main(void)
@@ -49,9 +53,8 @@ int
   // inline assembly block
   asm volatile (
     // load third-party encrypted operands
-    // "ld        /*p0*/t3, (%0)\n\t"   // p0 = x
-    ".insn i 0xb, 0x0, t3, %0, 0\n\t"
-    "ld        /*p1*/t4, (%1)\n\t"   // p1 = max
+    LDE(t3, %0, 0)
+    LDE(t4, %1, 0)
 
     // Condition: (max < x)?
     // "slt       /*p2*/t5, x1, x2\n\t" // Mojo-V test: no secret inputs
@@ -68,7 +71,7 @@ int
     "or        /*p3*/t6, /*p0*/t3, /*p1*/t4\n\t" // select: p3 = (x if x>max else max)
 
     // Store third-party encrypted (potentially) new max value
-    "sd     /*p3*/t6, (%1)\n\t"
+    SDE(t6,%1,0)
 
     :
     : "r" (&x), "r" (&max)   // input operands
