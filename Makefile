@@ -169,9 +169,9 @@ else ifeq ($(TARGET), mojo-v)
 TARGET_CC = riscv64-unknown-elf-gcc
 #TARGET_CC = riscv64-unknown-elf-clang
 TARGET_AR = riscv64-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gczicond -mabi=lp64d -static -mcmodel=medlow -Wall -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding -ffixed-t3 -ffixed-t4 -ffixed-t5 -ffixed-t6 # -MMD -mcmodel=medany
+TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc_zicond -mabi=lp64d -static -mcmodel=medlow -Wall -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding -ffixed-t3 -ffixed-t4 -ffixed-t5 -ffixed-t6 # -MMD -mcmodel=medany
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gczicond --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc_zicond_zkmojov --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv

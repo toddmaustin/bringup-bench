@@ -49,7 +49,8 @@ int
   // inline assembly block
   asm volatile (
     // load third-party encrypted operands
-    "ld        /*p0*/t3, (%0)\n\t"   // p0 = x
+    // "ld        /*p0*/t3, (%0)\n\t"   // p0 = x
+    ".insn i 0xb, 0x0, t3, %0, 0\n\t"
     "ld        /*p1*/t4, (%1)\n\t"   // p1 = max
 
     // Condition: (max < x)?
