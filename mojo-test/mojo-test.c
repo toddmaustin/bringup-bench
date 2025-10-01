@@ -67,7 +67,7 @@ int
     "or        /*p3*/t6, /*p0*/t3, /*p1*/t4\n\t" // select: p3 = (x if x>max else max)
 
     // Store third-party encrypted (potentially) new max value
-    "sw     /*p3*/t6, (%1)\n\t"
+    "sd     /*p3*/t6, (%1)\n\t"
 
     :
     : "r" (&x), "r" (&max)   // input operands
