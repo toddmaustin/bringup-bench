@@ -1,7 +1,7 @@
 
 LOCAL_CFLAGS=
 LOCAL_LIBS=
-LOCAL_OBJS=mojo-test.o
+LOCAL_OBJS=mojo-test.o simon.o
 
 PROG=mojo-test
 
