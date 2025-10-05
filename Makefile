@@ -39,7 +39,7 @@ OPT_CFLAGS = -O3 -g
 
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
-#TARGET_CC = clang
+#TARGET_CC = /opt/riscv-llvm/bin/clang-21 -target riscv64-unknown-elf
 TARGET_AR = ar
 TARGET_CFLAGS = -DTARGET_HOST -DTARGET_PERFHOOKS
 TARGET_LIBS =
@@ -114,12 +114,12 @@ TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc 
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
+#TARGET_CC = riscv64-unknown-elf-gcc
+TARGET_CC = /opt/riscv-llvm/bin/clang-21 -target riscv64-unknown-elf
 TARGET_AR = riscv64-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
-TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr_zicond -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -ffreestanding # -MMD -mcmodel=medany 
+TARGET_LIBS = /opt/riscv/lib/gcc/riscv64-unknown-elf/15.1.0/libgcc.a
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC_zicond_zkmojov --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
@@ -127,12 +127,12 @@ TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher sp
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike64)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
+#TARGET_CC = riscv64-unknown-elf-gcc
+TARGET_CC = /opt/riscv-llvm/bin/clang-21 -target riscv64-unknown-elf
 TARGET_AR = riscv64-unknown-elf-ar
-TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc -mabi=lp64d -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
-TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc_zicond -mabi=lp64d -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -ffreestanding # -MMD -mcmodel=medany 
+TARGET_LIBS = /opt/riscv/lib/gcc/riscv64-unknown-elf/15.1.0/libgcc.a
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc_zicond_zkmojov --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
@@ -224,9 +224,9 @@ else ifeq ($(TARGET), hashalone-spike64)
 else ifeq ($(TARGET), simple)
 	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike32)
-	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
+	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -nostartfiles -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike64)
-	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
+	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -nostartfiles -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike32-pk)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike64-pk)

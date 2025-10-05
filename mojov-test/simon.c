@@ -6,11 +6,7 @@
  *  # The MIT License (MIT) - see LICENSE.md
 */
 
-#include <stdio.h>
-#include <stdint.h>
-#include <limits.h>
-#include <stdlib.h>
-#include <string.h>
+#include "libmin.h"
 #include "simon.h"
 
 
@@ -129,14 +125,14 @@ uint8_t Simon_Init(SimSpk_Cipher *cipher_object, enum cipher_config_t cipher_cfg
 
     // Setup
     for(int i = 0; i < key_words; i++) {
-        memcpy(&sub_keys[i], (uint8_t *)key + (word_bytes * i), word_bytes);
+        libmin_memcpy(&sub_keys[i], (uint8_t *)key + (word_bytes * i), word_bytes);
     }
     
     uint64_t tmp1,tmp2;
     uint64_t c = 0xFFFFFFFFFFFFFFFC; 
     
     // Store First Key Schedule Entry
-    memcpy(cipher_object->key_schedule, &sub_keys[0], word_bytes);
+    libmin_memcpy(cipher_object->key_schedule, &sub_keys[0], word_bytes);
 
     for (int i = 0; i < simon_rounds[cipher_cfg] - 1; i++) {
         tmp1 = rshift_three(sub_keys[key_words - 1]);
@@ -160,7 +156,7 @@ uint8_t Simon_Init(SimSpk_Cipher *cipher_object, enum cipher_config_t cipher_cfg
         sub_keys[key_words - 1] = tmp1 & mod_mask;
 
         // Append sub key to key schedule
-        memcpy(cipher_object->key_schedule + (word_bytes * (i + 1)), &sub_keys[0], word_bytes);
+        libmin_memcpy(cipher_object->key_schedule + (word_bytes * (i + 1)), &sub_keys[0], word_bytes);
 
     }
 

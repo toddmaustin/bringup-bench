@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #define MAX_SPIN  10000     /* make this larger for a real hardware platform */
 #elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE) || defined(TARGET_HASPIKE)
-#include <stdlib.h>
+//#include <stdlib.h>
 
 /* simple system MMAP'ed registers */
 #define SIMPLE_CTRL_BASE   0x20000

@@ -1,5 +1,5 @@
 
-LOCAL_CFLAGS=
+LOCAL_CFLAGS=-std=c23
 LOCAL_LIBS=
 LOCAL_OBJS=mojov-test.o simon.o
 

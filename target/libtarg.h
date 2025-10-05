@@ -49,7 +49,7 @@
 
 /* size type */
 typedef __SIZE_TYPE__   size_t;
-typedef signed __SIZE_TYPE__   ssize_t;
+typedef unsigned long int   ssize_t;
 
 /* signed */
 typedef __INT8_TYPE__   int8_t;

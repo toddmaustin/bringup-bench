@@ -15,14 +15,14 @@ static inline uint64_t
 read_mprivregcfg(void)
 {
   uint64_t value;
-  asm volatile ("csrr %0, %1" : "=r"(value) : "i"(CSR_MPRIVREGCFG));
+  __asm__ volatile ("csrr %0, %1" : "=r"(value) : "i"(CSR_MPRIVREGCFG));
   return value;
 }
 
 static inline void
 write_mprivregcfg(uint64_t value)
 {
-  asm volatile ("csrw %0, %1" :: "i"(CSR_MPRIVREGCFG), "rK"(value));
+  __asm__ volatile ("csrw %0, %1" :: "i"(CSR_MPRIVREGCFG), "rK"(value));
 }
 
 // Predefined memory values
@@ -74,7 +74,7 @@ main(void)
   libmin_printf("Initial inputs: x:%lu, max:%lu\n", x, max);
 
   // inline assembly block
-  asm volatile (
+  __asm__ volatile (
     // first encrypt the public X and MAX values
     "ld t3, (%0)\n\t"
     SDE(t3,%2,0)
@@ -83,6 +83,10 @@ main(void)
 
     // test-load a bogus ciphertext value -- it should get an exception
     // LDE(t3, %4, 0)
+
+    // cannot ld/sd a secret register
+    // "sd t3, (%0)\n\t"
+    // "sd t0, (%0)\n\t"
 
     // load third-party encrypted operands
     LDE(t3, %2, 0)
@@ -95,7 +99,7 @@ main(void)
     // "bne       t3, t0, .+12\n\t"
     // "bne       t0, t3, .+12\n\t"
     // "slt       t0, /*p1*/t4, /*p0*/t3\n\t" // Mojo-V test: should have secret dest
-    "slt       /*p2*/t5, /*p1*/t4, /*p0*/t3\n\t" // p2 = (p1 < p0) ? 1 : 0
+    "slt       /*p2*/t5, /*p1*/t4, /*p0*/t3\n\t" /* p2 = (p1 < p0) ? 1 : 0 */
 
     // Build data-oblivious conditional result
     "czero.eqz /*p0*/t3, /*p0*/t3, /*p2*/t5\n\t" // if p2==0 => p0=0, else p0=x
@@ -125,5 +129,6 @@ main(void)
   libmin_printf("After disable, mprivregcfg = 0x%lx\n", val);
 
   libmin_success();
+  return 0;
 }
 
