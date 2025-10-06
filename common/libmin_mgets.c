@@ -48,7 +48,7 @@ libmin_getline(char **line, size_t *bufflen, MFILE *fp)
       *bufflen = *bufflen * 2; // we update the size of the buffer
     }
     char c = libmin_mgetc(fp); // gets a char from file descriptor
-    if (c == '\n' || c == EOF)
+    if (c == '\n' || c == (char)EOF)
     {
       (*line)[i] = '\0'; // make buff a c string
       break;

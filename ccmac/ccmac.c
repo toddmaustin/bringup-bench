@@ -72,5 +72,6 @@ main(void)
   libmin_free(c); libmin_free((void*)x); libmin_free((void*)y);
 
   libmin_success();
+  return 0;
 }
 
