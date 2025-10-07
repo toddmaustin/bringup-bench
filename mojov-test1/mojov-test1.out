@@ -1,0 +1,6 @@
+** Running CSR[privreg] tests...
+Initial mprivregcfg = 0x0
+After enable, mprivregcfg = 0x1
+Initial inputs: x:35, max:25
+Final results:   x:35, max:35
+After disable, mprivregcfg = 0x0
