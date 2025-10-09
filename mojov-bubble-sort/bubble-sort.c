@@ -1,6 +1,6 @@
 #include "libmin.h"
 
-#define SECRET /* _secret */
+#define SECRET __attribute__((__secret__))
 #define mojov_cmov(p, x, y) ((p) ? (x) : (y))
 #define mojov_decrypt(x) (x)
 
