@@ -1,10 +1,26 @@
-//#define SECRET_BUGS
+#define SECRET_BUGS
 
 __attribute__((__secret__)) int x;
 int y;
 
-void foo(void)
+int arr_public[128];
+__attribute__((__secret__)) int arr_secret[128];
+
+int
+bar(int x)
 {
+  return x+y;
+}
+
+int (*pbar)(int) = &bar;
+
+__attribute__((__secret__)) int (*sbar)(int) = &bar;
+
+void
+foo(void)
+{
+  int *p = arr_public;
+
 #ifdef SECRET_BUGS
   if (x)
     x++;
@@ -99,11 +115,56 @@ void foo(void)
 #ifdef SECRET_BUGS
   y = (x < 0) ? y+1 : y-1;
   y = (1-x < 0) ? y+1 : y-1;
+  y = (1-arr_secret[y] < 0) ? y+1 : y-1;
 #endif /* SECRET_BUGS */
 
   y = (y < 0) ? y+1 : y-1;
+
   y = (y < 0) ? y+1 : x-1;
 
+  y = (*pbar)(42);
+
+  x = bar(42);
+
+#ifdef SECRET_BUGS
+  x = (*sbar)(42);
+#endif /* SECRET_BUGS */
+
+  x = arr_secret[y];
+
+#ifdef SECRET_BUGS
+  y = arr_secret[x];
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  y = arr_secret[y + (1-x)];
+#endif /* SECRET_BUGS */
+
+  x = arr_public[y];
+
+#ifdef SECRET_BUGS
+  y = arr_public[x];
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  y = arr_public[y + (1-x)];
+#endif /* SECRET_BUGS */
+
+  p += y;
+
+  p = p + y;
+
+#ifdef SECRET_BUGS
+  p += x;
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  p = p + x;
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  p = p + (y - (1 + x));
+#endif /* SECRET_BUGS */
 }
 
 int

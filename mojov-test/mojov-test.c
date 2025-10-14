@@ -101,6 +101,20 @@ main(void)
     // "slt       t0, /*p1*/t4, /*p0*/t3\n\t" // Mojo-V test: should have secret dest
     "slt       /*p2*/t5, /*p1*/t4, /*p0*/t3\n\t" /* p2 = (p1 < p0) ? 1 : 0 */
 
+    // try to move the secret predicate, via integer to FP register/ moves/converts
+    "fmv.w.x      f1, t2\n\t"
+    "fcvt.s.w     f3, t2\n\t"
+    // "fmv.w.x      f1, t5\n\t"
+    // "fmv.d.x      f2, t5\n\t"
+    // "fcvt.s.w     f3, t5\n\t"
+    // "fcvt.s.wu    f3, t5\n\t"
+    // "fcvt.s.l     f5, t5\n\t"
+    // "fcvt.s.lu    f6, t5\n\t"
+    // "fcvt.d.w     f1, t5\n\t"
+    // "fcvt.d.wu    f2, t5\n\t"
+    // "fcvt.d.l     f3, t5\n\t"
+    // "fcvt.d.lu    f4, t5\n\t"
+
     // Build data-oblivious conditional result
     "czero.eqz /*p0*/t3, /*p0*/t3, /*p2*/t5\n\t" // if p2==0 => p0=0, else p0=x
     "czero.nez /*p1*/t4, /*p1*/t4, /*p2*/t5\n\t" // if p2!=0 => p1=0, else p1=max
