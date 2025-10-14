@@ -10,6 +10,7 @@ FOO
 *.sa
 *.elf
 *.swp
+*.tmp
 *.enc
 *.na
 *.log

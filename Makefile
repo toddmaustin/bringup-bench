@@ -166,12 +166,26 @@ TARGET_CLEAN =
 TARGET_EXCLUDES =
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
-else ifeq ($(TARGET), mojo-v)
+else ifeq ($(TARGET), mojov)
 #TARGET_CC = riscv64-unknown-elf-gcc
 #TARGET_CC = /opt/riscv-llvm/bin/clang-21
 TARGET_CC = ../../llvm-project/build/bin/clang-21
 TARGET_AR = riscv64-unknown-elf-ar
 TARGET_CFLAGS = -std=c23 -fmojov -Wno-inline-asm -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc_zicond -mabi=lp64d -static -mcmodel=medlow -Wall -fvisibility=hidden -nostdlib -ffreestanding -ffixed-x28 -ffixed-x29 -ffixed-x30 -ffixed-x31 # -MMD -mcmodel=medany
+TARGET_LIBS = /opt/riscv/lib/gcc/riscv64-unknown-elf/15.1.0/libgcc.a
+TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc_zicond_zkmojov --misaligned --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_DIFF = diff
+TARGET_EXE = $(PROG).elf
+TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
+TARGET_EXCLUDES = anagram c-interp checkers lz-compress rsa-cipher spelt2num
+TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
+else ifeq ($(TARGET), mojov-llvm)
+#TARGET_CC = riscv64-unknown-elf-gcc
+#TARGET_CC = /opt/riscv-llvm/bin/clang-21
+TARGET_CC = ../../llvm-project/build/bin/clang-21
+TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CFLAGS = -std=c23 -fmojov -Wno-inline-asm -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc_zicond -mabi=lp64d -static -mcmodel=medlow -Wall -fvisibility=hidden -nostdlib -ffreestanding # -MMD -mcmodel=medany
 TARGET_LIBS = /opt/riscv/lib/gcc/riscv64-unknown-elf/15.1.0/libgcc.a
 TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc_zicond_zkmojov --misaligned --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
@@ -233,7 +247,9 @@ else ifeq ($(TARGET), spike32-pk)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike64-pk)
 	$(TARGET_CC) $(CFLAGS) -o $@ $^ $(LIBS) $(TARGET_LIBS)
-else ifeq ($(TARGET), mojo-v)
+else ifeq ($(TARGET), mojov)
+	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -nostartfiles -o $@ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), mojov-llvm)
 	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -nostartfiles -o $@ $(LIBS) $(TARGET_LIBS)
 else
 	$(error MODE is not defined (add: TARGET={host|sa}).)

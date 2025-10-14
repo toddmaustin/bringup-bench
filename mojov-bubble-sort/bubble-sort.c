@@ -31,6 +31,9 @@ bubblesort(SECRET int *data, unsigned size)
       // swap needed?
       SECRET bool swap = (data[j] > data[j+1]);
 
+      bool isTrue = (data[j] > 0);
+      libmin_printf("isTrue: %s\n", isTrue ? "t" : "f");
+
       // perform the swap
       SECRET int tmp = data[j];
       data[j] = mojov_cmov(swap, data[j+1], data[j]);
