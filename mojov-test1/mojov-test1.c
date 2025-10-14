@@ -1,16 +1,31 @@
 #define SECRET_BUGS
 
-__attribute__((__secret__)) int x;
-int y;
+__attribute__((__secret__)) long int x, xdst;
+long int y;
 
 int arr_public[128];
 __attribute__((__secret__)) int arr_secret[128];
+
+char *q, r, s;
 
 int
 bar(int x)
 {
   return x+y;
 }
+
+#ifndef SECRET_BUGS
+__attribute__((__secret__))
+#endif /* SECRET_BUGS */
+int
+uxxe(int w)
+{
+  if (w != 22)
+    return 1+(y-w);
+  else
+    return 2*((y>>1) - x);
+}
+
 
 int (*pbar)(int) = &bar;
 
@@ -165,6 +180,31 @@ foo(void)
 #ifdef SECRET_BUGS
   p = p + (y - (1 + x));
 #endif /* SECRET_BUGS */
+
+  // cast tests
+  q = (char *)y;
+
+#ifdef SECRET_BUGS
+  r = (char *)x;
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  s = (char *)(y - (1 + x));
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  y = x;
+#endif /* SECRET_BUGS */
+
+#ifdef SECRET_BUGS
+  y = 1 - (y/2 + x);
+#endif /* SECRET_BUGS */
+
+  xdst = x;
+
+  xdst = 1 - (y/2 + x);
+
+
 }
 
 int
