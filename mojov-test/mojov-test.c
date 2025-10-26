@@ -10,6 +10,16 @@ typedef unsigned __int128 uint128_t;
 // Define your custom CSR number
 #define CSR_MPRIVREGCFG 0x0a0
 
+static void
+print_mprivregcfg(uint64_t val)
+{
+  libmin_printf("(mojov_en:%s, key_valid:%s, format_sel:%s, mojov_ver:%u)",
+                (val & 0x01) ? "t" : "f",
+                (val & 0x02) ? "t" : "f",
+                (val & 0x04) ? "strong" : "weak",
+                (val >> 3) & 0xff);
+}
+
 // Inline helpers
 static inline uint64_t
 read_mprivregcfg(void)
@@ -61,13 +71,17 @@ main(void)
 
   // read reset value
   val = read_mprivregcfg();
-  libmin_printf("Initial mprivregcfg = 0x%lx\n", val);
+  libmin_printf("Initial mprivregcfg = 0x%lx, ", val);
+  print_mprivregcfg(val);
+  libmin_printf("\n");
 
   // enable private register semantics (bit 0 = 1)
   write_mprivregcfg(1);
 
   val = read_mprivregcfg();
-  libmin_printf("After enable, mprivregcfg = 0x%lx\n", val);
+  libmin_printf("After enable, mprivregcfg = 0x%lx, ", val);
+  print_mprivregcfg(val);
+  libmin_printf("\n");
 
 
   // do some secret computation
@@ -95,7 +109,7 @@ main(void)
     // Condition: (max < x)?
     // "slt       /*p2*/t5, x1, x2\n\t" // Mojo-V test: no secret inputs
     // "jalr         ra, 64(t4)\n\t"
-    // "sw        t0, (t3)\n\t"
+    // "sw        t5, (t3)\n\t"
     // "bne       t3, t0, .+12\n\t"
     // "bne       t0, t3, .+12\n\t"
     // "slt       t0, /*p1*/t4, /*p0*/t3\n\t" // Mojo-V test: should have secret dest
@@ -140,7 +154,9 @@ main(void)
   write_mprivregcfg(0);
 
   val = read_mprivregcfg();
-  libmin_printf("After disable, mprivregcfg = 0x%lx\n", val);
+  libmin_printf("After disable, mprivregcfg = 0x%lx, ", val);
+  print_mprivregcfg(val);
+  libmin_printf("\n");
 
   libmin_success();
   return 0;

@@ -1,6 +1,6 @@
 ** Running CSR[privreg] tests...
-Initial mprivregcfg = 0x0
-After enable, mprivregcfg = 0x1
+Initial mprivregcfg = 0xa, (mojov_en:f, key_valid:t, format_sel:weak, mojov_ver:1)
+After enable, mprivregcfg = 0xb, (mojov_en:t, key_valid:t, format_sel:weak, mojov_ver:1)
 Initial inputs: x:35, max:25
 Final results:   x:35, max:35
-After disable, mprivregcfg = 0x0
+After disable, mprivregcfg = 0xa, (mojov_en:f, key_valid:t, format_sel:weak, mojov_ver:1)
