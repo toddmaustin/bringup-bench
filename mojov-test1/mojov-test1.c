@@ -1,4 +1,4 @@
-#define SECRET_BUGS
+// #define SECRET_BUGS
 
 #ifdef SECRET_BUGS
 __attribute__((__secret__))
@@ -46,6 +46,19 @@ uxxe(int w)
     return 2*((y>>1) - x);
 }
 
+
+int
+uxxe1(int w)
+{
+  if (w != 22)
+    return 1+(y-w);
+#ifdef SECRET_BUGS
+  else
+    return 2*((y>>1) - x);
+#else
+  return 0;
+#endif /* SECRET_BUGS */
+}
 
 int (*pbar)(int) = &bar;
 
@@ -155,7 +168,9 @@ foo(void)
 
   y = (y < 0) ? y+1 : y-1;
 
+#ifdef SECRET_BUGS
   y = (y < 0) ? y+1 : x-1;
+#endif /* SECRET_BUGS */
 
   y = (*pbar)(42);
 
@@ -224,7 +239,11 @@ foo(void)
 
   xdst = 1 - (y/2 + x);
 
+  xdst = 1 - (y/2 + y*y);
 
+#ifdef SECRET_BUGS
+  int qq = 1 - (y*y - (1 - x));
+#endif /* SECRET_BUGS */
 }
 
 int

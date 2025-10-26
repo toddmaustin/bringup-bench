@@ -1,12 +1,23 @@
 #include "libmin.h"
 
+#if 0
 #define SECRET __attribute__((__secret__))
-#define mojov_cmov(p, x, y) ((p) ? (x) : (y))
-#define mojov_decrypt(x) (x)
+#else
+#define SECRET
+#endif
+// #define secret_cmov(p, x, y) __builtin_secret_cmov((p), (x), (y))
+#define secret_decrypt(x) (x)
+
+SECRET int
+secret_cmov(SECRET bool p, SECRET int x, SECRET int y)
+{
+  return (int)p*x + (int)!p*y;
+}
+
 
 // supported sizes: 256 (default), 512, 1024, 2048
 #define DATASET_SIZE 256
-SECRET int raw_data[DATASET_SIZE];
+int raw_data[DATASET_SIZE];
 SECRET int secret_data[DATASET_SIZE];
 
 // total swaps executed so far
@@ -31,16 +42,13 @@ bubblesort(SECRET int *data, unsigned size)
       // swap needed?
       SECRET bool swap = (data[j] > data[j+1]);
 
-      bool isTrue = (data[j] > 0);
-      libmin_printf("isTrue: %s\n", isTrue ? "t" : "f");
-
       // perform the swap
       SECRET int tmp = data[j];
-      data[j] = mojov_cmov(swap, data[j+1], data[j]);
-      data[j+1] = mojov_cmov(swap, tmp, data[j+1]);
+      data[j] = secret_cmov(swap, data[j+1], data[j]);
+      data[j+1] = secret_cmov(swap, tmp, data[j+1]);
 
       // count the number of swaps executed
-      swaps = mojov_cmov(swap, swaps+1, swaps);
+      swaps = secret_cmov(swap, swaps+1, swaps);
     }
   }
 }
@@ -68,7 +76,7 @@ main(void)
 
   // decrypt the array
   for (unsigned i=0; i < DATASET_SIZE; i++)
-    raw_data[i] = mojov_decrypt(secret_data[i]);
+    raw_data[i] = secret_decrypt(secret_data[i]);
   print_data(raw_data, DATASET_SIZE);
 
   // check the array
@@ -80,7 +88,7 @@ main(void)
       return -1;
     }
   }
-  libmin_printf("INFO: %lu swaps executed.\n", mojov_decrypt(swaps));
+  libmin_printf("INFO: %lu swaps executed.\n", secret_decrypt(swaps));
   libmin_printf("INFO: data is properly sorted.\n");
 
   libmin_success();
