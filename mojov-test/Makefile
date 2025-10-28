@@ -1,7 +1,7 @@
 
 LOCAL_CFLAGS=-std=c23
 LOCAL_LIBS=
-LOCAL_OBJS=mojov-test.o simon.o
+LOCAL_OBJS=mojov-test.o ../common/simon.o
 
 PROG=mojov-test
 

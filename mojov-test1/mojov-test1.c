@@ -1,3 +1,5 @@
+#include "libmin.h"
+
 // #define SECRET_BUGS
 
 #ifdef SECRET_BUGS
@@ -250,5 +252,6 @@ int
 main(void)
 {
   foo();
+  libmin_printf("INFO: All tests successed.\n");
   return 0;
 }

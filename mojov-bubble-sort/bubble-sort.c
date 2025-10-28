@@ -6,13 +6,25 @@
 #define SECRET
 #endif
 // #define secret_cmov(p, x, y) __builtin_secret_cmov((p), (x), (y))
+#define secret_cmov(p, x, y) ((p) ? (x) : (y))
 #define secret_decrypt(x) (x)
 
+extern inline uint64_t
+__instret(void)
+{
+  uint64_t insts;
+  __asm__ volatile ("rdinstret %0" : "=r"(insts));
+
+  return insts;
+}
+
+#if 0
 SECRET int
 secret_cmov(SECRET bool p, SECRET int x, SECRET int y)
 {
   return (int)p*x + (int)!p*y;
 }
+#endif
 
 
 // supported sizes: 256 (default), 512, 1024, 2048
@@ -66,11 +78,12 @@ main(void)
 
   {
     // performance monitoring
-    libtarg_start_perf();
+    uint64_t icnt_start = __instret();
 
     bubblesort(secret_data, DATASET_SIZE);
 
-    libtarg_stop_perf();
+    uint64_t icnt_end = __instret();
+    libmin_printf("INFO: bubblesort inst count = %lu.\n", icnt_end - icnt_start + 1);
   }
 
 

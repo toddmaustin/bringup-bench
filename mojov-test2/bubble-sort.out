@@ -1,3 +1,6 @@
+** Running CSR[privreg] tests...
+Initial mprivregcfg = 0xa, (mojov_en:f, key_valid:t, format_sel:weak, mojov_ver:1)
+After enable, mprivregcfg = 0xb, (mojov_en:t, key_valid:t, format_sel:weak, mojov_ver:1)
 DATA DUMP:
   data[0] = 2032060776
   data[1] = 615236124
@@ -255,7 +258,7 @@ DATA DUMP:
   data[253] = 1241618063
   data[254] = 514462864
   data[255] = 1726956146
-INFO: bubblesort inst count = 911384.
+INFO: bubblesort inst count = 1236502.
 DATA DUMP:
   data[0] = 2863982
   data[1] = 18097017
