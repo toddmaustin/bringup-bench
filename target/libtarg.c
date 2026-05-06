@@ -119,7 +119,7 @@ _mmio_write8(uintptr_t addr, uint8_t value)
 }
 
 extern inline int
-cva6_putchar(char c)
+_cva6_putchar(char c)
 {
   // The mock_uart prints the low byte written to THR.
   _mmio_write8(UART_BASE + UART_THR, (uint8_t)c);
@@ -131,9 +131,9 @@ cva6_putchar(char c)
 volatile uint64_t tohost __attribute__((section(".tohost"))) = 0;
 volatile uint64_t fromhost __attribute__((section(".fromhost"))) = 0;
 
-void cva6_exit(int code) __attribute__((noreturn));
+void _cva6_exit(int code) __attribute__((noreturn));
 void
-cva6_exit(int code)
+_cva6_exit(int code)
 {
   tohost = (((uint64_t)(uint32_t)code) << 1) | 1ULL;
 
@@ -156,27 +156,11 @@ memcpy(void *dest, const void *src, size_t len)
 }
 
 // Small local stack, since we are not using the C runtime startup files.
-uint8_t boot_stack[4096] __attribute__((aligned(16)));
+// NOTE: If you change stack size, you must also update the cva6-crt0.S file.
+uint8_t _boot_stack[8*4096] __attribute__((aligned(16)));
 
-void _start(void) __attribute__((naked, noreturn, section(".text.init")));
-void
-_start(void)
-{
-  __asm__ volatile (
-      ".option push\n"
-      ".option norelax\n"
-      "la sp, boot_stack\n"
-      ".option pop\n"
-      "li t0, 4096\n"
-      "add sp, sp, t0\n"
-      "call main\n"
-      "tail cva6_exit\n"
-  );
-}
-
-#ifdef notdef
 extern inline uint32_t
-simple_get_mepc(void)
+_cva6_get_mepc(void)
 {
   uint32_t result;
   __asm__ volatile("csrr %0, mepc;" : "=r"(result));
@@ -184,7 +168,7 @@ simple_get_mepc(void)
 }
 
 extern inline uint32_t
-simple_get_mcause(void)
+_cva6_get_mcause(void)
 {
   uint32_t result;
   __asm__ volatile("csrr %0, mcause;" : "=r"(result));
@@ -192,7 +176,7 @@ simple_get_mcause(void)
 }
 
 extern inline uint32_t
-simple_get_mtval(void)
+_cva6_get_mtval(void)
 {
   uint32_t result;
   __asm__ volatile("csrr %0, mtval;" : "=r"(result));
@@ -200,25 +184,24 @@ simple_get_mtval(void)
 }
 
 void
-simple_exc_handler(void)
+_cva6_exc_handler(void)
 {
   libmin_printf("EXCEPTION!!!\n");
   libmin_printf("============\n");
-  libmin_printf("MEPC:0x%08x, CAUSE:0x%08x, MTVAL:0x%08x\n", simple_get_mepc(), simple_get_mcause(), simple_get_mtval());
+  libmin_printf("MEPC:0x%08x, CAUSE:0x%08x, MTVAL:0x%08x\n", _cva6_get_mepc(), _cva6_get_mcause(), _cva6_get_mtval());
 
-  simple_halt();
-  while(1);
+  _cva6_exit(-1);
 }
 
 void
-simple_timer_handler(void)
+_cva6_timer_handler(void)
 {
   libmin_printf("TIMER EXCEPTION!!!\n");
 
-  simple_halt();
-  while(1);
+  _cva6_exit(-1);
 }
 
+#ifdef notdef
 extern inline void
 simple_output_hash(uint64_t __hashval)
 {
@@ -275,7 +258,7 @@ SPIN_SUCCESS_ADDR:
   // libmin_printf("EXIT: success\n");
   simple_halt();
 #elif defined(TARGET_CVA6_RV64)
-  cva6_exit(0);
+  _cva6_exit(0);
 #else
 #error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
@@ -303,7 +286,7 @@ SPIN_FAIL_ADDR:
   // libmin_printf("EXIT: fail code = %d\n", code);
   simple_halt();
 #elif defined(TARGET_CVA6_RV64)
-  cva6_exit(code);
+  _cva6_exit(code);
 #else
 #error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif
@@ -329,7 +312,7 @@ libtarg_putc(char c)
 #elif defined(TARGET_SIMPLE) || defined(TARGET_SPIKE)
   simple_putchar(c);
 #elif defined(TARGET_CVA6_RV64)
-  cva6_putchar(c);
+  _cva6_putchar(c);
 #else
 #error Co-simulation platform not defined, define TARGET_HOST or a target-dependent definition.
 #endif

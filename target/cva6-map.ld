@@ -18,6 +18,14 @@ ENTRY(_start)
 
 SECTIONS
 {
+  .vectors :
+  {
+    . = ALIGN(16);
+    _vectors_start = .;
+    KEEP(*(.vectors))
+    _vectors_end = .;
+  }
+
   . = 0x80000000;
   /* . = 0x00100000; */
   _start_text = .;
@@ -52,7 +60,14 @@ SECTIONS
     *(.sbss .sbss.* .gnu.linkonce.sb.*)
     *(.scommon)
   }*/
-  .bss : { *(.bss) }
+  .bss :
+  {
+    . = ALIGN(16);
+    _bss_start = .;
+    *(.bss)
+    _bss_end = .;
+  }
+/*
   .tdata :
   {
     _tdata_begin = .;
@@ -64,6 +79,6 @@ SECTIONS
     *(.tbss)
     _tbss_end = .;
   }
-
+*/
   _end = .;
 }
