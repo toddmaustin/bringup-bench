@@ -113,6 +113,18 @@ TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
+else ifeq ($(TARGET), cva6-rv64gc)
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
+TARGET_CFLAGS = -DTARGET_CVA6_RV64 -march=rv64gc -mabi=lp64d -static -mcmodel=medany -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding -fno-builtin -Wl,--no-relax # -MMD -mcmodel=medany
+TARGET_LIBS = #-lgcc
+TARGET_EXE = $(PROG).elf
+TARGET_SIM = $(CVA6_REPO_DIR)/work-ver/Variane_testharness $(TARGET_EXE) +elf_file=$(TARGET_EXE) +core_name=cv64a6_imafdc_sv39 +tohost_addr= | ../scripts/cva6-filter.sh
+TARGET_DIFF = diff
+TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
+TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num
+TARGET_CONFIGURED = 1
+TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32)
 TARGET_CC = riscv64-unknown-elf-gcc
 #TARGET_CC = riscv64-unknown-elf-clang
@@ -210,6 +222,8 @@ else ifeq ($(TARGET), hashalone-spike64)
 	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), simple)
 	$(TARGET_CC) $(CFLAGS) -T ../target/simple-map.ld $^ ../target/simple-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
+else ifeq ($(TARGET), cva6-rv64gc)
+	$(TARGET_CC) $(CFLAGS) -T ../target/cva6-rv64gc-map.ld -Wl,--no-relax $^ -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike32)
 	$(TARGET_CC) $(CFLAGS) -T ../target/spike-map.ld $^ ../target/spike-crt0.S -o $@ $(LIBS) $(TARGET_LIBS)
 else ifeq ($(TARGET), spike64)

@@ -586,6 +586,7 @@ static void
 fmtfp (char *buffer, size_t *currlen, size_t maxlen,
        LDOUBLE fvalue, int min, int max, int flags)
 {
+#if 0
   int signvalue = 0;
   double ufvalue;
   char iconvert[311];
@@ -736,6 +737,7 @@ fmtfp (char *buffer, size_t *currlen, size_t maxlen,
     dopr_outch (buffer, currlen, maxlen, ' ');
     ++padlen;
   }
+#endif
 }
 
 static void
