@@ -4,12 +4,8 @@
 
 .section .text.init
 
-#ifdef notdef
 default_exc_handler:
   jal x0, _cva6_exc_handler
-
-timer_handler:
-  jal x0, _cva6_timer_handler
 
 reset_handler:
   /* set all registers to zero */
@@ -46,8 +42,6 @@ reset_handler:
   mv x31, x1
 
   /* fall thru to stack initilization */
-#endif /* notdef */
-
 _start:
   .global _start
 
@@ -58,7 +52,13 @@ _start:
   li t0, (8*4096)
   add sp, sp, t0
 
-#ifdef notdef
+  /* Route all traps/exceptions to our machine-mode handler. */
+  .option push
+  .option norelax
+  la t0, default_exc_handler
+  .option pop
+  csrw mtvec, t0
+
   /* clear BSS */
   la x26, _bss_start
   la x27, _bss_end
@@ -66,11 +66,10 @@ _start:
   bge x26, x27, zero_loop_end
 
 zero_loop:
-  sw x0, 0(x26)
-  addi x26, x26, 4
+  sd x0, 0(x26)
+  addi x26, x26, 8
   blt x26, x27, zero_loop
 zero_loop_end:
-#endif /* notdef */
 
   /* jump to main program entry point (argc = argv = 0) */
   addi x10, x0, 0
@@ -79,25 +78,3 @@ zero_loop_end:
 
   /* if we return from main, call exit() */
   tail _cva6_exit
-
-#ifdef notdef
-/* =================================================== [ exceptions ] === */
-/* This section has to be down here, since we have to disable rvc for it  */
-
-  .section .vectors, "ax"
-  .option norvc;
-
-  // All unimplemented interrupts/exceptions go to the default_exc_handler.
-  .org 0x00
-  .rept 7
-  jal x0, default_exc_handler
-  .endr
-  jal x0, timer_handler
-  .rept 23
-  jal x0, default_exc_handler
-  .endr
-
-  // reset vector
-  .org 0x80
-  jal x0, reset_handler
-#endif /* notdef */

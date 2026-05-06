@@ -159,26 +159,26 @@ memcpy(void *dest, const void *src, size_t len)
 // NOTE: If you change stack size, you must also update the cva6-crt0.S file.
 uint8_t _boot_stack[8*4096] __attribute__((aligned(16)));
 
-extern inline uint32_t
+extern inline uint64_t
 _cva6_get_mepc(void)
 {
-  uint32_t result;
+  uint64_t result;
   __asm__ volatile("csrr %0, mepc;" : "=r"(result));
   return result;
 }
 
-extern inline uint32_t
+extern inline uint64_t
 _cva6_get_mcause(void)
 {
-  uint32_t result;
+  uint64_t result;
   __asm__ volatile("csrr %0, mcause;" : "=r"(result));
   return result;
 }
 
-extern inline uint32_t
+extern inline uint64_t
 _cva6_get_mtval(void)
 {
-  uint32_t result;
+  uint64_t result;
   __asm__ volatile("csrr %0, mtval;" : "=r"(result));
   return result;
 }
@@ -188,7 +188,8 @@ _cva6_exc_handler(void)
 {
   libmin_printf("EXCEPTION!!!\n");
   libmin_printf("============\n");
-  libmin_printf("MEPC:0x%08x, CAUSE:0x%08x, MTVAL:0x%08x\n", _cva6_get_mepc(), _cva6_get_mcause(), _cva6_get_mtval());
+  libmin_printf("MEPC:0x%016lx, CAUSE:0x%016lx, MTVAL:0x%016lx\n",
+                _cva6_get_mepc(), _cva6_get_mcause(), _cva6_get_mtval());
 
   _cva6_exit(-1);
 }
@@ -399,4 +400,3 @@ libtarg_stop_perf(void)
 #endif
 }
 #endif /* TARGET_PERFHOOKS */
-
