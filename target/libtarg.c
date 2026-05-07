@@ -183,6 +183,10 @@ _cva6_get_mtval(void)
   return result;
 }
 
+// GCC/Clang RISC-V interrupt attribute emits an M-mode trap epilogue.
+// This handler never returns, but the attribute still gives a safe prologue.
+void _cva6_exc_handler(void) __attribute__((interrupt("machine"), aligned(16)));
+
 void
 _cva6_exc_handler(void)
 {

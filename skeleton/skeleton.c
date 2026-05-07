@@ -7,8 +7,8 @@ main(void)
 {
   libmin_printf("This is a test!, %d, %f...\n", 23, 44.4);
 
-  // *ptr = *ptr + 1;
-  // libmin_printf("This is string: %s\n", ptr);
+  // illegal insn
+  // __asm__ volatile (".word 0x00000000");
 
   libmin_success();
   return 0;

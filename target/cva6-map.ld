@@ -18,14 +18,6 @@ ENTRY(_start)
 
 SECTIONS
 {
-  .vectors :
-  {
-    . = ALIGN(16);
-    _vectors_start = .;
-    KEEP(*(.vectors))
-    _vectors_end = .;
-  }
-
   . = 0x80000000;
   /* . = 0x00100000; */
   _start_text = .;
