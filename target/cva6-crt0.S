@@ -4,12 +4,6 @@
 
 .section .text.init
 
-/* Trap vector entry for CVA6.
- * Keep this tiny and always tail-call into C to print/terminate.
- */
-_cva6_trap_entry:
-  j _cva6_exc_handler
-
 _start:
   .global _start
 
@@ -33,7 +27,7 @@ _start:
 zero_loop:
   sw x0, 0(x26)
   addi x26, x26, 4
-  blt x26, x27, zero_loop
+  ble x26, x27, zero_loop
 zero_loop_end:
 
   /* jump to main program entry point (argc = argv = 0) */
@@ -43,3 +37,10 @@ zero_loop_end:
 
   /* if we return from main, call exit() */
   tail _cva6_exit
+
+/* Trap vector entry for CVA6.
+ * Keep this tiny and always tail-call into C to print/terminate.
+ */
+_cva6_trap_entry:
+  j _cva6_exc_handler
+

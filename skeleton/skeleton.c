@@ -1,6 +1,6 @@
 #include "libmin.h"
 
-char *ptr = 0;
+char *ptr = (char *)0ull-1;
 
 int
 main(void)
