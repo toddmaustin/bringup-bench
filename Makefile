@@ -119,7 +119,7 @@ TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_CVA6_RV64 -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc -mabi=lp64d -static -mcmodel=medany -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding -fno-builtin -Wl,--no-relax # -MMD -mcmodel=medany
 TARGET_LIBS = #-lgcc
 TARGET_EXE = $(PROG).elf
-TARGET_SIM = $(CVA6_REPO_DIR)/work-ver/Variane_testharness $(TARGET_EXE) +elf_file=$(TARGET_EXE) +core_name=cv64a6_imafdc_sv39 +tohost_addr= | ../scripts/cva6-filter.sh
+TARGET_SIM = $(CVA6_REPO_DIR)/work-ver/Variane_testharness $(TARGET_EXE) +elf_file=$(TARGET_EXE) +core_name=cv64a6_imafdc_sv39 +tohost_addr= +time_out=250000000 | ../scripts/cva6-filter.sh
 TARGET_DIFF = diff
 TARGET_CLEAN = encaps.traces iti.traces trace_hart_0.dasm trace_rvfi_hart_00.dasm
 TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num

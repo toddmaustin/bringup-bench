@@ -14,11 +14,9 @@ _start:
   li t0, (8*4096)
   add sp, sp, t0
 
-#if 0
   /* Disable all interrupts */
   li    t0, 0x8             # MSTATUS_MIE
   csrc  mstatus, t0         # clear bits in mstatus selected by t0
-#endif
 
   /* Route all traps/exceptions to _cva6_trap_entry in direct mode. */
   la t0, _cva6_exc_handler
