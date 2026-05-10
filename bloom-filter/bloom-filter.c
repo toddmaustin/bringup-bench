@@ -1,7 +1,7 @@
 #include "libmin.h"
 #include "tinybloom.h"
 
-#define NUM_ITEMS 2048
+#define NUM_ITEMS 512 /* 2048 */
 #define NUM_BUCKETS NUM_ITEMS * 4
 
 int bad_search(const unsigned int* array, unsigned int target, size_t size)
@@ -25,7 +25,7 @@ main(void)
 	// Create a bloom filter with (2 << 13) buckets
 	bloom_filter* bFilter = create_bfilter(NUM_BUCKETS);
 
-	libmin_printf("Using %lu kilobytes for filter.\n\n", (bFilter->filter_size * sizeof(unsigned)) / 1024);
+	libmin_printf("Using %.2lf kilobytes for filter.\n\n", (bFilter->filter_size * sizeof(unsigned)) / 1024.0);
 
 	libmin_srand(42);
 

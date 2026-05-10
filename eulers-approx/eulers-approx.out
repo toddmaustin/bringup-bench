@@ -1,0 +1,2 @@
+INFO: e via compound interest after 10000 steps == 2.7181459268248985 (0.0001359016341467 error).
+INFO: e via infinite series after 19 steps == 2.7182818284590455 (-0.0000000000000004 error).

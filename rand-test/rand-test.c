@@ -24,8 +24,14 @@
 typedef uint32_t (*rng_func_t)(void);
 
 // Helper: Count the number of 1 bits in a 32-bit integer.
+// Helper: Count the number of 1 bits in a 32-bit integer.
 static inline int count_bits(uint32_t x) {
-    return __builtin_popcount(x);
+    int count = 0;
+    while (x != 0) {
+        x &= x - 1;   // Clear the lowest set bit
+        count++;
+    }
+    return count;
 }
 
 // A deliberately weak ("bad") random number generator using a simple LCG.

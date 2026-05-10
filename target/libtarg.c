@@ -192,10 +192,8 @@ _cva6_exc_handler(void)
 {
   libmin_printf("EXCEPTION!!!\n");
   libmin_printf("============\n");
-  libmin_printf("MEPC:0x%016lx, CAUSE:0x%016lx, MTVAL:0x%016lx\n",
-                (unsigned long)_cva6_get_mepc(),
-                (unsigned long)_cva6_get_mcause(),
-                (unsigned long)_cva6_get_mtval());
+  libmin_printf("MEPC:0x%lx, CAUSE:0x%lx, MTVAL:0x%lx\n",
+                _cva6_get_mepc(), _cva6_get_mcause(), _cva6_get_mtval());
 
   _cva6_exit(-1);
 }

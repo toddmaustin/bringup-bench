@@ -1,0 +1,6 @@
+pca-analysis: encrypted PCA complete
+dataset shape: samples=192 features=6 retained_components=2
+eigenvalues: pc1=10.515265 pc2=9.358101
+explained variance ratios: pc1=0.414783 pc2=0.369138 cumulative=0.783921
+projected sample[0]:  pc1=-4.251255 pc2=1.104000
+projected sample[191]: pc1=3.399934 pc2=2.492896

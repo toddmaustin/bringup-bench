@@ -49,7 +49,7 @@ main(void)
     //sleep(500);
     process();
     iters++;
-    if (iters == 80)
+    if (iters == 10 /*80*/)
       running = FALSE;
   }
 

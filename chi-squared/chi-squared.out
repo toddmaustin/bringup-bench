@@ -1,0 +1,12 @@
+chi-squared dataset-size=600 association-categories=4x3 gof-categories=5
+chi-squared association contingency:
+  row0: 46 61 64 (row-total=171)
+  row1: 48 62 61 (row-total=171)
+  row2: 24 31 31 (row-total=86)
+  row3: 46 64 62 (row-total=172)
+  col-totals: 164 218 218
+chi-squared goodness-of-fit observed: 123 120 115 126 116
+chi-squared goodness-of-fit expected: 60 120 180 150 90
+chi-squared association-statistic-scaled-x1000=212 reject-null(alpha=0.05)=no
+chi-squared goodness-of-fit-statistic-scaled-x1000=100973 reject-null(alpha=0.05)=yes
+chi-squared: categorical analysis completed for 600 records

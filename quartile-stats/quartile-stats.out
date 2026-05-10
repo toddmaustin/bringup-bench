@@ -1,0 +1,6 @@
+quartile-stats: encrypted quartile analysis complete
+input summary: samples=128 range=[38, 1510]
+quartile cuts order positions (1-based): Q1=32 Q2=64 Q3=96
+quartile cuts order positions (0-based): Q1=31 Q2=63 Q3=95
+quartile cuts (Q1,Q2,Q3): 263, 529, 892
+quartile averages (Q1,Q2,Q3,Q4): 138, 393, 697, 1188

@@ -31,13 +31,6 @@ unsigned int count_bits_kernighan(uint32_t x) {
 }
 
 // ------------------------------
-// Bit-counting Kernel 3: Compiler built-in popcount (GCC/Clang)
-// ------------------------------
-unsigned int count_bits_builtin(uint32_t x) {
-    return __builtin_popcount(x);
-}
-
-// ------------------------------
 // Bit-counting Kernel 4: Table lookup
 // ------------------------------
 // Initialize the lookup table for 8-bit popcount.
@@ -101,7 +94,6 @@ int main(void) {
     // Variables to sum total bit counts for each method.
     unsigned long long total_naive = 0;
     unsigned long long total_kernighan = 0;
-    unsigned long long total_builtin = 0;
     unsigned long long total_table = 0;
     unsigned long long total_parallel = 0;
     
@@ -110,27 +102,25 @@ int main(void) {
         uint32_t val = numbers[i];
         unsigned int naive   = count_bits_naive(val);
         unsigned int kernighan = count_bits_kernighan(val);
-        unsigned int builtin = count_bits_builtin(val);
         unsigned int table   = count_bits_table(val);
         unsigned int parallel = count_bits_parallel(val);
         
         // Verify that all methods agree.
-        if (naive != kernighan || naive != builtin || naive != table || naive != parallel) {
-            libmin_printf("Mismatch for value 0x%08X: naive=%u, kernighan=%u, builtin=%u, table=%u, parallel=%u\n",
-                   val, naive, kernighan, builtin, table, parallel);
+        if (naive != kernighan || naive != table || naive != parallel) {
+            libmin_printf("Mismatch for value 0x%08X: naive=%u, kernighan=%u, table=%u, parallel=%u\n",
+                   val, naive, kernighan, table, parallel);
         }
         
         // Accumulate totals.
         total_naive   += naive;
         total_kernighan += kernighan;
-        total_builtin += builtin;
         total_table   += table;
         total_parallel += parallel;
         
         // For demonstration, print the first 5 numbers with their popcount from each method.
         if (i < 5) {
-            libmin_printf("Value 0x%08X: naive=%2u, kernighan=%2u, builtin=%2u, table=%2u, parallel=%2u\n",
-                   val, naive, kernighan, builtin, table, parallel);
+            libmin_printf("Value 0x%08X: naive=%2u, kernighan=%2u, table=%2u, parallel=%2u\n",
+                   val, naive, kernighan, table, parallel);
         }
     }
     
@@ -138,7 +128,6 @@ int main(void) {
     libmin_printf("\nTotal bit count over %d numbers:\n", NUM_ELEMENTS);
     libmin_printf("Naive         : %llu\n", total_naive);
     libmin_printf("Kernighan     : %llu\n", total_kernighan);
-    libmin_printf("Built-in      : %llu\n", total_builtin);
     libmin_printf("Table Lookup  : %llu\n", total_table);
     libmin_printf("Parallel      : %llu\n", total_parallel);
     

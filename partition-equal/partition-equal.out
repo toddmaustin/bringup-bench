@@ -1,0 +1,18 @@
+partition-equal: processing 8 encrypted sets
+partition-equal set=0 can_partition=YES
+  partition A: {1, 5, 5} (sum=11)
+  partition B: {11} (sum=11)
+partition-equal set=1 can_partition=NO
+partition-equal set=2 can_partition=NO
+partition-equal set=3 can_partition=NO
+partition-equal set=4 can_partition=YES
+  partition A: {4, 4, 4} (sum=12)
+  partition B: {4, 4, 4} (sum=12)
+partition-equal set=5 can_partition=YES
+  partition A: {9, 1, 1, 1} (sum=12)
+  partition B: {2, 10} (sum=12)
+partition-equal set=6 can_partition=YES
+  partition A: {2, 5, 1, 6, 4} (sum=18)
+  partition B: {7, 3, 8} (sum=18)
+partition-equal set=7 can_partition=NO
+partition-equal PASS: validated 8 encrypted sets
