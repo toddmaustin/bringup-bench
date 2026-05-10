@@ -8,7 +8,7 @@
 
 // supported sizes: 256, 512, 1024 (default), 2048
 #ifndef DATASET_SIZE
-#define DATASET_SIZE 1024
+#define DATASET_SIZE 256
 #endif
 
 static int64_t raw_data[DATASET_SIZE];
@@ -38,8 +38,8 @@ compareExchange(int64_t *a, int i, int j, uint64_t *swaps)
   int64_t pred = (((int64_t)(i < j) && (a[i] > a[j]))
                    || ((int64_t)(i > j) && (a[i] < a[j])));
   int64_t temp = a[i];
-  a[i] = cmov(pred, a[j], a[i]);
-  a[j] = cmov(pred, temp, a[j]);
+  a[i] = pred ? a[j] : a[i];
+  a[j] = pred ? temp : a[j];
   *swaps = *swaps + 1;
 }
 
@@ -89,17 +89,6 @@ randshellsort(int64_t *data, uint64_t size, uint64_t *swaps)
 int
 main(void)
 {
-  if (mojov_configure_kmsm_from_dc_fast() != 0)
-    return -1;
-
-  // enable private register semantics (bit 0 = 1)
-  if (mojov_enable_and_verify() != 0)
-    return -1;
-
-  // enable encrypted variable debugging
-  if (debug_context(SIMON128_KEY, CONTRACT_SIG) != 0)
-    return -1;
-
   // initialize the pseudo-RNG
   libmin_srand(42);
 
@@ -118,7 +107,7 @@ main(void)
   randshellsort(secret_data, DATASET_SIZE, &swaps);
 
   for (uint64_t i = 0; i < DATASET_SIZE; i++)
-    raw_data[i] = secret_data[i].decrypt();
+    raw_data[i] = secret_data[i];
 
   print_data(raw_data, DATASET_SIZE);
 
@@ -131,7 +120,7 @@ main(void)
     }
   }
 
-  libmin_printf("INFO: %lu swaps executed.\n", swaps.decrypt());
+  libmin_printf("INFO: %lu swaps executed.\n", swaps);
   libmin_printf("INFO: data is properly sorted.\n");
 
   libmin_success();

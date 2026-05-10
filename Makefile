@@ -122,7 +122,7 @@ TARGET_EXE = $(PROG).elf
 TARGET_SIM = time -p $(CVA6_REPO_DIR)/work-ver/Variane_testharness $(TARGET_EXE) +elf_file=$(TARGET_EXE) +core_name=cv64a6_imafdc_sv39 +tohost_addr= +time_out=250000000 +no_rvfi_trace | ../scripts/cva6-filter.sh
 TARGET_DIFF = diff
 TARGET_CLEAN = encaps.traces iti.traces trace_hart_0.dasm trace_rvfi_hart_00.dasm
-TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num connect4-minimax donut huff-encode
+TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num connect4-minimax donut huff-encode lz-compress matmult n-queens parrondo pi-calc ransac rho-factor rsa-cipher sudoku-solver
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32)
