@@ -1,3 +1,9 @@
+Version 1.9
+  - Added target support (TARGET=cva6-rv64gc) for OpenHW Group's CVA6 64-bit RISC-V core (RV64GC build, running on the Verilator workflow), including built-in MOCK_UART usage (no CVA6 build changes are required), an optional no-trace CVA6 patch (~3x faster simulation: https://github.com/toddmaustin/cva6-mojov/tree/mojov-dev), no libgcc.a requirement, and bringup-bench suite completion in under 1.5 hours on a Verilator-simulated CVA6-RV64GC
+  - Added 18 new benchmarks, most of which came from the Mojo-V project (https://github.com/toddmaustin/mojo-v), which is using bringup-bench
+  - Further reduced BRINGUP-BENCH's dependency on low-level libraries such as libgcc.a; most benchmarks can now be built with zero external libraries
+  - Improved RISC-V exception handling support so all RISC-V targets output error/debug messages and terminate when an uncaught exception occurs
+
 Version 1.8
   - Added TARGET={spike32,spike64,spike32-pk,spike64-pk} to support running benchmarks on a wide range of Spike configurations
   - Ported the Spike simulator bare-metal device driver (spike_mmio_plugin.so) to utilize Spike's new Device Factory framework,

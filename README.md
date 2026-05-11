@@ -26,6 +26,8 @@ This command will first "clean" the benchmark directory and then "build" the app
 
 - **RISC-V Spike + Proxy Kernel (PK) target = TARGET=spike-pk** - This target runs the benchmarks on the RISC-V spike instruction set simulator with proxy kernel (pk). It builds RISC-V binaries to be run on the Spike instruction set simulator (ISS). Spike is configured to proxy kernel system calls (pk). This target is useful as a "golden" model to compare against execution traces occurring on a (perhaps buggy) RTL design target.
 
+- **CVA6-RV64GC target - TARGET=cva6-rv64gc** - This target builds benchmarks for the CVA6 RV64GC Verilator simulation flow used by Mojo-V. Bringup-bench already uses the simulator's built-in MOCK_UART capability, so no CVA6 build changes are required. There is also an optional CVA6 patch available here (with an upstream path expected soon) that disables tracing and improves simulation throughput by about 3x: https://github.com/toddmaustin/cva6-mojov/tree/mojov-dev. This target does not require libgcc.a support; all benchmarks build and run on a Verilator-simulated CVA6-RV64GC target in under 1.5 hours.
+
 - **HashAlone Host target - TARGET=hashalone-host** - This target builds the benchmarks to run on x86/Linux with a hashing output device. Instead of producing output, hash-alone binaries simply send the program output to a hash function. When the program completes it prints the final value of the hash function, which is cryptographically unique for every possible output of the program.
 
 - **HashAlone Spike target - TARGET=hashalone-spike** - This target builds the benchmarks to run on bare-metal RISC-V with a hashing output device. Instead of producing output, hash-alone binaries simply send the program output to a hash function. When the program completes it prints the final value of the hash function, which is cryptographically unique for every possible output of the program. Use this target to enhance your "golden model" to support reference hash-alone signatures for the bringup-bench benchmarks.
@@ -79,17 +81,19 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **bubble-sort** - Performs a bubble sort on a randomly generated internal list of integers.
 
+- **c-interp** - A C language interpreter that interprets the test program "hello.c". This benchmark uses code-based read-only file access.
+
 - **ccmac** - Complex CMAC (FP64): Performs a complex multiply-accumulate dot product, exercising 4 multiplies and 4 adds per element to stress FP throughput.
 
 - **checkers** - Checkers game based on minimax search.
 
-- **c-interp** - A C language interpreter that interprets the test program "hello.c". This benchmark uses code-based read-only file access.
+- **chi-squared** - Computes chi-squared statistics for observed versus expected distributions.
 
 - **cipher** - A TEA cipher implementation the encrypts and decrypts some fixed test data.
 
-- **connect4-minimax** - A MINIMAX implementation of the classic Connect-4 game.
-
 - **congrad** - Iteratively solves Ax=b for SPD matrices with a loop dominated by sparse matrix–vector multiplies (SpMV), AXPY and dot products.
+
+- **connect4-minimax** - A MINIMAX implementation of the classic Connect-4 game.
 
 - **convex-hull** - Computes the surface of a convex hull.
 
@@ -98,6 +102,10 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 - **distinctness** - Computes if every element of an array is unique.
 
 - **donut** - A donut in code and action that defies proper explanation!
+
+- **edit-distance** - Computes string edit distance using dynamic programming over test datasets.
+
+- **eulers-approx** - Approximates Euler-related values with iterative numeric methods.
 
 - **fft-int** - Performs an integer fast-Fourier-transform on fixed integer input data.
 
@@ -111,6 +119,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **gcd-list** - Computes the greatest common divisor for a list of integers using the division algorithm.
 
+- **gemm** - General matrix-matrix multiplication benchmark.
+
 - **grad-descent** - Gradient descent with linear regression implementation, with test code.
 
 - **graph-tests** - A graph data-structure manipulation library with many tests.
@@ -121,21 +131,27 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **heat-calc** - Performs heat flow analysis of a metal pipe.
 
+- **heldkarp-tsp** - Solves Traveling Salesman instances with the Held-Karp dynamic-programming algorithm.
+
+- **highlife** - Simulates the HighLife cellular automaton.
+
 - **huff-encode** - Performs string compression and decompression using a Huffman encoding technique.
 
 - **idct-alg** - Computes the integer DCT over a collection of pixels.
 
 - **indirect-test** - A few specialized tests to validate indirect jumps, switch tables, and function returns.
 
+- **k-means** - A K-Means clustering algorithm running on synthetic data.
+
 - **kadane** - Implementation of Kadane's algorithm, which finds find the maximum sum of a contiguous subarray.
 
 - **kepler** - Calculates an orbital path for a planetary body based on the Kepler parameters.
 
-- **k-means** - A K-Means clustering algorithm running on synthetic data.
-
 - **knapsack** - A knapsack packing algorithm running various tests.
 
 - **knights-tour** - A dynamic programming implementation of the Knight's Tour problem (i.e., one chess knight visits all board squares).
+
+- **lda** - Performs Linear Discriminant Analysis on fixed input data.
 
 - **life** - Conway's game of life simulation.
 
@@ -157,21 +173,31 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **monte-carlo** - Uses a Monte Carlo simulation to find an approximation of PI.
 
+- **moving-average** - Computes moving averages over numeric streams.
+
 - **murmur-hash** - Computes the MURMUR hash of its input value.
+
+- **n-queens** - Solves the N-queens problem, of various sizes.
 
 - **natlog** - Compute the value of natural log e, using an iterative method.
 
 - **nbody-sim** - Performs an N-body simulation to high detail.
 
-- **n-queens** - Solves the N-queens problem, of various sizes.
+- **nonlinear-nn** - Runs a small nonlinear neural-network workload for inference/training style testing.
 
 - **nr-solver** - Computes a square-root value using a Newton-Raphson solver.
+
+- **ntt-kernel** - Number Theoretic Transform kernel benchmark.
 
 - **packet-filter** - Performs complex packet filtering on a randomly generated steam of network packets.
 
 - **parrondo** - A game theory based solver that simulates Parrondo's paradox.
 
+- **partition-equal** - Tests whether sets can be partitioned into equal-sum subsets.
+
 - **pascal** - Compute Pascal's triangle, to a specified depth.
+
+- **pca-analysis** - Principal Component Analysis workload over sample data.
 
 - **pi-calc** - An integer based high-precision PI calculator.
 
@@ -183,13 +209,19 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **qsort-test** - Tests the library's QSORT implementation, using a range of self-validating tests.
 
+- **quartile-stats** - Computes quartiles and related descriptive statistics.
+
 - **quaternions** - Computes a geometry problem using quaternions.
 
 - **quine** - A C program that prints itself.
 
 - **rabinkarp-search** - Implements the very efficient Rabin-Karp data-oblivious string search algorithm. This search algorithm is O(N) in the length of the string searched.
 
+- **rad-to-deg** - Converts angle data from radians to degrees.
+
 - **rand-test** - Performs a set of randomness tests on a good and bad random number generator.
+
+- **randshell-sort** - Shell-sort benchmark using randomized input.
 
 - **ransac** - Performs RANSAC (RANdom SAmple Consensus) robustly estimate the parameters of a mathematical model from a randomly generated dataset.
 
@@ -219,6 +251,8 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 
 - **sudoku-solver** - Solves a fairly challenging Sudoku board.
 
+- **tea-cipher** - Tiny Encryption Algorithm (TEA) encryption/decryption benchmark.
+
 - **tetris-sim** - Plays tetris until the board fills.
 
 - **tiny-NN** - A deep neural net (DNN) implementation, with training and inference tests.
@@ -228,6 +262,12 @@ The Bringup-Bench benchmarks were selected for their minimal library and system 
 - **totient** - Calculates the Euler totient function phi.
 
 - **transcend** - Evaluates exp, sin, cos, and a mixed sequence over large arrays for fixed iterations to stress transcendental while emitting a checksum.
+
+- **triangle-count** - Counts triangles in graph-structured input.
+
+- **uniquify** - Deduplicates input values while preserving deterministic output.
+
+- **variability-sample** - Sample workload for variability and repeatability measurement.
 
 - **vectors-3d** - A 3D vector library running a battery of tests.
 
