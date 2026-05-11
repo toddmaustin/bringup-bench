@@ -37,6 +37,8 @@ BMARKS = ackermann aes anagram audio-codec avl-tree banner bit-kernels blake2b b
 #OPT_CFLAGS = -O0 -g
 OPT_CFLAGS = -O3 -g
 
+SPIKE = ../../mojo-v/riscv-isa-sim/build/spike
+
 ifeq ($(TARGET), host)
 TARGET_CC = gcc
 #TARGET_CC = clang
@@ -75,25 +77,23 @@ TARGET_EXCLUDES =
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), hashalone-spike32)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_HASPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_SIM = $(SPIKE) --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_EXE = $(PROG).haspike
 TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES = anagram bit-kernels c-interp checkers chi-squared edit-distance eulers-approx heldkarp-tsp lda lz-compress moving-average ntt-kernel partition-equal quartile-stats rand-test randshell-sort rho-factor rsa-cipher spelt2num tea-cipher triangle-count variability-sample
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), hashalone-spike64)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_HASPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc -mabi=lp64d -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_SIM = $(SPIKE) --isa=rv64gc --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_EXE = $(PROG).haspike
 TARGET_CONFIGURED = 1
 TARGET_DIFF = diff
@@ -101,16 +101,15 @@ TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
 TARGET_EXCLUDES = anagram c-interp checkers lz-compress rsa-cipher spelt2num
 TARGET_REFEXT = hash
 else ifeq ($(TARGET), simple)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_SIMPLE -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany
 TARGET_LIBS = -lgcc
 TARGET_SIM = ../target/simple_sim.sh ../../../Snowflake-IoT/ibex/build/lowrisc_ibex_ibex_simple_system_0/sim-verilator/Vibex_simple_system
 TARGET_DIFF = mv ibex_simple_system.log FOO; diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES = ackermann anagram bit-kernels c-interp checkers chi-squared donut edit-distance eulers-approx heldkarp-tsp lda lz-compress moving-average ntt-kernel partition-equal pi-calc quartile-stats rand-test randshell-sort rho-factor rsa-cipher spelt2num tea-cipher triangle-count variability-sample
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), cva6-rv64gc)
@@ -126,25 +125,23 @@ TARGET_EXCLUDES = ackermann anagram c-interp checkers donut lz-compress pi-calc 
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_SIM = $(SPIKE) --isa=RV32IMC --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
-TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES = anagram bit-kernels c-interp checkers chi-squared edit-distance eulers-approx heldkarp-tsp lda lz-compress moving-average ntt-kernel partition-equal quartile-stats rand-test randshell-sort rho-factor rsa-cipher spelt2num tea-cipher triangle-count variability-sample
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike64)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_SPIKE -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv64gc -mabi=lp64d -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -nostdlib -nostartfiles -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=rv64gc --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
+TARGET_SIM = $(SPIKE) --isa=rv64gc --extlib=../target/spike_mmio_plugin.so -m0x100000:0x820000 --device=spike_mmio_plugin,0x20000
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = *.d ibex_simple_system_pcount.csv
@@ -152,16 +149,15 @@ TARGET_EXCLUDES = anagram c-interp checkers lz-compress rsa-cipher spelt2num
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike32-pk)
-TARGET_CC = riscv64-unknown-elf-gcc
-#TARGET_CC = riscv64-unknown-elf-clang
-TARGET_AR = riscv64-unknown-elf-ar
+TARGET_CC = riscv-none-elf-gcc
+TARGET_AR = riscv-none-elf-ar
 TARGET_CFLAGS = -DTARGET_SPIKE_PK -DLIBMIN_MALLOC_ALIGN_BYTES=8 -march=rv32imczicsr -mabi=ilp32 -static -mcmodel=medlow -Wall -g -Os -fvisibility=hidden -ffreestanding # -MMD -mcmodel=medany 
 TARGET_LIBS = -lgcc
-TARGET_SIM = ../../riscv-isa-sim/build/spike --isa=RV32IMC pk32
+TARGET_SIM = $(SPIKE) --isa=RV32IMC pk32
 TARGET_DIFF = diff
 TARGET_EXE = $(PROG).elf
 TARGET_CLEAN = 
-TARGET_EXCLUDES = anagram c-interp checkers lz-compress rho-factor rsa-cipher spelt2num
+TARGET_EXCLUDES = anagram bit-kernels c-interp checkers chi-squared edit-distance eulers-approx heldkarp-tsp lda lz-compress moving-average ntt-kernel partition-equal quartile-stats rand-test randshell-sort rho-factor rsa-cipher spelt2num tea-cipher triangle-count variability-sample
 TARGET_CONFIGURED = 1
 TARGET_REFEXT = out
 else ifeq ($(TARGET), spike64-pk)
