@@ -35,12 +35,13 @@ SECTIONS
   . = ALIGN(/* 0x1000*/ 16);
   .rodata : { *(.rodata*)}
   . = ALIGN(0x8);
-  . = ALIGN(/* 0x1000*/ 16);
-  .page_table : { *(.page_table) }
-  .user_stack : { *(.user_stack) }
-  .kernel_data : { *(.kernel_data) }
-  .kernel_stack : { *(.kernel_stack) }
-  .data : { *(.data) }
+  /* Force next PT_LOAD segment onto a page boundary so text is not merged with writable data. */
+  . = ALIGN(0x1000);
+  .page_table : { *(.page_table) } :data
+  .user_stack : { *(.user_stack) } :data
+  .kernel_data : { *(.kernel_data) } :data
+  .kernel_stack : { *(.kernel_stack) } :data
+  .data : { *(.data) } :data
   .sdata : {
     __global_pointer$ = . + 0x800;
     *(.srodata.cst16) *(.srodata.cst8) *(.srodata.cst4) *(.srodata.cst2) *(.srodata*)
@@ -73,4 +74,9 @@ SECTIONS
   }
 */
   _end = .;
+}
+
+PHDRS {
+  text PT_LOAD FLAGS(5); /* R + X */
+  data PT_LOAD FLAGS(6); /* R + W */
 }
