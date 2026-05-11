@@ -32,3 +32,7 @@ make TARGET=hashalone-spike32 run-tests
 make TARGET=hashalone-spike64 all-clean
 make TARGET=hashalone-spike64 run-tests
 
+make TARGET=cva6-rv64gc all-clean
+make TARGET=cva6-rv64gc run-tests
+
+

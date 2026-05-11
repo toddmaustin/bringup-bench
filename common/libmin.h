@@ -83,10 +83,10 @@ int libmin_sscanf(const char *buf, const char *fmt, ...);
 #define EXIT_SUCCESS  0 /* successful exit status */
 
 /* successfully exit co-simulation */
-void libmin_success(void);
+void libmin_success(void) __attribute__((noreturn));
 
 /* exit co-simulation with failure exit code CODE */
-void libmin_fail(int code);
+void libmin_fail(int code) __attribute__((noreturn));
 
 /* largest random number, must be power-of-two-minus-one! */
 #define RAND_MAX (0x7fffffff)

@@ -19,7 +19,7 @@ in() {
     libmin_printf("\n| %d |", i);
 
     i = 5i;
-    libmin_printf("\n %d", i);
+    libmin_printf("\n %d\n", i);
 
     libmin_success();
     goto https;

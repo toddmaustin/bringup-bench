@@ -98,32 +98,12 @@ int_gemm_reference(void)
   }
 }
 
-static uint64_t
-int_checksum(void)
-{
-  uint64_t checksum = 0;
-  const uint64_t mod = 1000000007ul;
-
-  for (int i = 0; i < M; i++)
-  {
-    for (int j = 0; j < N; j++)
-    {
-      uint64_t term = IC[i][j] + 100000l;
-      checksum = ((checksum * 131ul) + term) % mod;
-    }
-  }
-
-  return checksum;
-}
-
 static int
 run_int_gemm(void)
 {
   init_int_matrices();
 
-  libtarg_start_perf();
   int_gemm_kernel();
-  libtarg_stop_perf();
 
   int_gemm_reference();
 
@@ -140,7 +120,7 @@ run_int_gemm(void)
     }
   }
 
-  libmin_printf("INFO: int64 GEMM verified, checksum=0x%08lx\n", int_checksum());
+  libmin_printf("INFO: int64 GEMM verified\n");
   return 0;
 }
 
@@ -220,37 +200,12 @@ fp_gemm_reference(void)
   }
 }
 
-static uint64_t
-fp_checksum(void)
-{
-  uint64_t checksum = 0;
-  const uint64_t mod = 1000000007ul;
-
-  /*
-   * All results are exact multiples of 1/256, so scale and hash
-   * as integers for a stable printed checksum.
-   */
-  for (int i = 0; i < M; i++)
-  {
-    for (int j = 0; j < N; j++)
-    {
-      uint64_t scaled = (uint64_t)(DC[i][j] * 256.0);
-      uint64_t term = scaled + 100000lu;
-      checksum = ((checksum * 131ul) + term) % mod;
-    }
-  }
-
-  return checksum;
-}
-
 static int
 run_fp_gemm(void)
 {
   init_fp_matrices();
 
-  libtarg_start_perf();
   fp_gemm_kernel();
-  libtarg_stop_perf();
 
   fp_gemm_reference();
 
@@ -268,7 +223,7 @@ run_fp_gemm(void)
     }
   }
 
-  libmin_printf("INFO: double GEMM verified,  checksum=0x%08lx\n", fp_checksum());
+  libmin_printf("INFO: double GEMM verified\n");
   return 0;
 }
 
