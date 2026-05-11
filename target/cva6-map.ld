@@ -35,7 +35,8 @@ SECTIONS
   . = ALIGN(/* 0x1000*/ 16);
   .rodata : { *(.rodata*)} :text
   . = ALIGN(0x8);
-  . = ALIGN(/* 0x1000*/ 16);
+  /* Force next PT_LOAD segment onto a page boundary so text is not merged with writable data. */
+  . = ALIGN(0x1000);
   .page_table : { *(.page_table) } :data
   .user_stack : { *(.user_stack) } :data
   .kernel_data : { *(.kernel_data) } :data
