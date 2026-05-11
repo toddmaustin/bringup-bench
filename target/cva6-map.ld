@@ -23,9 +23,9 @@ SECTIONS
   _start_text = .;
   .text.init : { *(.text.init) } :text
   . = ALIGN(/* 0x1000*/ 16);
-  .tohost : { *(.tohost) } :data
+  .tohost : { *(.tohost) } :text
   . = ALIGN(/* 0x1000*/ 16);
-  .uvmif : { *(.uvmif) } :data
+  .uvmif : { *(.uvmif) } :text
   . = ALIGN(/* 0x1000*/ 16);
   .text : { *(.text) } :text
   . = ALIGN(/* 0x1000*/ 16);
